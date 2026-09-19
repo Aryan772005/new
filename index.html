@@ -21,11 +21,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- External 3D & Animation Libraries for Reel-Style Modern Experience -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
+  <!-- External 3D & Animation Libraries for Reel-Style Modern Experience (Deferred for instant mobile paint) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js" defer></script>
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -139,7 +139,7 @@
       <!-- Full-Bleed Portal Visual & 3D Layered Depth -->
       <div class="hero-backdrop" id="hero-backdrop" aria-hidden="true">
         <div class="hero-bg-layer" id="hero-bg-layer">
-          <img src="assets/images/hero_dribbble_portal.jpg" alt="Voxel Portal Hero Art" class="hero-bg-image" id="hero-portal-img" loading="eager">
+          <img src="assets/images/hero_dribbble_portal.jpg" alt="Voxel Portal Hero Art" class="hero-bg-image" id="hero-portal-img" loading="eager" fetchpriority="high">
         </div>
         <div class="hero-gradient-scrim"></div>
         <div class="hero-portal-glow-layer" id="hero-portal-glow"></div>
@@ -260,7 +260,7 @@
       <!-- 3D Clearly Visible Background Atmosphere: Netherite Hackathon Trophy -->
       <div class="section-backdrop" aria-hidden="true">
         <div class="section-bg-layer" id="about-bg-layer">
-          <img src="assets/images/mc_crafting_trophy_3d.jpg" alt="Netherite Trophy 3D Background" class="section-bg-image" style="object-position: 80% center;">
+          <img src="assets/images/mc_crafting_trophy_3d.jpg" alt="Netherite Trophy 3D Background" class="section-bg-image bg-img-about" loading="lazy" decoding="async">
         </div>
         <div class="section-scrim-left"></div>
         <div class="section-glow-fx glow-purple"></div>
@@ -301,7 +301,7 @@
             <!-- Output Slot (Enchanted Trophy with Hologram Glint) -->
             <div class="mc-output-slot-wrap">
               <div class="mc-slot mc-output-slot enchanted-glint" id="crafting-output-slot">
-                <img src="assets/images/mc_crafting_trophy_3d.jpg" alt="CraftCon Netherite Trophy" class="mc-trophy-thumb">
+                <img src="assets/images/mc_crafting_trophy_3d.jpg" alt="CraftCon Netherite Trophy" class="mc-trophy-thumb" loading="lazy" decoding="async">
                 <span class="mc-item-qty highlight">x1</span>
               </div>
               <div class="mc-output-info">
@@ -414,7 +414,7 @@
       <!-- 3D Panoramic Minecraft Biomes Clearly Visible Background -->
       <div class="section-backdrop" aria-hidden="true">
         <div class="section-bg-layer" id="tracks-bg-layer">
-          <img src="assets/images/mc_tracks_biomes_3d.jpg" alt="Panoramic 3D Minecraft Biomes Background" class="section-bg-image" style="object-position: center 40%;">
+          <img src="assets/images/mc_tracks_biomes_3d.jpg" alt="Panoramic 3D Minecraft Biomes Background" class="section-bg-image bg-img-tracks" loading="lazy" decoding="async">
         </div>
         <div class="section-scrim-center"></div>
         <div class="section-glow-fx glow-green"></div>
@@ -603,7 +603,7 @@
       <!-- 3D Smelting Blast Furnace Clearly Visible Background -->
       <div class="section-backdrop" aria-hidden="true">
         <div class="section-bg-layer" id="timeline-bg-layer">
-          <img src="assets/images/mc_furnace_smelter_3d.jpg" alt="36-Hour Hackathon Blast Furnace Background" class="section-bg-image" style="object-position: 85% center;">
+          <img src="assets/images/mc_furnace_smelter_3d.jpg" alt="36-Hour Hackathon Blast Furnace Background" class="section-bg-image bg-img-timeline" loading="lazy" decoding="async">
         </div>
         <div class="section-scrim-left"></div>
         <div class="section-glow-fx glow-amber"></div>
@@ -612,7 +612,7 @@
         <!-- Furnace Smelting Status Bar with 3D Blast Furnace Render -->
         <div class="mc-furnace-banner tilt-3d-card">
           <div class="furnace-3d-thumb-wrap">
-            <img src="assets/images/mc_furnace_smelter_3d.jpg" alt="3D Minecraft Blast Furnace Smelter" class="furnace-3d-thumb">
+            <img src="assets/images/mc_furnace_smelter_3d.jpg" alt="3D Minecraft Blast Furnace Smelter" class="furnace-3d-thumb" loading="lazy" decoding="async">
           </div>
           <div class="furnace-flame-wrap">
             <span class="furnace-flame-icon">🔥</span>
@@ -826,7 +826,7 @@
       <!-- 3D Ender Chest Loot Vault Clearly Visible Background -->
       <div class="section-backdrop" aria-hidden="true">
         <div class="section-bg-layer" id="prizes-bg-layer">
-          <img src="assets/images/mc_ender_chest_loot_3d.jpg" alt="3D Minecraft Ender Chest Loot Vault Background" class="section-bg-image" style="object-position: center 35%;">
+          <img src="assets/images/mc_ender_chest_loot_3d.jpg" alt="3D Minecraft Ender Chest Loot Vault Background" class="section-bg-image bg-img-prizes" loading="lazy" decoding="async">
         </div>
         <div class="section-scrim-center"></div>
         <div class="section-glow-fx glow-gold"></div>
@@ -913,7 +913,7 @@
           <div class="loot-card loot-grand-champion featured-loot tilt-3d-card">
             <div class="loot-tier-ribbon ribbon-amber">🏆 GRAND CHAMPION</div>
             <div class="loot-3d-chest-hero">
-              <img src="assets/images/mc_ender_chest_loot_3d.jpg" alt="3D Minecraft Ender Chest Loot Vault" class="loot-3d-chest-img">
+              <img src="assets/images/mc_ender_chest_loot_3d.jpg" alt="3D Minecraft Ender Chest Loot Vault" class="loot-3d-chest-img" loading="lazy" decoding="async">
             </div>
             <h3 class="loot-tier-name">Champion’s Cache</h3>
             <div class="loot-cash-amount highlight-amber">₹1,00,000</div>
@@ -1017,7 +1017,7 @@
       <!-- 3D Enchanted Written Codex Book Clearly Visible Background -->
       <div class="section-backdrop" aria-hidden="true">
         <div class="section-bg-layer" id="rules-bg-layer">
-          <img src="assets/images/mc_codex_book_3d.jpg" alt="3D Minecraft Enchanted Codex Book Background" class="section-bg-image" style="object-position: 85% center;">
+          <img src="assets/images/mc_codex_book_3d.jpg" alt="3D Minecraft Enchanted Codex Book Background" class="section-bg-image bg-img-rules" loading="lazy" decoding="async">
         </div>
         <div class="section-scrim-left"></div>
         <div class="section-glow-fx glow-purple"></div>
@@ -1037,7 +1037,7 @@
 
             <!-- 3D Enchanted Written Codex Book Illustration -->
             <div class="mc-codex-3d-feature tilt-3d-card">
-              <img src="assets/images/mc_codex_book_3d.jpg" alt="3D Minecraft Enchanted Codex Book" class="codex-3d-img">
+              <img src="assets/images/mc_codex_book_3d.jpg" alt="3D Minecraft Enchanted Codex Book" class="codex-3d-img" loading="lazy" decoding="async">
               <span class="codex-3d-tag">OFFICIAL ENCHANTED CODEX</span>
             </div>
 
@@ -1178,7 +1178,7 @@
       <!-- 3D Skyward Beacon Monument Clearly Visible Background -->
       <div class="section-backdrop" aria-hidden="true">
         <div class="section-bg-layer" id="sponsors-bg-layer">
-          <img src="assets/images/mc_beacon_sponsors_3d.jpg" alt="3D Skyward Beacon Monument Background" class="section-bg-image" style="object-position: center 30%;">
+          <img src="assets/images/mc_beacon_sponsors_3d.jpg" alt="3D Skyward Beacon Monument Background" class="section-bg-image bg-img-sponsors" loading="lazy" decoding="async">
         </div>
         <div class="section-scrim-center"></div>
         <div class="section-glow-fx glow-cyan"></div>
@@ -1187,7 +1187,7 @@
         <!-- Skyward Beacon Beam Visual -->
         <div class="mc-beacon-container" aria-hidden="true">
           <div class="beacon-3d-visual tilt-3d-card">
-            <img src="assets/images/mc_beacon_sponsors_3d.jpg" alt="3D Skyward Beacon Monument" class="beacon-3d-monument-img">
+            <img src="assets/images/mc_beacon_sponsors_3d.jpg" alt="3D Skyward Beacon Monument" class="beacon-3d-monument-img" loading="lazy" decoding="async">
             <div class="beacon-beam-ray"></div>
           </div>
           <div class="beacon-meta">
@@ -1365,7 +1365,7 @@
       <!-- 3D Villager Hackathon Hub Clearly Visible Background -->
       <div class="section-backdrop" aria-hidden="true">
         <div class="section-bg-layer" id="faq-bg-layer">
-          <img src="assets/images/mc_villager_dialogue_3d.jpg" alt="3D Minecraft Hackathon Village Background" class="section-bg-image" style="object-position: center 40%;">
+          <img src="assets/images/mc_villager_dialogue_3d.jpg" alt="3D Minecraft Hackathon Village Background" class="section-bg-image bg-img-faq" loading="lazy" decoding="async">
         </div>
         <div class="section-scrim-center"></div>
         <div class="section-glow-fx glow-purple"></div>
@@ -1751,6 +1751,6 @@
     </div>
   </div>
 
-  <script src="main.js"></script>
+  <script src="main.js" defer></script>
 </body>
 </html>

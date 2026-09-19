@@ -1883,6 +1883,14 @@ a {
   transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.bg-img-about { object-position: 80% center; }
+.bg-img-tracks { object-position: center 40%; }
+.bg-img-timeline { object-position: 85% center; }
+.bg-img-prizes { object-position: center 35%; }
+.bg-img-rules { object-position: 85% center; }
+.bg-img-sponsors { object-position: center 30%; }
+.bg-img-faq { object-position: center 40%; }
+
 .section-scrim-left {
   position: absolute;
   inset: 0;
@@ -1962,145 +1970,370 @@ a {
 
 @media (max-width: 768px) {
   :root {
-    --nav-height: 64px;
+    --nav-height: 60px;
   }
 
   body.smooth-scroll-body {
     font-size: 15px;
+    perspective: none; /* Disables expensive 3D perspective layers on mobile GPU */
   }
 
   .section-padding {
-    padding: 70px 0;
+    padding: 56px 0;
   }
 
   .container {
     padding: 0 16px;
   }
 
+  /* ========================================================
+     MOBILE BACKGROUND ENGINE: CRYSTAL CLEAR, CENTERED & VIBRANT
+     ======================================================== */
+  .section-bg-image,
+  .bg-img-about,
+  .bg-img-tracks,
+  .bg-img-timeline,
+  .bg-img-prizes,
+  .bg-img-rules,
+  .bg-img-sponsors,
+  .bg-img-faq {
+    object-position: center center !important;
+    opacity: 0.76 !important;
+    filter: brightness(1.08) contrast(1.12) saturate(1.22) !important;
+    transform: none !important;
+  }
+
+  .hero-bg-image {
+    object-position: center 20% !important;
+    opacity: 0.86 !important;
+    filter: brightness(1.06) contrast(1.12) saturate(1.2) !important;
+  }
+
+  .hero-gradient-scrim {
+    background: 
+      linear-gradient(180deg, 
+        rgba(8, 8, 13, 0.42) 0%, 
+        rgba(8, 8, 13, 0.58) 35%, 
+        rgba(8, 8, 13, 0.88) 75%, 
+        rgba(8, 8, 13, 1) 100%),
+      radial-gradient(circle at 50% 25%, transparent 22%, rgba(8, 8, 13, 0.65) 85%) !important;
+  }
+
+  /* Vertical protective scrim that lets 3D art shine vividly while text and cards pop */
+  .section-scrim-left,
+  .section-scrim-center {
+    background: 
+      linear-gradient(180deg, 
+        rgba(8, 8, 13, 0.84) 0%, 
+        rgba(8, 8, 13, 0.44) 25%, 
+        rgba(8, 8, 13, 0.50) 65%, 
+        rgba(8, 8, 13, 0.92) 100%),
+      radial-gradient(ellipse at 50% 35%, transparent 25%, rgba(8, 8, 13, 0.68) 90%) !important;
+  }
+
+  /* Center, contained glow orbs with low blur to eliminate mobile GPU lag */
+  .section-glow-fx {
+    width: 260px !important;
+    height: 260px !important;
+    filter: blur(36px) !important;
+    opacity: 0.55 !important;
+    left: 50% !important;
+    right: auto !important;
+    top: 15% !important;
+    transform: translateX(-50%) !important;
+  }
+
+  /* Touch micro-interactions and tactile feedback */
+  button:active,
+  .pill-cta-btn:active,
+  .hero-primary-btn:active,
+  .ghost-cta-btn:active,
+  .day-tab-btn:active,
+  .codex-tab:active,
+  .mc-hotbar-slot:active,
+  .mc-slot:active,
+  .faq-question:active {
+    transform: scale(0.96) !important;
+  }
+
+  @keyframes slotBounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.22); filter: brightness(1.4); }
+    100% { transform: scale(1); }
+  }
+
+  .slot-tapped {
+    animation: slotBounce 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
   /* Header & Navigation */
+  .site-header {
+    background: rgba(10, 10, 16, 0.88) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
   .desktop-nav { display: none; }
-  .cube-status-pill { display: none; }
+  .cube-status-pill {
+    display: flex;
+    padding: 3px 8px;
+    font-size: 0.62rem;
+    gap: 4px;
+    border-color: rgba(112, 224, 0, 0.4);
+    background: rgba(112, 224, 0, 0.1);
+  }
+
   .hamburger-btn { display: flex; }
   .brand-wordmark .brand-text { font-size: 1.15rem; }
   .brand-tag { display: none; }
-  
+
   .header-actions {
     gap: 8px;
   }
 
-  .pill-cta-btn.open-modal-btn span {
-    font-size: 0.74rem;
-  }
   .pill-cta-btn.open-modal-btn {
-    padding: 8px 14px;
+    padding: 7px 12px;
+    background: linear-gradient(135deg, #70e000 0%, #38b000 100%);
+    color: #08080d;
+    box-shadow: 0 0 14px rgba(112, 224, 0, 0.4);
+  }
+
+  .pill-cta-btn.open-modal-btn span {
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  /* Mobile Drawer Menu (Minecraft Inventory Theme) */
+  .mobile-drawer {
+    width: 85vw;
+    max-width: 320px;
+    background: rgba(14, 14, 22, 0.96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-left: 2px solid #2e2e42;
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.8);
   }
 
   /* Hero Section */
   .hero-section {
     padding-top: calc(var(--nav-height) + 16px);
-    padding-bottom: 24px;
+    padding-bottom: 30px;
     min-height: auto;
   }
 
-  .hero-bg-image {
-    object-position: center center;
-    filter: brightness(0.9) contrast(1.1);
-  }
-
-  .hero-gradient-scrim {
-    background: 
-      linear-gradient(180deg, rgba(8, 8, 13, 0.72) 0%, rgba(8, 8, 13, 0.88) 45%, rgba(8, 8, 13, 1) 100%),
-      radial-gradient(circle at 50% 30%, transparent 0%, rgba(8, 8, 13, 0.75) 70%, rgba(8, 8, 13, 0.95) 100%);
+  .hero-kicker-badge {
+    padding: 6px 12px;
+    font-size: 0.72rem;
+    margin-bottom: 14px;
+    border: 1px solid rgba(199, 125, 255, 0.35);
+    background: rgba(157, 78, 221, 0.15);
+    backdrop-filter: blur(8px);
   }
 
   .hero-headline {
-    font-size: clamp(2.3rem, 11vw, 3.4rem);
-    line-height: 1.0;
-    margin-bottom: 16px;
+    font-size: clamp(2.4rem, 11vw, 3.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.8), 0 0 40px rgba(157, 78, 221, 0.4);
   }
 
   .hero-subtext {
     font-size: 0.94rem;
     line-height: 1.55;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
+    color: var(--text-primary);
   }
 
+  /* Countdown Box for Mobile (4 Equal Touch Cards) */
+  .hero-countdown-box {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    max-width: 100%;
+    width: 100%;
+    padding: 12px 8px;
+    background: rgba(14, 14, 24, 0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(112, 224, 0, 0.35);
+    border-radius: var(--radius-md);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 16px rgba(112, 224, 0, 0.15);
+    margin-bottom: 18px;
+  }
+
+  .cd-segment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 2px;
+    background: rgba(8, 8, 13, 0.65);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .cd-number {
+    font-size: 1.45rem;
+    font-family: var(--font-pixel);
+    color: #70e000;
+    text-shadow: 0 0 10px rgba(112, 224, 0, 0.6);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .cd-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+
+  .cd-colon {
+    display: none;
+  }
+
+  /* Event Metadata Chips Bar (2x2 Grid) */
   .hero-meta-bar {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 8px;
     width: 100%;
-    padding: 12px 14px;
-    margin-bottom: 22px;
+    padding: 10px;
+    background: rgba(20, 20, 34, 0.75);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    margin-bottom: 20px;
   }
 
   .meta-divider { display: none; }
 
+  .meta-chip {
+    padding: 6px 8px;
+    font-size: 0.76rem;
+    gap: 6px;
+  }
+
   .hero-cta-group {
+    display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
     width: 100%;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
 
-  .hero-primary-btn, .ghost-cta-btn {
+  .hero-primary-btn {
     width: 100%;
     justify-content: center;
-    padding: 14px 20px;
+    padding: 15px 20px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #70e000 0%, #38b000 100%);
+    color: #08080d;
+    box-shadow: 0 4px 20px rgba(112, 224, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.3) inset;
+    letter-spacing: 0.05em;
   }
 
-  .hero-countdown-box {
-    max-width: 100%;
+  .ghost-cta-btn {
     width: 100%;
-    padding: 12px 14px;
-  }
-
-  .cd-number {
-    font-size: 1.35rem;
-  }
-
-  .cd-colon {
-    font-size: 1.1rem;
-    margin-top: -8px;
+    justify-content: center;
+    padding: 13px 20px;
+    font-size: 0.88rem;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(199, 125, 255, 0.35);
+    color: #c77dff;
   }
 
   .hero-footer-bar {
     flex-direction: column;
     align-items: flex-start;
     gap: 14px;
-    padding-top: 20px;
+    padding-top: 16px;
   }
 
   /* Compact Mobile Minecraft HUD Dock (Fixed at bottom) */
   .mc-hud-overlay {
-    bottom: 8px;
-    padding: 4px 10px;
+    position: fixed;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99;
+    padding: 6px 14px;
+    background: rgba(12, 12, 18, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(112, 224, 0, 0.35);
+    border-radius: var(--radius-pill);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(112, 224, 0, 0.2);
     width: auto;
-    max-width: 95vw;
-  }
-
-  .mc-hearts-strip, .mc-hunger-strip {
-    font-size: 0.7rem;
-    gap: 1px;
+    max-width: 92vw;
+    cursor: pointer;
   }
 
   .mc-hud-top-row {
-    gap: 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 3px;
+  }
+
+  .mc-hearts-strip, .mc-hunger-strip {
+    font-size: 0.68rem;
+    gap: 2px;
+  }
+
+  .mc-hearts-strip {
+    animation: heartbeat 2.2s infinite ease-in-out;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+  }
+
+  .mc-xp-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .mc-xp-bar-bg {
-    width: 140px;
-    height: 5px;
+    width: 150px;
+    height: 6px;
+    background: #181824;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .mc-xp-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #38b000 0%, #70e000 100%);
+    box-shadow: 0 0 8px rgba(112, 224, 0, 0.8);
+    border-radius: 3px;
+    transition: width 0.15s ease-out;
   }
 
   .mc-xp-level-number {
-    font-size: 0.65rem;
+    font-family: var(--font-pixel);
+    font-size: 0.72rem;
+    color: #70e000;
+    text-shadow: 0 0 6px rgba(112, 224, 0, 0.8);
   }
 
-  /* About: 3x3 Crafting Table Stacks Vertically like Minecraft Pocket Edition */
+  /* About: 3x3 Crafting Table (Minecraft Pocket Edition layout) */
   .mc-crafting-table-ui {
-    padding: 16px 12px;
+    padding: 18px 14px;
+    background: rgba(18, 18, 28, 0.84);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 2px solid #3c3c4e;
+    border-radius: var(--radius-md);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(0, 0, 0, 0.5);
     margin-bottom: 28px;
   }
 
@@ -2108,6 +2341,7 @@ a {
     flex-direction: column;
     align-items: flex-start;
     gap: 6px;
+    margin-bottom: 14px;
   }
 
   .mc-crafting-body {
@@ -2117,27 +2351,43 @@ a {
   }
 
   .mc-grid-3x3 {
-    grid-template-columns: repeat(3, 48px);
-    grid-template-rows: repeat(3, 48px);
-    gap: 4px;
+    grid-template-columns: repeat(3, 52px);
+    grid-template-rows: repeat(3, 52px);
+    gap: 5px;
   }
 
   .mc-slot {
-    width: 48px;
-    height: 48px;
+    width: 52px;
+    height: 52px;
+    background: #252538;
+    border: 2px solid;
+    border-color: #12121c #3d3d54 #3d3d54 #12121c;
+    border-radius: 4px;
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.6);
+    cursor: pointer;
+    transition: transform 0.15s ease, border-color 0.15s ease;
   }
 
   .mc-item {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
   }
 
   .mc-crafting-arrow-wrap {
     transform: rotate(90deg);
-    margin: -4px 0;
+    margin: 0;
+    cursor: pointer;
   }
 
   .mc-arrow-icon {
-    font-size: 1.8rem;
+    font-size: 1.9rem;
+    color: #f5a623;
+    text-shadow: 0 0 10px rgba(245, 166, 35, 0.7);
+    animation: arrowGlow 1.5s infinite alternate;
+  }
+
+  @keyframes arrowGlow {
+    0% { transform: scale(1); filter: brightness(1); }
+    100% { transform: scale(1.15); filter: brightness(1.4); }
   }
 
   .mc-arrow-label {
@@ -2148,24 +2398,42 @@ a {
     flex-direction: column;
     text-align: center;
     gap: 10px;
+    cursor: pointer;
   }
 
   .mc-output-slot {
-    width: 62px;
-    height: 62px;
+    width: 68px;
+    height: 68px;
+    background: #2c2c42;
+    border: 2px solid;
+    border-color: #1a1a26 #4a4a68 #4a4a68 #1a1a26;
+    box-shadow: 0 0 20px rgba(199, 125, 255, 0.5), inset 2px 2px 6px rgba(0, 0, 0, 0.6);
+    border-radius: 6px;
+  }
+
+  .mc-trophy-thumb {
+    width: 46px;
+    height: 46px;
+    object-fit: cover;
+    border-radius: 4px;
   }
 
   .stats-card-matrix {
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 10px;
   }
 
   .voxel-stat-card {
-    padding: 16px 12px;
+    padding: 14px 12px;
+    background: rgba(18, 18, 30, 0.75);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
   }
 
   .stat-big-num {
-    font-size: 1.7rem;
+    font-size: 1.65rem;
   }
 
   .stat-caption {
@@ -2174,9 +2442,12 @@ a {
 
   /* Tracks Section */
   .mc-enchantment-banner {
-    padding: 6px 8px;
+    padding: 6px 10px;
     gap: 6px;
     flex-wrap: wrap;
+    background: rgba(18, 18, 28, 0.85);
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(199, 125, 255, 0.3);
   }
 
   .rune-glyph {
@@ -2189,19 +2460,36 @@ a {
 
   .tracks-grid {
     grid-template-columns: 1fr;
-    gap: 18px;
+    gap: 16px;
   }
 
   .track-card {
-    padding: 22px 18px;
+    padding: 20px 16px;
+    background: rgba(18, 18, 30, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
   }
 
   /* Timeline Section */
   .mc-furnace-banner {
     flex-direction: column;
     align-items: flex-start;
-    gap: 14px;
-    padding: 16px 16px;
+    gap: 12px;
+    padding: 16px 14px;
+    background: rgba(18, 18, 30, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 102, 0, 0.3);
+    border-radius: var(--radius-md);
+  }
+
+  .furnace-3d-thumb {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
   }
 
   .furnace-flame-wrap {
@@ -2211,10 +2499,11 @@ a {
 
   .furnace-fuel-gauge {
     flex-grow: 1;
-    max-width: 180px;
+    max-width: 200px;
   }
 
   .timeline-day-tabs {
+    display: flex;
     overflow-x: auto;
     width: 100%;
     justify-content: flex-start;
@@ -2225,14 +2514,16 @@ a {
 
   .day-tab-btn {
     flex-shrink: 0;
-    padding: 6px 14px;
-    font-size: 0.74rem;
+    padding: 8px 16px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    border-radius: var(--radius-pill);
   }
 
   .crafting-node {
-    grid-template-columns: 24px 1fr;
-    gap: 14px;
-    padding-bottom: 24px;
+    grid-template-columns: 20px 1fr;
+    gap: 12px;
+    padding-bottom: 20px;
   }
 
   .node-milestone {
@@ -2240,20 +2531,29 @@ a {
   }
 
   .node-content {
-    padding: 16px 16px;
+    padding: 14px 14px;
+    background: rgba(18, 18, 30, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
   }
 
   .node-title {
-    font-size: 0.98rem;
+    font-size: 0.95rem;
   }
 
   .node-desc {
-    font-size: 0.84rem;
+    font-size: 0.82rem;
   }
 
   /* Prizes: 9-Slot Hotbar Touch Scroll */
   .mc-hotbar-showcase {
-    padding: 16px 10px;
+    padding: 14px 10px;
+    background: rgba(18, 18, 28, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 2px solid #3c3c4e;
+    border-radius: var(--radius-md);
   }
 
   .mc-hotbar-slots {
@@ -2262,39 +2562,60 @@ a {
     flex-wrap: nowrap;
     justify-content: flex-start;
     width: 100%;
-    padding: 6px 6px;
+    padding: 6px 4px;
     -webkit-overflow-scrolling: touch;
     gap: 6px;
     scroll-snap-type: x mandatory;
   }
 
   .mc-hotbar-slot {
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     flex-shrink: 0;
     scroll-snap-align: center;
+    background: #222232;
+    border: 2px solid #36364a;
+    border-radius: 6px;
+  }
+
+  .mc-hotbar-slot.active {
+    border-color: #70e000;
+    box-shadow: 0 0 12px rgba(112, 224, 0, 0.6);
   }
 
   .slot-item {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
   }
 
   .mc-hotbar-tooltip {
     min-width: unset;
     width: 100%;
-    padding: 8px 12px;
+    padding: 10px 14px;
+    background: rgba(10, 10, 16, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
   }
 
   .loot-card {
-    padding: 24px 18px;
+    padding: 22px 16px;
+    background: rgba(18, 18, 30, 0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
   }
 
   .loot-cash-amount {
-    font-size: 2rem;
+    font-size: 2.1rem;
   }
 
   .loot-3d-chest-hero {
-    height: 150px;
+    height: 140px;
+  }
+
+  .loot-3d-chest-img {
+    max-height: 130px;
+    object-fit: contain;
   }
 
   .bounties-grid {
@@ -2314,26 +2635,40 @@ a {
   }
 
   .codex-3d-img {
-    height: 160px;
+    height: 140px;
+    object-fit: contain;
   }
 
   .mc-repeater-widget {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
+    padding: 14px;
+    background: rgba(18, 18, 28, 0.8);
+    backdrop-filter: blur(12px);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 34, 34, 0.3);
   }
 
   .codex-nav-tabs {
+    display: flex;
+    overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    gap: 6px;
   }
 
   .codex-tab {
-    padding: 12px 10px;
-    font-size: 0.7rem;
+    padding: 10px 14px;
+    font-size: 0.74rem;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .codex-pane {
     padding: 20px 14px;
+    background: rgba(18, 18, 30, 0.82);
+    backdrop-filter: blur(12px);
+    border-radius: var(--radius-md);
   }
 
   .criteria-metric-grid {
@@ -2344,12 +2679,20 @@ a {
   /* Sponsors & Organizers */
   .beacon-3d-visual {
     width: 100%;
-    height: 180px;
+    height: 160px;
+  }
+
+  .beacon-3d-monument-img {
+    max-height: 150px;
+    object-fit: contain;
   }
 
   .sponsor-card {
     min-width: 100%;
     padding: 18px;
+    background: rgba(18, 18, 30, 0.78);
+    backdrop-filter: blur(10px);
+    border-radius: var(--radius-md);
   }
 
   .tier-obsidian .sponsor-card {
@@ -2375,19 +2718,30 @@ a {
   }
 
   /* FAQ */
+  .faq-item {
+    background: rgba(18, 18, 30, 0.75);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-md);
+    margin-bottom: 10px;
+  }
+
   .faq-question {
-    padding: 16px 16px;
+    padding: 16px 14px;
     font-size: 0.92rem;
   }
 
   .faq-answer {
-    padding: 0 16px 16px 16px;
+    padding: 0 14px 16px 14px;
     font-size: 0.85rem;
   }
 
   /* Final CTA */
   .final-cta-box {
     padding: 36px 18px;
+    background: rgba(18, 18, 30, 0.85);
+    backdrop-filter: blur(14px);
+    border-radius: var(--radius-lg);
   }
 
   .final-heading {
@@ -2416,19 +2770,20 @@ a {
     gap: 12px;
   }
 
-  /* Registration Modal */
+  /* Registration Modal (Fits 100dvh smoothly on mobile) */
   .modal-backdrop {
     padding: 10px;
   }
 
   .modal-dialog {
-    padding: 24px 16px;
-    max-height: 94vh;
+    padding: 20px 14px;
+    max-height: 92vh;
     border-radius: var(--radius-md);
+    width: 95vw;
   }
 
   .modal-title {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
   }
 
   .form-row.two-col {
@@ -2438,6 +2793,7 @@ a {
 
   .hacker-pass-ticket {
     padding: 16px;
+    background: rgba(18, 18, 28, 0.9);
   }
 
   .ticket-grid {
@@ -2449,7 +2805,7 @@ a {
 /* Extra Small Phones (320px - 420px) */
 @media (max-width: 420px) {
   .hero-headline {
-    font-size: 2.05rem;
+    font-size: 2.1rem;
   }
 
   .stats-card-matrix {
@@ -2457,21 +2813,29 @@ a {
   }
 
   .mc-grid-3x3 {
-    grid-template-columns: repeat(3, 42px);
-    grid-template-rows: repeat(3, 42px);
+    grid-template-columns: repeat(3, 44px);
+    grid-template-rows: repeat(3, 44px);
     gap: 3px;
   }
 
   .mc-slot {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
   }
 
   .mc-item {
-    font-size: 1.05rem;
+    font-size: 1.1rem;
   }
 
   .hero-meta-bar {
     grid-template-columns: 1fr;
+  }
+  
+  .cd-number {
+    font-size: 1.25rem;
+  }
+
+  .mc-xp-bar-bg {
+    width: 120px;
   }
 }

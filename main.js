@@ -62,6 +62,14 @@ function getAudioContext() {
   return globalAudioCtx;
 }
 
+function triggerHaptic(duration = 15) {
+  if (typeof navigator !== 'undefined' && navigator.vibrate) {
+    try {
+      navigator.vibrate(duration);
+    } catch (e) {}
+  }
+}
+
 function playMinecraftSound(type) {
   const ctx = getAudioContext();
   if (!ctx) return;
@@ -201,6 +209,41 @@ let lenis = null;
 function initLenisSmoothScroll() {
   if (typeof Lenis === 'undefined') return;
 
+  const isTouchMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.innerWidth <= 768);
+
+  if (isTouchMobile) {
+    // On mobile devices, native touch momentum scrolling is hardware-accelerated 120Hz.
+    // Lenis touch simulation causes severe input lag and inertia battles on phones.
+    // Update progress bar and ScrollTrigger on native window scroll instead!
+    const progressBar = document.getElementById('scroll-progress-bar');
+    window.addEventListener('scroll', () => {
+      if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.update();
+      }
+      if (progressBar) {
+        const scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight || 1;
+        const scrollProgress = (scrollY / maxScroll) * 100;
+        progressBar.style.width = `${scrollProgress}%`;
+      }
+    }, { passive: true });
+
+    // Smooth scroll for internal anchor links using native behavior
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener('click', function (e) {
+        const targetId = this.getAttribute('href');
+        if (targetId && targetId !== '#') {
+          const targetEl = document.querySelector(targetId);
+          if (targetEl) {
+            e.preventDefault();
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      });
+    });
+    return;
+  }
+
   lenis = new Lenis({
     duration: 1.2,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -273,14 +316,17 @@ function initThreeJSScene() {
   threeCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
   threeCamera.position.z = 24;
 
+  const isMobile = window.innerWidth <= 768;
+
   // Renderer
   threeRenderer = new THREE.WebGLRenderer({
     canvas: canvas,
     alpha: true,
-    antialias: true
+    antialias: !isMobile,
+    powerPreference: 'high-performance'
   });
   threeRenderer.setSize(width, height);
-  threeRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  threeRenderer.setPixelRatio(isMobile ? 1.0 : Math.min(window.devicePixelRatio, 1.75));
 
   // Lighting
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
@@ -409,9 +455,17 @@ function initThreeJSScene() {
 
   // Animation Loop
   let clock = new THREE.Clock();
+  let isAnimating = true;
 
   function animate() {
+    if (!isAnimating) return;
     requestAnimationFrame(animate);
+
+    // On mobile screens, pause render if user is scrolled past the first 2 viewports
+    if (isMobile && window.pageYOffset > window.innerHeight * 1.6) {
+      return;
+    }
+
     const elapsedTime = clock.getElapsedTime();
 
     // Smooth Camera Track
@@ -440,6 +494,14 @@ function initThreeJSScene() {
   }
 
   animate();
+
+  if (isMobile) {
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset <= window.innerHeight * 1.6) {
+        requestAnimationFrame(animate);
+      }
+    }, { passive: true });
+  }
 }
 
 /* ==========================================================================
@@ -493,6 +555,8 @@ function initHero3DCameraDive() {
    ========================================================================== */
 function initSectionBackdropParallax() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  // On mobile screens, bypass heavy multi-layer GSAP parallax scrubs so phone scroll remains locked at 120fps
+  if (window.innerWidth <= 768) return;
 
   const backdropConfigs = [
     { id: '#about-bg-layer', trigger: '#about', yStart: -30, yEnd: 40, scale: 1.14 },
@@ -531,6 +595,9 @@ function initSectionBackdropParallax() {
    5. INTERACTIVE 3D CARD GYROSCOPE / MOUSE TILT PHYSICS
    ========================================================================== */
 function init3DCardTiltPhysics() {
+  // Only enable on desktop mouse pointers to prevent interfering with mobile touch scrolling
+  if (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.innerWidth <= 768)) return;
+
   const cards = document.querySelectorAll('.tilt-3d-card');
 
   cards.forEach((card) => {
@@ -612,6 +679,19 @@ function initHUDScrollTracker() {
       lastLevel = currentLevel;
     }
   }, { passive: true });
+
+  if (hudBar) {
+    hudBar.addEventListener('click', () => {
+      playMinecraftSound('level_up');
+      triggerHaptic(25);
+      xpLevel.style.transform = 'scale(1.5)';
+      xpLevel.style.color = '#fff';
+      setTimeout(() => {
+        xpLevel.style.transform = 'scale(1)';
+        xpLevel.style.color = '#70e000';
+      }, 250);
+    });
+  }
 }
 
 /* ==========================================================================
@@ -704,6 +784,39 @@ function initAboutCrafting3DScroll() {
         duration: 0.85,
         ease: 'power3.out'
       });
+    });
+  }
+
+  // Interactive Mobile & Desktop Tap on Crafting Slots
+  slots.forEach((slot) => {
+    slot.addEventListener('click', () => {
+      slot.classList.remove('slot-tapped');
+      void slot.offsetWidth; // force DOM reflow
+      slot.classList.add('slot-tapped');
+      playMinecraftSound('pop');
+      triggerHaptic(14);
+    });
+  });
+
+  // Tapping crafting arrow or output triggers craft level-up chime and haptic feedback
+  if (arrow && arrow.parentElement) {
+    arrow.parentElement.addEventListener('click', () => {
+      playMinecraftSound('level_up');
+      triggerHaptic(25);
+      if (outputSlot) {
+        outputSlot.classList.remove('slot-tapped');
+        void outputSlot.offsetWidth;
+        outputSlot.classList.add('slot-tapped');
+      }
+    });
+  }
+  if (outputSlot) {
+    outputSlot.addEventListener('click', () => {
+      playMinecraftSound('level_up');
+      triggerHaptic(25);
+      outputSlot.classList.remove('slot-tapped');
+      void outputSlot.offsetWidth;
+      outputSlot.classList.add('slot-tapped');
     });
   }
 }
@@ -896,6 +1009,10 @@ function initPrizes3DAnimation() {
       }, 200);
 
       playMinecraftSound('pop');
+      triggerHaptic(15);
+      if (window.innerWidth <= 768) {
+        slot.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
     }
 
     slot.addEventListener('click', selectSlot);
@@ -1007,6 +1124,7 @@ function initRulesCodexAnimation() {
       }
 
       playMinecraftSound('click');
+      triggerHaptic(18);
     });
   }
 }
@@ -1111,6 +1229,7 @@ function initVillagerFAQAnimation() {
     if (summary) {
       summary.addEventListener('click', () => {
         playMinecraftSound('villager');
+        triggerHaptic(15);
       });
     }
   });
