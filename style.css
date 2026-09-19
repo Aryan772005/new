@@ -85,6 +85,9 @@ html {
   scroll-behavior: auto; /* Lenis handles smooth interpolation */
   color-scheme: dark;
   background-color: var(--bg-deep);
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body.smooth-scroll-body {
@@ -93,10 +96,12 @@ body.smooth-scroll-body {
   line-height: 1.6;
   color: var(--text-primary);
   background-color: var(--bg-deep);
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
+  position: relative;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  perspective: 1400px;
 }
 
 /* 3D Scroll Progress Bar */
@@ -116,10 +121,10 @@ body.smooth-scroll-body {
 /* WebGL 3D Three.js Floating Voxel Layer */
 .webgl-canvas {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
   z-index: 1;
   pointer-events: none;
 }
@@ -127,10 +132,10 @@ body.smooth-scroll-body {
 /* Ambient 2D Sparks Canvas */
 .ambient-canvas {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
   pointer-events: none;
   z-index: 2;
 }
@@ -220,6 +225,8 @@ body.smooth-scroll-body {
 .section-padding {
   padding: 120px 0;
   position: relative;
+  overflow: hidden;
+  max-width: 100%;
 }
 
 /* Typography Helpers */
@@ -542,7 +549,10 @@ a {
 .mobile-drawer {
   position: fixed;
   top: 0;
-  right: -100%;
+  right: 0;
+  transform: translateX(100%);
+  visibility: hidden;
+  pointer-events: none;
   width: min(320px, 85vw);
   height: 100vh;
   background: #11111a;
@@ -551,13 +561,15 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: right var(--transition-smooth);
+  transition: transform var(--transition-smooth), visibility var(--transition-smooth);
   z-index: 95;
   box-shadow: -10px 0 40px rgba(0, 0, 0, 0.7);
 }
 
 .mobile-drawer.open {
-  right: 0;
+  transform: translateX(0);
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .mobile-nav-links {
@@ -1883,28 +1895,60 @@ a {
   transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.bg-img-about { object-position: 80% center; }
-.bg-img-tracks { object-position: center 40%; }
-.bg-img-timeline { object-position: 85% center; }
-.bg-img-prizes { object-position: center 35%; }
-.bg-img-rules { object-position: 85% center; }
+.bg-img-about { object-position: 60% center; }
+.bg-img-tracks { object-position: center center; }
+.bg-img-timeline { object-position: 62% center; }
+.bg-img-prizes { object-position: center center; }
+.bg-img-rules { object-position: 62% center; }
 .bg-img-sponsors { object-position: center 30%; }
-.bg-img-faq { object-position: center 40%; }
+.bg-img-faq { object-position: center center; }
 
+/* Section Scrim: Balanced coverage allowing artwork and ambient light to fill both left and right sides */
 .section-scrim-left {
   position: absolute;
   inset: 0;
   background: 
-    linear-gradient(90deg, rgba(8, 8, 13, 0.94) 0%, rgba(8, 8, 13, 0.72) 42%, rgba(8, 8, 13, 0.12) 75%, rgba(8, 8, 13, 0.35) 100%),
-    linear-gradient(180deg, rgba(8, 8, 13, 0.85) 0%, transparent 18%, transparent 82%, rgba(8, 8, 13, 0.92) 100%);
+    linear-gradient(90deg, 
+      rgba(8, 8, 13, 0.76) 0%, 
+      rgba(8, 8, 13, 0.52) 36%, 
+      rgba(8, 8, 13, 0.20) 70%, 
+      rgba(8, 8, 13, 0.48) 100%),
+    linear-gradient(180deg, 
+      rgba(8, 8, 13, 0.82) 0%, 
+      transparent 20%, 
+      transparent 80%, 
+      rgba(8, 8, 13, 0.88) 100%);
 }
 
 .section-scrim-center {
   position: absolute;
   inset: 0;
   background: 
-    linear-gradient(180deg, rgba(8, 8, 13, 0.85) 0%, rgba(8, 8, 13, 0.2) 28%, rgba(8, 8, 13, 0.3) 72%, rgba(8, 8, 13, 0.9) 100%),
-    radial-gradient(circle at 50% 50%, transparent 20%, rgba(8, 8, 13, 0.55) 75%, rgba(8, 8, 13, 0.85) 100%);
+    linear-gradient(180deg, 
+      rgba(8, 8, 13, 0.80) 0%, 
+      rgba(8, 8, 13, 0.25) 28%, 
+      rgba(8, 8, 13, 0.35) 72%, 
+      rgba(8, 8, 13, 0.88) 100%),
+    radial-gradient(circle at 50% 50%, 
+      transparent 25%, 
+      rgba(8, 8, 13, 0.45) 75%, 
+      rgba(8, 8, 13, 0.85) 100%);
+}
+
+/* Atmospheric left-side ambient aura to completely eliminate any dullness or blank areas on the left */
+.section-backdrop::before {
+  content: '';
+  position: absolute;
+  left: -80px;
+  top: 15%;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(157, 78, 221, 0.22) 0%, rgba(56, 176, 0, 0.12) 45%, transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.9;
 }
 
 .section-glow-fx {
@@ -1955,17 +1999,68 @@ a {
   top: 15%;
 }
 
-/* --- 20. RESPONSIVE BREAKPOINTS (MOBILE & TABLET ENGINE) --- */
+/* --- 20. RESPONSIVE BREAKPOINTS (TABLETS & DESKTOP SITE IN PHONE ENGINE) --- */
 @media (max-width: 1024px) {
+  :root {
+    --max-width: 100%;
+  }
+
+  /* Prevent page zoom-out in desktop mode on phone (980px viewport) */
+  html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 20px !important;
+    box-sizing: border-box;
+  }
+
+  /* Centered, vibrant background coverage for 980px-1024px desktop site view */
+  .section-bg-image,
+  .bg-img-about,
+  .bg-img-tracks,
+  .bg-img-timeline,
+  .bg-img-prizes,
+  .bg-img-rules,
+  .bg-img-sponsors,
+  .bg-img-faq {
+    object-position: center center !important;
+    opacity: 0.82 !important;
+    filter: brightness(1.06) contrast(1.12) saturate(1.2) !important;
+  }
+
+  .hero-bg-image {
+    object-position: center center !important;
+  }
+
+  /* Soft balanced scrim so left side is never dull or blank in desktop site mode */
+  .section-scrim-left {
+    background: 
+      linear-gradient(90deg, 
+        rgba(8, 8, 13, 0.78) 0%, 
+        rgba(8, 8, 13, 0.52) 36%, 
+        rgba(8, 8, 13, 0.22) 70%, 
+        rgba(8, 8, 13, 0.50) 100%),
+      linear-gradient(180deg, 
+        rgba(8, 8, 13, 0.82) 0%, 
+        transparent 20%, 
+        transparent 80%, 
+        rgba(8, 8, 13, 0.88) 100%) !important;
+  }
+
   .hero-inner { max-width: 100%; }
-  .about-grid { grid-template-columns: 1fr; gap: 40px; }
-  .tracks-grid { grid-template-columns: repeat(2, 1fr); }
+  .about-grid { grid-template-columns: 1fr; gap: 36px; }
+  .tracks-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
   .prizes-podium-grid { grid-template-columns: 1fr; gap: 32px; }
   .featured-loot { order: -1; }
-  .bounties-grid { grid-template-columns: repeat(2, 1fr); }
-  .rules-layout { grid-template-columns: 1fr; gap: 40px; }
-  .organizers-grid { grid-template-columns: repeat(2, 1fr); }
-  .footer-top-grid { grid-template-columns: 1fr 1fr; }
+  .bounties-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .rules-layout { grid-template-columns: 1fr; gap: 36px; }
+  .organizers-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .footer-top-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
 }
 
 @media (max-width: 768px) {
