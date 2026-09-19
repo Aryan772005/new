@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRAFTCON '26 — Desh Bhagat University's Flagship Collegiate Hackathon</title>
+  <meta name="description" content="A 36-hour Minecraft-inspired collegiate sandbox hackathon hosted at Desh Bhagat University. 500+ builders assembling to imagine, craft, and ship real-world breakthroughs.">
+  <meta name="keywords" content="hackathon, Desh Bhagat University, DBU hackathon, Minecraft hackathon, college hackathon, coding competition, tech festival">
+  
+  <!-- Open Graph / Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="CRAFTCON '26 — Imagine · Build · Transcend">
+  <meta property="og:description" content="Join 500+ developers, designers, and innovators at Desh Bhagat University for a 36-hour sandbox hackathon.">
+  <meta property="og:image" content="assets/images/hero_dribbble_portal.jpg">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%2312121a'/><rect x='4' y='4' width='24' height='24' fill='%233f8f2f'/><rect x='8' y='8' width='16' height='16' fill='%238b2fd1'/><rect x='12' y='12' width='8' height='8' fill='%23f5a623'/></svg>">
+
+  <!-- Google Fonts: Space Grotesk, Inter, Silkscreen (Pixel Accent) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- External 3D & Animation Libraries for Reel-Style Modern Experience -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="smooth-scroll-body">
+
+  <!-- WebGL 3D Floating Voxel Canvas Layer (Three.js real-time 3D scene) -->
+  <canvas id="webgl-canvas" class="webgl-canvas" aria-hidden="true"></canvas>
+
+  <!-- Background Ambient 2D Sparks Overlay -->
+  <canvas id="ambient-canvas" class="ambient-canvas" aria-hidden="true"></canvas>
+
+  <!-- 3D Scroll Progress Line -->
+  <div id="scroll-progress-bar" class="scroll-progress-bar" aria-hidden="true"></div>
+
+  <!-- FLOATING MINECRAFT HUD OVERLAY (Sticky Bottom Center) -->
+  <div class="mc-hud-overlay" id="mc-hud-bar" aria-label="Builder Status HUD">
+    <div class="mc-hud-container">
+      <!-- Hearts Row -->
+      <div class="mc-hud-top-row">
+        <div class="mc-hearts-strip" title="10/10 Hearts: Campus Health & Security Active">
+          <span class="mc-heart">❤️</span><span class="mc-heart">❤️</span><span class="mc-heart">❤️</span><span class="mc-heart">❤️</span><span class="mc-heart">❤️</span>
+          <span class="mc-heart">❤️</span><span class="mc-heart">❤️</span><span class="mc-heart">❤️</span><span class="mc-heart">❤️</span><span class="mc-heart">❤️</span>
+        </div>
+        <div class="mc-hunger-strip" title="Unlimited Free Meals & Midnight Fuel">
+          <span class="mc-hunger">🍗</span><span class="mc-hunger">🍗</span><span class="mc-hunger">🍗</span><span class="mc-hunger">🍗</span><span class="mc-hunger">🍗</span>
+          <span class="mc-hunger">🍗</span><span class="mc-hunger">🍗</span><span class="mc-hunger">🍗</span><span class="mc-hunger">🍗</span><span class="mc-hunger">🍗</span>
+        </div>
+      </div>
+      <!-- XP Level Bar -->
+      <div class="mc-xp-bar-wrap">
+        <div class="mc-xp-bar-bg">
+          <div class="mc-xp-bar-fill" id="mc-xp-fill"></div>
+        </div>
+        <span class="mc-xp-level-number" id="mc-xp-level">26</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= HEADER & NAV BAR ================= -->
+  <header id="site-header" class="site-header">
+    <div class="header-container">
+      <!-- Wordmark Logo -->
+      <a href="#hero" class="brand-wordmark" aria-label="CRAFTCON '26 Home">
+        <span class="brand-cube"></span>
+        <span class="brand-text">CRAFTCON<span class="brand-year">'26</span></span>
+        <span class="brand-tag">DBU</span>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="desktop-nav" aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#about" class="nav-link">ABOUT</a></li>
+          <li><a href="#tracks" class="nav-link">TRACKS</a></li>
+          <li><a href="#timeline" class="nav-link">TIMELINE</a></li>
+          <li><a href="#prizes" class="nav-link">PRIZES</a></li>
+          <li><a href="#rules" class="nav-link">RULES</a></li>
+          <li><a href="#sponsors" class="nav-link">SPONSORS</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <!-- Header CTAs -->
+      <div class="header-actions">
+        <!-- 3D Mode Toggle Indicator -->
+        <div class="cube-status-pill" title="Real-time WebGL 3D Active">
+          <span class="live-dot"></span>
+          <span>3D WORLD</span>
+        </div>
+
+        <!-- Audio Ambiance Toggle -->
+        <button id="audio-toggle" class="icon-toggle-btn" aria-label="Toggle ambient portal sound" title="Toggle portal ambiance">
+          <svg class="audio-icon on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+          <svg class="audio-icon off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+
+        <a href="#register" class="pill-cta-btn open-modal-btn" data-modal="register-modal">
+          <span>REGISTER NOW</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+
+        <!-- Mobile Menu Hamburger -->
+        <button id="hamburger-btn" class="hamburger-btn" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-drawer" class="mobile-drawer" aria-hidden="true">
+      <ul class="mobile-nav-links">
+        <li><a href="#about" class="mobile-link">ABOUT</a></li>
+        <li><a href="#tracks" class="mobile-link">TRACKS</a></li>
+        <li><a href="#timeline" class="mobile-link">TIMELINE</a></li>
+        <li><a href="#prizes" class="mobile-link">PRIZES & LOOT</a></li>
+        <li><a href="#rules" class="mobile-link">RULES & CRITERIA</a></li>
+        <li><a href="#sponsors" class="mobile-link">SPONSORS</a></li>
+        <li><a href="#organizers" class="mobile-link">ORGANIZERS</a></li>
+        <li><a href="#faq" class="mobile-link">FAQ</a></li>
+      </ul>
+      <div class="mobile-drawer-footer">
+        <a href="#register" class="pill-cta-btn full-width open-modal-btn" data-modal="register-modal">REGISTER FOR FREE -></a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- ================= 1. HERO SECTION (3D CAMERA DIVE CONTAINER) ================= -->
+    <section id="hero" class="hero-section 3d-scroll-target">
+      <!-- Full-Bleed Portal Visual & 3D Layered Depth -->
+      <div class="hero-backdrop" id="hero-backdrop" aria-hidden="true">
+        <div class="hero-bg-layer" id="hero-bg-layer">
+          <img src="assets/images/hero_dribbble_portal.jpg" alt="Voxel Portal Hero Art" class="hero-bg-image" id="hero-portal-img" loading="eager">
+        </div>
+        <div class="hero-gradient-scrim"></div>
+        <div class="hero-portal-glow-layer" id="hero-portal-glow"></div>
+        <div class="hero-vignette"></div>
+      </div>
+
+      <div class="hero-content-wrapper" id="hero-content-3d">
+        <div class="hero-inner">
+          <!-- Top Badge / Homage Kicker -->
+          <div class="hero-kicker-badge elem-3d-float">
+            <span class="kicker-icon"></span>
+            <div class="kicker-texts">
+              <span class="kicker-title">BUILT FOR BUILDERS · POWERED BY INNOVATION</span>
+              <span class="kicker-sub">FACULTY OF COMPUTING & IT, DESH BHAGAT UNIVERSITY</span>
+            </div>
+          </div>
+
+          <!-- Oversized Stacked Wordmark Headline -->
+          <h1 class="hero-headline elem-3d-headline">
+            <span class="headline-row block-white row-1">IMAGINE</span>
+            <span class="headline-row block-white row-2">BUILD</span>
+            <span class="headline-row block-purple text-glow-purple row-3">BEYOND</span>
+          </h1>
+
+          <!-- Subtitle / Elevator Pitch -->
+          <p class="hero-subtext elem-3d-sub">
+            Innovation isn’t just code. It’s a canvas, a crafting toolkit, a boundless sandbox where 
+            500+ student developers assemble to forge the next dimension of technology.
+          </p>
+
+          <!-- Key Event Info Micro-Bar -->
+          <div class="hero-meta-bar elem-3d-meta">
+            <div class="meta-item">
+              <span class="meta-label">DATES</span>
+              <span class="meta-val">OCTOBER 24–26, 2026</span>
+            </div>
+            <div class="meta-divider"></div>
+            <div class="meta-item">
+              <span class="meta-label">VENUE</span>
+              <span class="meta-val">AUDITORIUM, DESH BHAGAT UNIV.</span>
+            </div>
+            <div class="meta-divider"></div>
+            <div class="meta-item">
+              <span class="meta-label">BOUNTY POOL</span>
+              <span class="meta-val highlight-amber">₹2,50,000+</span>
+            </div>
+          </div>
+
+          <!-- CTAs & Action Row -->
+          <div class="hero-cta-group elem-3d-cta">
+            <a href="#register" class="pill-cta-btn hero-primary-btn open-modal-btn" data-modal="register-modal">
+              <span>ENTER THE ARENA</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#brochure" id="brochure-btn" class="ghost-cta-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span>BROCHURE</span>
+            </a>
+          </div>
+
+          <!-- Live Countdown Timer -->
+          <div class="hero-countdown-box elem-3d-countdown">
+            <div class="countdown-header">
+              <span class="pulse-dot"></span>
+              <span class="countdown-caption">PORTAL ACTIVATION COUNTDOWN</span>
+            </div>
+            <div class="countdown-grid" id="countdown-timer">
+              <div class="cd-unit">
+                <span class="cd-number" id="cd-days">35</span>
+                <span class="cd-label">DAYS</span>
+              </div>
+              <span class="cd-colon">:</span>
+              <div class="cd-unit">
+                <span class="cd-number" id="cd-hours">14</span>
+                <span class="cd-label">HOURS</span>
+              </div>
+              <span class="cd-colon">:</span>
+              <div class="cd-unit">
+                <span class="cd-number" id="cd-minutes">28</span>
+                <span class="cd-label">MINS</span>
+              </div>
+              <span class="cd-colon">:</span>
+              <div class="cd-unit">
+                <span class="cd-number" id="cd-seconds">42</span>
+                <span class="cd-label">SECS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Corner Anchor Badges -->
+        <div class="hero-footer-bar">
+          <!-- Bottom Left Laurel Crest -->
+          <div class="hero-crest">
+            <div class="crest-wreath-icon">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 21a10 10 0 0 1-4-8 10 10 0 0 1 10-10 10 10 0 0 1 10 10 10 10 0 0 1-4 8"/><path d="M12 7v10"/><path d="m9 11 3-3 3 3"/></svg>
+            </div>
+            <div class="crest-meta">
+              <span class="crest-kicker">THE PREMIER SANDBOX</span>
+              <span class="crest-sub">DBU CAMPUS · PUNJAB</span>
+            </div>
+          </div>
+
+          <!-- Bottom Right Tri-Word Tagline -->
+          <div class="hero-tagline-tri">
+            <span>CREATE</span>
+            <span class="bullet">•</span>
+            <span>CONNECT</span>
+            <span class="bullet">•</span>
+            <span>INSPIRE</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 2. ABOUT SECTION (CRAFTING TABLE 3x3 UI & VOXEL STATS) ================= -->
+    <section id="about" class="about-section section-padding reveal-3d-section has-section-backdrop">
+      <!-- 3D Clearly Visible Background Atmosphere: Netherite Hackathon Trophy -->
+      <div class="section-backdrop" aria-hidden="true">
+        <div class="section-bg-layer" id="about-bg-layer">
+          <img src="assets/images/mc_crafting_trophy_3d.jpg" alt="Netherite Trophy 3D Background" class="section-bg-image" style="object-position: 80% center;">
+        </div>
+        <div class="section-scrim-left"></div>
+        <div class="section-glow-fx glow-purple"></div>
+      </div>
+      <div class="container">
+        <div class="section-badge">
+          <span class="badge-dot dot-green"></span>
+          <span>CRAFTING BENCH & ARCHIVE</span>
+        </div>
+
+        <!-- MINECRAFT 3x3 CRAFTING BENCH UI SHOWCASE -->
+        <div class="mc-crafting-table-ui tilt-3d-card" id="crafting-table-module">
+          <div class="mc-gui-header">
+            <span class="mc-gui-title">CRAFTING TABLE — BUILD RECIPE #026</span>
+            <span class="mc-gui-badge">RECIPE: HACKATHON GLORY</span>
+          </div>
+
+          <div class="mc-crafting-body">
+            <!-- 3x3 Grid -->
+            <div class="mc-grid-3x3" id="crafting-grid">
+              <div class="mc-slot" data-slot="1"><span class="mc-item item-chip">💻</span><span class="mc-item-qty">64</span></div>
+              <div class="mc-slot" data-slot="2"><span class="mc-item item-redstone">🔴</span><span class="mc-item-qty">32</span></div>
+              <div class="mc-slot" data-slot="3"><span class="mc-item item-emerald">🟢</span><span class="mc-item-qty">16</span></div>
+              <div class="mc-slot" data-slot="4"><span class="mc-item item-obsidian">⬛</span><span class="mc-item-qty">4</span></div>
+              <div class="mc-slot" data-slot="5"><span class="mc-item item-diamond">💠</span><span class="mc-item-qty">8</span></div>
+              <div class="mc-slot" data-slot="6"><span class="mc-item item-obsidian">⬛</span><span class="mc-item-qty">4</span></div>
+              <div class="mc-slot" data-slot="7"><span class="mc-item item-glowstone">🟡</span><span class="mc-item-qty">64</span></div>
+              <div class="mc-slot" data-slot="8"><span class="mc-item item-ingot">🪙</span><span class="mc-item-qty">12</span></div>
+              <div class="mc-slot" data-slot="9"><span class="mc-item item-chip">⚡</span><span class="mc-item-qty">36</span></div>
+            </div>
+
+            <!-- Crafting Arrow with Animated Energy Stream -->
+            <div class="mc-crafting-arrow-wrap">
+              <div class="mc-arrow-icon" id="mc-crafting-arrow">➔</div>
+              <span class="mc-arrow-label">FORGING...</span>
+            </div>
+
+            <!-- Output Slot (Enchanted Trophy with Hologram Glint) -->
+            <div class="mc-output-slot-wrap">
+              <div class="mc-slot mc-output-slot enchanted-glint" id="crafting-output-slot">
+                <img src="assets/images/mc_crafting_trophy_3d.jpg" alt="CraftCon Netherite Trophy" class="mc-trophy-thumb">
+                <span class="mc-item-qty highlight">x1</span>
+              </div>
+              <div class="mc-output-info">
+                <strong class="mc-output-name">CraftCon '26 Netherite Trophy</strong>
+                <span>+ ₹2,50,000 Bounty Cache</span>
+                <span>+ DBU Pre-Seed Incubation</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-grid">
+          <!-- Left Column: Rich Editorial Storytelling -->
+          <div class="about-narrative">
+            <h2 class="section-title">A 36-Hour Sandbox for the Next Generation of Builders</h2>
+            <div class="about-lead">
+              Hosted at the sprawling campus of <strong>Desh Bhagat University</strong>, CRAFTCON '26 transforms traditional hackathons into an open-world collaborative expedition.
+            </div>
+            <p class="about-para">
+              Whether you are mining datasets, engineering autonomous agents, or crafting decentralized smart contracts, this hackathon provides the obsidian foundation, high-speed connectivity, and industry mentorship you need to build software that matters.
+            </p>
+            <p class="about-para">
+              No boring boilerplate slides. No cookie-cutter problem statements. Choose your biome, assemble your party of 1 to 4 crafters, and bring bold solutions to life over 36 non-stop hours.
+            </p>
+
+            <div class="about-highlights">
+              <div class="highlight-item tilt-3d-card">
+                <span class="highlight-icon">⚡</span>
+                <div>
+                  <strong>High-Octane Mentorship</strong>
+                  <span>Round-the-clock guidance from seasoned engineers & startup founders.</span>
+                </div>
+              </div>
+              <div class="highlight-item tilt-3d-card">
+                <span class="highlight-icon">🛖</span>
+                <div>
+                  <strong>All-Inclusive Hospitality</strong>
+                  <span>Free food, midnight fuel bars, energy stations & dedicated rest zones.</span>
+                </div>
+              </div>
+              <div class="highlight-item tilt-3d-card">
+                <span class="highlight-icon">💎</span>
+                <div>
+                  <strong>Real Institutional Backing</strong>
+                  <span>Direct incubation opportunities with DBU Centre for Innovation & Research.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Voxel Isometric Stat Matrix -->
+          <div class="about-stats-column">
+            <div class="stats-card-matrix">
+              <!-- Stat Card 1 -->
+              <div class="voxel-stat-card card-purple tilt-3d-card">
+                <div class="voxel-stat-header">
+                  <span class="stat-glyph">👥</span>
+                  <span class="stat-biome">BUILDERS</span>
+                </div>
+                <div class="stat-big-num">500+</div>
+                <div class="stat-caption">Developers, Designers & Hardware Crafters</div>
+              </div>
+
+              <!-- Stat Card 2 -->
+              <div class="voxel-stat-card card-amber tilt-3d-card">
+                <div class="voxel-stat-header">
+                  <span class="stat-glyph">⏳</span>
+                  <span class="stat-biome">DURATION</span>
+                </div>
+                <div class="stat-big-num">36</div>
+                <div class="stat-caption">Continuous Hours of Collaborative Building</div>
+              </div>
+
+              <!-- Stat Card 3 -->
+              <div class="voxel-stat-card card-green tilt-3d-card">
+                <div class="voxel-stat-header">
+                  <span class="stat-glyph">🏆</span>
+                  <span class="stat-biome">LOOT VAULT</span>
+                </div>
+                <div class="stat-big-num">₹2.5L+</div>
+                <div class="stat-caption">Cash Bounties, Tech Gear & Cloud Credits</div>
+              </div>
+
+              <!-- Stat Card 4 -->
+              <div class="voxel-stat-card card-cyan tilt-3d-card">
+                <div class="voxel-stat-header">
+                  <span class="stat-glyph">🏛️</span>
+                  <span class="stat-biome">OUTREACH</span>
+                </div>
+                <div class="stat-big-num">60+</div>
+                <div class="stat-caption">Colleges & Universities Represented Across India</div>
+              </div>
+            </div>
+
+            <!-- University Credibility Strip -->
+            <div class="dbu-institutional-card tilt-3d-card">
+              <div class="dbu-logo-mark">DBU</div>
+              <div class="dbu-info">
+                <h4>Desh Bhagat University</h4>
+                <p>Mandi Gobindgarh, Punjab · NAAC Accredited · Recognized by UGC</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 3. TRACKS & BIOMES (ENCHANTMENT TABLE & 3D RUNES) ================= -->
+    <section id="tracks" class="tracks-section section-padding reveal-3d-section has-section-backdrop">
+      <!-- 3D Panoramic Minecraft Biomes Clearly Visible Background -->
+      <div class="section-backdrop" aria-hidden="true">
+        <div class="section-bg-layer" id="tracks-bg-layer">
+          <img src="assets/images/mc_tracks_biomes_3d.jpg" alt="Panoramic 3D Minecraft Biomes Background" class="section-bg-image" style="object-position: center 40%;">
+        </div>
+        <div class="section-scrim-center"></div>
+        <div class="section-glow-fx glow-green"></div>
+      </div>
+      <div class="container">
+        <!-- Floating Enchantment Runes Stream -->
+        <div class="mc-enchantment-banner" aria-hidden="true">
+          <span class="rune-glyph">ᔑ</span>
+          <span class="rune-glyph">ʖ</span>
+          <span class="rune-glyph">ᓵ</span>
+          <span class="rune-glyph">↸</span>
+          <span class="rune-text">ENCHANTMENT TABLE: SELECT EXPEDITION BIOME</span>
+          <span class="rune-glyph">ᒷ</span>
+          <span class="rune-glyph">⎓</span>
+          <span class="rune-glyph">⊣</span>
+          <span class="rune-glyph">⍑</span>
+        </div>
+
+        <div class="section-header-center">
+          <div class="section-badge">
+            <span class="badge-dot dot-purple"></span>
+            <span>EXPEDITION DOMAINS</span>
+          </div>
+          <h2 class="section-title">Select Your Biome</h2>
+          <p class="section-subtitle">
+            Six uniquely crafted problem domains designed to challenge your technical ingenuity. Choose one primary track or merge domains for wildcard bonus points.
+          </p>
+        </div>
+
+        <div class="tracks-grid">
+          <!-- Track 1: The End (AI / ML) -->
+          <div class="track-card track-the-end tilt-3d-card">
+            <div class="track-top-meta">
+              <span class="track-tag">TRACK 01</span>
+              <span class="biome-pill biome-purple">THE END</span>
+            </div>
+            <div class="track-icon-wrap">
+              <div class="voxel-box purple-glow enchanted-glint">🔮</div>
+            </div>
+            <h3 class="track-name">Artificial Intelligence & Agentic Workflows</h3>
+            <p class="track-desc">
+              Harness LLMs, autonomous multi-agent frameworks, computer vision, and neural reasoning to solve friction in education, healthcare, and developer velocity.
+            </p>
+            <div class="track-tech-tags">
+              <span>LangChain</span>
+              <span>PyTorch</span>
+              <span>HuggingFace</span>
+              <span>Autonomous Agents</span>
+            </div>
+            <div class="track-bounty-badge">
+              <span>₹40,000 Track Pool</span>
+              <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
+            </div>
+          </div>
+
+          <!-- Track 2: The Overworld (Sustainability & AgriTech) -->
+          <div class="track-card track-overworld tilt-3d-card">
+            <div class="track-top-meta">
+              <span class="track-tag">TRACK 02</span>
+              <span class="biome-pill biome-green">THE OVERWORLD</span>
+            </div>
+            <div class="track-icon-wrap">
+              <div class="voxel-box green-glow enchanted-glint">🌱</div>
+            </div>
+            <h3 class="track-name">Sustainable Tech & Smart Agriculture</h3>
+            <p class="track-desc">
+              Develop high-impact solutions for clean energy optimization, regenerative agriculture monitoring, circular supply chains, and carbon accountability.
+            </p>
+            <div class="track-tech-tags">
+              <span>IoT Sensing</span>
+              <span>Geo-Spatial</span>
+              <span>Climate Data</span>
+              <span>Green Compute</span>
+            </div>
+            <div class="track-bounty-badge">
+              <span>₹40,000 Track Pool</span>
+              <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
+            </div>
+          </div>
+
+          <!-- Track 3: Redstone Lab (Hardware / IoT) -->
+          <div class="track-card track-redstone tilt-3d-card">
+            <div class="track-top-meta">
+              <span class="track-tag">TRACK 03</span>
+              <span class="biome-pill biome-red">REDSTONE LAB</span>
+            </div>
+            <div class="track-icon-wrap">
+              <div class="voxel-box red-glow enchanted-glint">⚙️</div>
+            </div>
+            <h3 class="track-name">IoT, Embedded Systems & Smart Hardware</h3>
+            <p class="track-desc">
+              Build physical prototypes with microcontrollers, edge sensors, robotics, and industrial automation to bridge the digital and tactile worlds.
+            </p>
+            <div class="track-tech-tags">
+              <span>ESP32</span>
+              <span>Raspberry Pi</span>
+              <span>ROS 2</span>
+              <span>Edge AI</span>
+            </div>
+            <div class="track-bounty-badge">
+              <span>₹40,000 Track Pool</span>
+              <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
+            </div>
+          </div>
+
+          <!-- Track 4: The Deep Dark (Security & Privacy) -->
+          <div class="track-card track-deepdark tilt-3d-card">
+            <div class="track-top-meta">
+              <span class="track-tag">TRACK 04</span>
+              <span class="biome-pill biome-teal">THE DEEP DARK</span>
+            </div>
+            <div class="track-icon-wrap">
+              <div class="voxel-box teal-glow enchanted-glint">🛡️</div>
+            </div>
+            <h3 class="track-name">Cybersecurity, Privacy & Web3 Infrastructure</h3>
+            <p class="track-desc">
+              Architect bulletproof defense tools, zero-knowledge verification protocols, threat intelligence visualizers, and decentralized ledger trust networks.
+            </p>
+            <div class="track-tech-tags">
+              <span>Zero Knowledge</span>
+              <span>Threat Intel</span>
+              <span>Rust</span>
+              <span>Decentralized Identity</span>
+            </div>
+            <div class="track-bounty-badge">
+              <span>₹40,000 Track Pool</span>
+              <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
+            </div>
+          </div>
+
+          <!-- Track 5: The Nether (FinTech & High Scale) -->
+          <div class="track-card track-nether tilt-3d-card">
+            <div class="track-top-meta">
+              <span class="track-tag">TRACK 05</span>
+              <span class="biome-pill biome-orange">THE NETHER</span>
+            </div>
+            <div class="track-icon-wrap">
+              <div class="voxel-box orange-glow enchanted-glint">🔥</div>
+            </div>
+            <h3 class="track-name">Next-Gen FinTech & Ultra-Scale Systems</h3>
+            <p class="track-desc">
+              Engineer distributed financial rails, fraud anomaly detection pipelines, micro-payment routing, and resilient distributed backend architectures.
+            </p>
+            <div class="track-tech-tags">
+              <span>Go / Kafka</span>
+              <span>UPI Protocols</span>
+              <span>Distributed DBs</span>
+              <span>Fraud Engines</span>
+            </div>
+            <div class="track-bounty-badge">
+              <span>₹40,000 Track Pool</span>
+              <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
+            </div>
+          </div>
+
+          <!-- Track 6: Open Sandbox (Wildcard) -->
+          <div class="track-card track-sandbox tilt-3d-card">
+            <div class="track-top-meta">
+              <span class="track-tag">TRACK 06</span>
+              <span class="biome-pill biome-cyan">OPEN SANDBOX</span>
+            </div>
+            <div class="track-icon-wrap">
+              <div class="voxel-box cyan-glow enchanted-glint">✨</div>
+            </div>
+            <h3 class="track-name">Open Sandbox & Civic Innovation</h3>
+            <p class="track-desc">
+              Have an audacious concept that doesn’t fit into a tidy box? Build groundbreaking tools for civic improvement, mental health, accessibility, or gaming.
+            </p>
+            <div class="track-tech-tags">
+              <span>Creative Tech</span>
+              <span>Accessibility</span>
+              <span>Public Goods</span>
+              <span>Cross-Disciplinary</span>
+            </div>
+            <div class="track-bounty-badge">
+              <span>₹40,000 Track Pool</span>
+              <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 4. TIMELINE: SMELTING FURNACE & REDSTONE CIRCUIT ================= -->
+    <section id="timeline" class="timeline-section section-padding reveal-3d-section has-section-backdrop">
+      <!-- 3D Smelting Blast Furnace Clearly Visible Background -->
+      <div class="section-backdrop" aria-hidden="true">
+        <div class="section-bg-layer" id="timeline-bg-layer">
+          <img src="assets/images/mc_furnace_smelter_3d.jpg" alt="36-Hour Hackathon Blast Furnace Background" class="section-bg-image" style="object-position: 85% center;">
+        </div>
+        <div class="section-scrim-left"></div>
+        <div class="section-glow-fx glow-amber"></div>
+      </div>
+      <div class="container">
+        <!-- Furnace Smelting Status Bar with 3D Blast Furnace Render -->
+        <div class="mc-furnace-banner tilt-3d-card">
+          <div class="furnace-3d-thumb-wrap">
+            <img src="assets/images/mc_furnace_smelter_3d.jpg" alt="3D Minecraft Blast Furnace Smelter" class="furnace-3d-thumb">
+          </div>
+          <div class="furnace-flame-wrap">
+            <span class="furnace-flame-icon">🔥</span>
+            <div class="furnace-fuel-gauge">
+              <div class="fuel-level-fill"></div>
+            </div>
+          </div>
+          <div class="furnace-desc">
+            <strong>36-HOUR BLAST SMELTER ENGINE ACTIVE</strong>
+            <span>Continuous hackathon fuel burning. Clockwork countdown: 36:00:00.</span>
+          </div>
+          <div class="redstone-indicator">
+            <span class="redstone-lamp on"></span>
+            <span>REDSTONE SIGNAL: 15 (MAX)</span>
+          </div>
+        </div>
+
+        <div class="section-header-center">
+          <div class="section-badge">
+            <span class="badge-dot dot-amber"></span>
+            <span>THE CRAFTING SEQUENCE</span>
+          </div>
+          <h2 class="section-title">36-Hour Expedition Roadmap</h2>
+          <p class="section-subtitle">
+            From initial resource gathering to the final grand showcase, here is how the crafting recipe unfolds.
+          </p>
+        </div>
+
+        <!-- Day Filter Tabs -->
+        <div class="timeline-day-tabs" role="tablist">
+          <button class="day-tab-btn active" data-day="all">ALL STAGES</button>
+          <button class="day-tab-btn" data-day="day1">DAY 1 · OCT 24</button>
+          <button class="day-tab-btn" data-day="day2">DAY 2 · OCT 25</button>
+          <button class="day-tab-btn" data-day="day3">DAY 3 · OCT 26</button>
+        </div>
+
+        <!-- Crafting Stepper with Glowing Redstone Wire Connector -->
+        <div class="crafting-stepper">
+          <!-- Step 1 -->
+          <div class="crafting-node tilt-3d-card" data-day="day1">
+            <div class="node-milestone">
+              <span class="node-step-index">01</span>
+              <span class="node-step-status">RESOURCE GATHER</span>
+            </div>
+            <div class="node-marker">
+              <div class="marker-cube amber-node"></div>
+              <div class="marker-line redstone-wire"></div>
+            </div>
+            <div class="node-content">
+              <div class="node-time">OCT 24 · 09:00 AM – 11:30 AM</div>
+              <h4 class="node-title">Hacker Check-In, Kit Distribution & Opening Ceremony</h4>
+              <p class="node-desc">
+                Arrive at the DBU Main Auditorium. Collect your physical Hacker NFC Pass, official CraftCon swag bag, Wi-Fi credentials, and fuel up with welcome refreshments.
+              </p>
+              <div class="node-tags">
+                <span>Auditorium Floor</span>
+                <span>Badge Pickup</span>
+                <span>Keynote</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="crafting-node tilt-3d-card" data-day="day1">
+            <div class="node-milestone">
+              <span class="node-step-index">02</span>
+              <span class="node-step-status">FORGE COMMENCES</span>
+            </div>
+            <div class="node-marker">
+              <div class="marker-cube purple-node"></div>
+              <div class="marker-line redstone-wire"></div>
+            </div>
+            <div class="node-content">
+              <div class="node-time">OCT 24 · 12:00 PM SHARP</div>
+              <h4 class="node-title">Hackathon Commencement: The 36-Hour Clock Starts</h4>
+              <p class="node-desc">
+                The portal opens. Teams claim their workstations, initialize Git repositories, configure sandbox environments, and begin rapid prototyping.
+              </p>
+              <div class="node-tags">
+                <span>Hack Floor</span>
+                <span>Repo Init</span>
+                <span>Sprint 01</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="crafting-node tilt-3d-card" data-day="day1">
+            <div class="node-milestone">
+              <span class="node-step-index">03</span>
+              <span class="node-step-status">MENTOR AUDIT</span>
+            </div>
+            <div class="node-marker">
+              <div class="marker-cube green-node"></div>
+              <div class="marker-line redstone-wire"></div>
+            </div>
+            <div class="node-content">
+              <div class="node-time">OCT 24 · 06:00 PM – 09:00 PM</div>
+              <h4 class="node-title">Round 1 Mentorship & Architectural Dry Runs</h4>
+              <p class="node-desc">
+                Industry architects and DBU faculty visit each team table to review technical feasibility, data pipelines, and UX roadmaps.
+              </p>
+              <div class="node-tags">
+                <span>1-on-1 Reviews</span>
+                <span>Dinner Feast</span>
+                <span>Course Correction</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="crafting-node tilt-3d-card" data-day="day2">
+            <div class="node-milestone">
+              <span class="node-step-index">04</span>
+              <span class="node-step-status">ENCHANTMENT HOUR</span>
+            </div>
+            <div class="node-marker">
+              <div class="marker-cube cyan-node"></div>
+              <div class="marker-line redstone-wire"></div>
+            </div>
+            <div class="node-content">
+              <div class="node-time">OCT 25 · 01:00 AM – 03:00 AM</div>
+              <h4 class="node-title">Midnight Snack Sprint, Red Bull Drops & Retro Mini-Games</h4>
+              <p class="node-desc">
+                Recharge with artisanal pizza, cold brew, and quick 10-minute retro arcade challenges before diving back into the midnight code trench.
+              </p>
+              <div class="node-tags">
+                <span>Fuel Station</span>
+                <span>Arcade Break</span>
+                <span>Surprise Swag Drop</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="crafting-node tilt-3d-card" data-day="day2">
+            <div class="node-milestone">
+              <span class="node-step-index">05</span>
+              <span class="node-step-status">MIDWAY CHECKPOINT</span>
+            </div>
+            <div class="node-marker">
+              <div class="marker-cube amber-node"></div>
+              <div class="marker-line redstone-wire"></div>
+            </div>
+            <div class="node-content">
+              <div class="node-time">OCT 25 · 11:00 AM – 02:00 PM</div>
+              <h4 class="node-title">Progress Review & Mid-Point Elimination Check</h4>
+              <p class="node-desc">
+                Submit your working alpha builds. Mentors help polish deployment setups, API security, and refine pitch scripts for the Sunday jury.
+              </p>
+              <div class="node-tags">
+                <span>Alpha Review</span>
+                <span>Lunch Break</span>
+                <span>Deploy Check</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 6 -->
+          <div class="crafting-node tilt-3d-card" data-day="day3">
+            <div class="node-milestone">
+              <span class="node-step-index">06</span>
+              <span class="node-step-status">CODE FREEZE</span>
+            </div>
+            <div class="node-marker">
+              <div class="marker-cube red-node"></div>
+              <div class="marker-line redstone-wire"></div>
+            </div>
+            <div class="node-content">
+              <div class="node-time">OCT 26 · 08:00 AM SHARP</div>
+              <h4 class="node-title">Final Repository Push & Soft Project Freeze</h4>
+              <p class="node-desc">
+                Commit your code, upload 2-minute video demonstrations, and publish production links to the evaluation portal. No further commits permitted.
+              </p>
+              <div class="node-tags">
+                <span>GitHub Freeze</span>
+                <span>Video Demo</span>
+                <span>Breakfast</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 7 -->
+          <div class="crafting-node tilt-3d-card" data-day="day3">
+            <div class="node-milestone">
+              <span class="node-step-index">07</span>
+              <span class="node-step-status">JURY SHOWCASE</span>
+            </div>
+            <div class="node-marker">
+              <div class="marker-cube purple-node"></div>
+            </div>
+            <div class="node-content">
+              <div class="node-time">OCT 26 · 10:00 AM – 03:00 PM</div>
+              <h4 class="node-title">Live Stage Pitches, Exhibition Floor & Grand Felicitation</h4>
+              <p class="node-desc">
+                Top 12 finalist teams present live on the Main Auditorium stage before angel investors, engineering leads, and university dignitaries. Prize distribution follows.
+              </p>
+              <div class="node-tags">
+                <span>Auditorium Stage</span>
+                <span>₹2.5L+ Loot Award</span>
+                <span>Closing Gala</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 5. PRIZES: ENDER CHEST & 9-SLOT HOTBAR ================= -->
+    <section id="prizes" class="prizes-section section-padding reveal-3d-section has-section-backdrop">
+      <!-- 3D Ender Chest Loot Vault Clearly Visible Background -->
+      <div class="section-backdrop" aria-hidden="true">
+        <div class="section-bg-layer" id="prizes-bg-layer">
+          <img src="assets/images/mc_ender_chest_loot_3d.jpg" alt="3D Minecraft Ender Chest Loot Vault Background" class="section-bg-image" style="object-position: center 35%;">
+        </div>
+        <div class="section-scrim-center"></div>
+        <div class="section-glow-fx glow-gold"></div>
+      </div>
+      <div class="container">
+        <!-- 9-Slot Minecraft Inventory Hotbar Showcase -->
+        <div class="mc-hotbar-showcase tilt-3d-card">
+          <div class="mc-hotbar-label">⚡ INVENTORY HOTBAR LOOT — SELECT SLOT TO INSPECT</div>
+          <div class="mc-hotbar-slots" id="mc-hotbar-slots">
+            <div class="mc-hotbar-slot active" data-slot="1" data-title="Netherite Trophy (₹1,00,000)" data-desc="Grand Champion First Place Loot + Pre-seed incubation grant">
+              <span class="slot-num">1</span>
+              <span class="slot-item enchanted-glint">👑</span>
+            </div>
+            <div class="mc-hotbar-slot" data-slot="2" data-title="Diamond Trove (₹60,000)" data-desc="Runner-Up Prize + Mechanical Keyboards for full squad">
+              <span class="slot-num">2</span>
+              <span class="slot-item enchanted-glint">💠</span>
+            </div>
+            <div class="mc-hotbar-slot" data-slot="3" data-title="Golden Vault (₹40,000)" data-desc="Second Runner-Up Cash Prize + Smart Wearables">
+              <span class="slot-num">3</span>
+              <span class="slot-item enchanted-glint">🪙</span>
+            </div>
+            <div class="mc-hotbar-slot" data-slot="4" data-title="All-Women Team Bounty (₹12,500)" data-desc="Special category bounty for highest scoring women-led squad">
+              <span class="slot-num">4</span>
+              <span class="slot-item">👩‍💻</span>
+            </div>
+            <div class="mc-hotbar-slot" data-slot="5" data-title="Freshmen Crafter Bounty (₹12,500)" data-desc="Special bounty for brightest project built by first-year builders">
+              <span class="slot-num">5</span>
+              <span class="slot-item">🌱</span>
+            </div>
+            <div class="mc-hotbar-slot" data-slot="6" data-title="UI/UX Aesthetics Bounty (₹12,500)" data-desc="Award for supreme frontend craftsmanship & accessibility">
+              <span class="slot-num">6</span>
+              <span class="slot-item">🎨</span>
+            </div>
+            <div class="mc-hotbar-slot" data-slot="7" data-title="Open Source Shield (₹12,500)" data-desc="Award for top documented, open-licensed GitHub build">
+              <span class="slot-num">7</span>
+              <span class="slot-item">🌐</span>
+            </div>
+            <div class="mc-hotbar-slot" data-slot="8" data-title="Sponsor API Bounty Pack ($5,000+)" data-desc="Cloud compute clusters, GPU quotas & developer API grants">
+              <span class="slot-num">8</span>
+              <span class="slot-item">☁️</span>
+            </div>
+            <div class="mc-hotbar-slot" data-slot="9" data-title="Hacker Swag Armor Set" data-desc="Custom cotton hoodie, NFC badge & holographic stickers">
+              <span class="slot-num">9</span>
+              <span class="slot-item">👕</span>
+            </div>
+          </div>
+          <!-- Dynamic Hotbar Tooltip Box -->
+          <div class="mc-hotbar-tooltip" id="mc-hotbar-tooltip">
+            <strong id="hotbar-tooltip-title">Netherite Trophy (₹1,00,000)</strong>
+            <p id="hotbar-tooltip-desc">Grand Champion First Place Loot + Pre-seed incubation grant</p>
+          </div>
+        </div>
+
+        <div class="section-header-center">
+          <div class="section-badge">
+            <span class="badge-dot dot-amber"></span>
+            <span>THE LOOT VAULT</span>
+          </div>
+          <h2 class="section-title">Rewards Worth The Grind</h2>
+          <p class="section-subtitle">
+            Over ₹2,50,000+ in total rewards, cloud infrastructure credits, specialized tech hardware, and fast-track incubation support.
+          </p>
+        </div>
+
+        <!-- Podium Loot Cards with 3D Float -->
+        <div class="prizes-podium-grid">
+          <!-- 2nd Place: Diamond Tier -->
+          <div class="loot-card loot-runner-up tilt-3d-card">
+            <div class="loot-tier-ribbon ribbon-cyan">2ND PLACE</div>
+            <div class="loot-chest-icon enchanted-glint">💠</div>
+            <h3 class="loot-tier-name">Architect's Trove</h3>
+            <div class="loot-cash-amount">₹60,000</div>
+            <p class="loot-subtitle">Hard Cash Prize + Tech Hardware</p>
+            <ul class="loot-perks-list">
+              <li><span>✓</span> ₹60,000 Direct Bank Transfer</li>
+              <li><span>✓</span> Mechanical Keyboards for each member</li>
+              <li><span>✓</span> $2,000 Cloud Platform Credits</li>
+              <li><span>✓</span> Direct fast-track interview with hiring partners</li>
+              <li><span>✓</span> Premium DBU Incubation Access</li>
+            </ul>
+          </div>
+
+          <!-- 1st Place: Grand Champion (Netherite Tier) -->
+          <div class="loot-card loot-grand-champion featured-loot tilt-3d-card">
+            <div class="loot-tier-ribbon ribbon-amber">🏆 GRAND CHAMPION</div>
+            <div class="loot-3d-chest-hero">
+              <img src="assets/images/mc_ender_chest_loot_3d.jpg" alt="3D Minecraft Ender Chest Loot Vault" class="loot-3d-chest-img">
+            </div>
+            <h3 class="loot-tier-name">Champion’s Cache</h3>
+            <div class="loot-cash-amount highlight-amber">₹1,00,000</div>
+            <p class="loot-subtitle">Cash Prize + Grand Trophy + Incubation</p>
+            <ul class="loot-perks-list">
+              <li><span>✓</span> <strong>₹1,00,000 Direct Cash Prize</strong></li>
+              <li><span>✓</span> Hand-crafted Obsidian Voxel Trophy</li>
+              <li><span>✓</span> Full Pre-Seed Incubation Grant support by DBU</li>
+              <li><span>✓</span> $5,000 Cloud Credits + Pro GPU Clusters</li>
+              <li><span>✓</span> VIP access to National Startup Conclave</li>
+              <li><span>✓</span> Custom Champion Bomber Jackets</li>
+            </ul>
+          </div>
+
+          <!-- 3rd Place: Gold Tier -->
+          <div class="loot-card loot-third-place tilt-3d-card">
+            <div class="loot-tier-ribbon ribbon-gold">3RD PLACE</div>
+            <div class="loot-chest-icon enchanted-glint">🪙</div>
+            <h3 class="loot-tier-name">Artisan's Vault</h3>
+            <div class="loot-cash-amount">₹40,000</div>
+            <p class="loot-subtitle">Hard Cash Prize + Goodies</p>
+            <ul class="loot-perks-list">
+              <li><span>✓</span> ₹40,000 Direct Bank Transfer</li>
+              <li><span>✓</span> Smart Wearable Fitness Trackers</li>
+              <li><span>✓</span> $1,000 Cloud Platform Credits</li>
+              <li><span>✓</span> 1-Year JetBrains Pro Licenses</li>
+              <li><span>✓</span> Official DBU Innovation Certificate</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Special Bounties Matrix -->
+        <div class="special-bounties-wrap">
+          <h3 class="bounties-title">Special Category Bounties</h3>
+          <div class="bounties-grid">
+            <div class="bounty-pill-card tilt-3d-card">
+              <span class="bounty-icon">👩‍💻</span>
+              <div class="bounty-info">
+                <h4>Best All-Women Team</h4>
+                <p>₹12,500 Cash + Specialized Mentorship from Women in Tech leads.</p>
+              </div>
+            </div>
+            <div class="bounty-pill-card tilt-3d-card">
+              <span class="bounty-icon">🌱</span>
+              <div class="bounty-info">
+                <h4>Best First-Year Crafters</h4>
+                <p>₹12,500 Cash for the most innovative project built entirely by freshmen.</p>
+              </div>
+            </div>
+            <div class="bounty-pill-card tilt-3d-card">
+              <span class="bounty-icon">🎨</span>
+              <div class="bounty-info">
+                <h4>Best UI / UX Experience</h4>
+                <p>₹12,500 Cash + Figma Enterprise Credits for supreme design craftsmanship.</p>
+              </div>
+            </div>
+            <div class="bounty-pill-card tilt-3d-card">
+              <span class="bounty-icon">🌐</span>
+              <div class="bounty-info">
+                <h4>Open Source Vanguard</h4>
+                <p>₹12,500 Cash for the most extensively documented and open-licensed build.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hacker Loot Pack (Every Participant) -->
+        <div class="loot-swag-box tilt-3d-card">
+          <div class="swag-box-header">
+            <h4>📦 EVERY ACCEPTED PARTICIPANT RECEIVES</h4>
+            <span>NO ONE LEAVES EMPTY-HANDED</span>
+          </div>
+          <div class="swag-items-row">
+            <div class="swag-item">
+              <span class="swag-emoji">👕</span>
+              <span>Exclusive CraftCon '26 Cotton Hoodie</span>
+            </div>
+            <div class="swag-item">
+              <span class="swag-emoji">🪪</span>
+              <span>Custom NFC Hacker Badge & Lanyard</span>
+            </div>
+            <div class="swag-item">
+              <span class="swag-emoji">✨</span>
+              <span>Matte Voxel Holographic Sticker Pack</span>
+            </div>
+            <div class="swag-item">
+              <span class="swag-emoji">☁️</span>
+              <span>$500+ Sponsor API & Cloud Credits</span>
+            </div>
+            <div class="swag-item">
+              <span class="swag-emoji">🍕</span>
+              <span>36-Hour Meals, Drinks & Fuel Kit</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 6. RULES & ELIGIBILITY (ENCHANTED QUEST BOOK) ================= -->
+    <section id="rules" class="rules-section section-padding reveal-3d-section has-section-backdrop">
+      <!-- 3D Enchanted Written Codex Book Clearly Visible Background -->
+      <div class="section-backdrop" aria-hidden="true">
+        <div class="section-bg-layer" id="rules-bg-layer">
+          <img src="assets/images/mc_codex_book_3d.jpg" alt="3D Minecraft Enchanted Codex Book Background" class="section-bg-image" style="object-position: 85% center;">
+        </div>
+        <div class="section-scrim-left"></div>
+        <div class="section-glow-fx glow-purple"></div>
+      </div>
+      <div class="container">
+        <div class="rules-layout">
+          <!-- Left Header Column with Redstone Repeater Widget -->
+          <div class="rules-heading-col">
+            <div class="section-badge">
+              <span class="badge-dot dot-purple"></span>
+              <span>EXPEDITION CODEX</span>
+            </div>
+            <h2 class="section-title">Rules & Eligibility Guidelines</h2>
+            <p class="section-subtitle">
+              Transparent, straightforward guidelines ensuring fair play, academic integrity, and an inclusive sandbox environment.
+            </p>
+
+            <!-- 3D Enchanted Written Codex Book Illustration -->
+            <div class="mc-codex-3d-feature tilt-3d-card">
+              <img src="assets/images/mc_codex_book_3d.jpg" alt="3D Minecraft Enchanted Codex Book" class="codex-3d-img">
+              <span class="codex-3d-tag">OFFICIAL ENCHANTED CODEX</span>
+            </div>
+
+            <!-- Redstone Repeater Interactive Toggle Widget -->
+            <div class="mc-repeater-widget tilt-3d-card" id="mc-repeater">
+              <div class="repeater-base">
+                <div class="repeater-torch fixed"></div>
+                <div class="repeater-torch movable" id="repeater-toggle-torch"></div>
+              </div>
+              <div class="repeater-info">
+                <strong>REDSTONE REPEATER DELAY: 1 TICK</strong>
+                <span>Click to toggle circuit delay & pulse sound</span>
+              </div>
+            </div>
+
+            <div class="rules-summary-pill">
+              <span>All recognized colleges eligible</span>
+              <span>•</span>
+              <span>Zero entry fee</span>
+            </div>
+          </div>
+
+          <!-- Right Tabbed Codex Box styled like an Enchanted Written Book -->
+          <div class="rules-tabs-container tilt-3d-card mc-book-gui">
+            <div class="codex-nav-tabs" role="tablist">
+              <button class="codex-tab active" data-tab="eligibility">TEAM & ELIGIBILITY</button>
+              <button class="codex-tab" data-tab="criteria">JUDGING CRITERIA</button>
+              <button class="codex-tab" data-tab="submission">SUBMISSION SPECS</button>
+              <button class="codex-tab" data-tab="conduct">CODE OF CONDUCT</button>
+            </div>
+
+            <!-- Tab Pane 1: Eligibility -->
+            <div class="codex-pane active" id="pane-eligibility">
+              <ul class="codex-list">
+                <li>
+                  <div class="codex-bullet">01</div>
+                  <div class="codex-text">
+                    <strong>Team Composition</strong>
+                    <p>Teams can consist of <strong>1 to 4 crafters</strong>. Cross-college and cross-departmental teams are strongly encouraged. Solo builders are welcome!</p>
+                  </div>
+                </li>
+                <li>
+                  <div class="codex-bullet">02</div>
+                  <div class="codex-text">
+                    <strong>Student Status</strong>
+                    <p>Open to all enrolled undergraduate, postgraduate, and diploma students from any recognized university or college across India. Valid student ID required at check-in.</p>
+                  </div>
+                </li>
+                <li>
+                  <div class="codex-bullet">03</div>
+                  <div class="codex-text">
+                    <strong>Zero Registration Fee</strong>
+                    <p>Participation in CRAFTCON '26 is 100% free of charge, sponsored by Desh Bhagat University and partner technology organizations.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Tab Pane 2: Criteria -->
+            <div class="codex-pane" id="pane-criteria">
+              <div class="criteria-metric-grid">
+                <div class="metric-box">
+                  <div class="metric-pct">30%</div>
+                  <h5>Technical Craftsmanship</h5>
+                  <p>Architecture resilience, depth of implementation, code quality, and proper integration of modern tools.</p>
+                </div>
+                <div class="metric-box">
+                  <div class="metric-pct">30%</div>
+                  <h5>Innovation & Originality</h5>
+                  <p>How uniquely does your build tackle the problem? Is it an ambitious leap or an incremental iteration?</p>
+                </div>
+                <div class="metric-box">
+                  <div class="metric-pct">20%</div>
+                  <h5>Design & Usability</h5>
+                  <p>Intuitive user experience, thoughtful aesthetics, accessible interactions, and responsive UI execution.</p>
+                </div>
+                <div class="metric-box">
+                  <div class="metric-pct">20%</div>
+                  <h5>Viability & Pitch</h5>
+                  <p>Clarity of the live presentation, real-world utility, business feasibility, and roadmap clarity.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab Pane 3: Submission -->
+            <div class="codex-pane" id="pane-submission">
+              <ul class="codex-list">
+                <li>
+                  <div class="codex-bullet">📦</div>
+                  <div class="codex-text">
+                    <strong>Original Codebase Requirement</strong>
+                    <p>All core development must be written during the official 36-hour duration. Utilizing open-source libraries, APIs, and frameworks is encouraged, but pre-built proprietary software is disqualified.</p>
+                  </div>
+                </li>
+                <li>
+                  <div class="codex-bullet">🔗</div>
+                  <div class="codex-text">
+                    <strong>Public Git Repository & Deployment</strong>
+                    <p>Teams must provide a public GitHub/GitLab repository with a descriptive README, setup instructions, and an active hosted demo URL (where applicable).</p>
+                  </div>
+                </li>
+                <li>
+                  <div class="codex-bullet">🎥</div>
+                  <div class="codex-text">
+                    <strong>2-Minute Video Walkthrough</strong>
+                    <p>A concise screen recording demonstrating the core problem statement, architecture diagram, and working live prototype.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Tab Pane 4: Conduct -->
+            <div class="codex-pane" id="pane-conduct">
+              <ul class="codex-list">
+                <li>
+                  <div class="codex-bullet">🤝</div>
+                  <div class="codex-text">
+                    <strong>Inclusive & Respectful Culture</strong>
+                    <p>CRAFTCON '26 is dedicated to providing a harassment-free experience for everyone, regardless of gender, sexual orientation, disability, physical appearance, or race.</p>
+                  </div>
+                </li>
+                <li>
+                  <div class="codex-bullet">🛡️</div>
+                  <div class="codex-text">
+                    <strong>Academic Integrity & Zero Tolerance</strong>
+                    <p>Plagiarism, credential spoofing, unauthorized access to network infrastructure, or sabotage of fellow teams results in immediate disqualification and campus escort.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 7. SPONSORS: SKYWARD BEACON LIGHT PILLARS ================= -->
+    <section id="sponsors" class="sponsors-section section-padding reveal-3d-section has-section-backdrop">
+      <!-- 3D Skyward Beacon Monument Clearly Visible Background -->
+      <div class="section-backdrop" aria-hidden="true">
+        <div class="section-bg-layer" id="sponsors-bg-layer">
+          <img src="assets/images/mc_beacon_sponsors_3d.jpg" alt="3D Skyward Beacon Monument Background" class="section-bg-image" style="object-position: center 30%;">
+        </div>
+        <div class="section-scrim-center"></div>
+        <div class="section-glow-fx glow-cyan"></div>
+      </div>
+      <div class="container">
+        <!-- Skyward Beacon Beam Visual -->
+        <div class="mc-beacon-container" aria-hidden="true">
+          <div class="beacon-3d-visual tilt-3d-card">
+            <img src="assets/images/mc_beacon_sponsors_3d.jpg" alt="3D Skyward Beacon Monument" class="beacon-3d-monument-img">
+            <div class="beacon-beam-ray"></div>
+          </div>
+          <div class="beacon-meta">
+            <span class="beacon-tag">NETHER STAR BEACON ACTIVATED</span>
+            <span class="beacon-buff">BUFF: SPEED II · RESISTANCE II · INSPIRATION III</span>
+          </div>
+        </div>
+
+        <div class="section-header-center">
+          <div class="section-badge">
+            <span class="badge-dot dot-cyan"></span>
+            <span>ECOSYSTEM ALLIANCES</span>
+          </div>
+          <h2 class="section-title">Backed by Industry Leaders</h2>
+          <p class="section-subtitle">
+            Leading engineering firms, cloud hyperscalers, and developer communities powering the CRAFTCON sandbox.
+          </p>
+        </div>
+
+        <!-- Tier 1: Obsidian Tier -->
+        <div class="sponsor-tier-block">
+          <div class="tier-label">OBSIDIAN TITLE PATRONS</div>
+          <div class="sponsor-grid tier-obsidian">
+            <div class="sponsor-card tilt-3d-card mc-sponsor-bevel">
+              <span class="sponsor-logo-text">[DEVHOST_CLOUD]</span>
+              <span class="sponsor-role">Cloud Infrastructure Partner</span>
+            </div>
+            <div class="sponsor-card tilt-3d-card mc-sponsor-bevel">
+              <span class="sponsor-logo-text">[NEXUS_AI_LABS]</span>
+              <span class="sponsor-role">AI & Compute Partner</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tier 2: Diamond & Gold Tiers -->
+        <div class="sponsor-tier-block">
+          <div class="tier-label">DIAMOND & GOLD PATRONS</div>
+          <div class="sponsor-grid tier-diamond">
+            <div class="sponsor-card tilt-3d-card mc-sponsor-bevel">
+              <span class="sponsor-logo-text">[CHAIN_FOUNDRY]</span>
+              <span class="sponsor-role">Web3 Bounty Sponsor</span>
+            </div>
+            <div class="sponsor-card tilt-3d-card mc-sponsor-bevel">
+              <span class="sponsor-logo-text">[SILICON_FORGE]</span>
+              <span class="sponsor-role">Hardware Track Sponsor</span>
+            </div>
+            <div class="sponsor-card tilt-3d-card mc-sponsor-bevel">
+              <span class="sponsor-logo-text">[DEVCOMM_INDIA]</span>
+              <span class="sponsor-role">Developer Ecosystem Partner</span>
+            </div>
+            <div class="sponsor-card tilt-3d-card mc-sponsor-bevel">
+              <span class="sponsor-logo-text">[PULSE_PAYMENTS]</span>
+              <span class="sponsor-role">FinTech Track Sponsor</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tier 3: Community & Platform Partners -->
+        <div class="sponsor-tier-block">
+          <div class="tier-label">OFFICIAL PLATFORMS & COMMUNITY</div>
+          <div class="sponsor-grid tier-community">
+            <div class="sponsor-card sm tilt-3d-card mc-sponsor-bevel">
+              <span class="sponsor-logo-text">UNSTOP</span>
+              <span class="sponsor-role">Official Registration Platform</span>
+            </div>
+            <div class="sponsor-card sm tilt-3d-card mc-sponsor-bevel">
+              <span class="sponsor-logo-text">GITHUB CAMPUS</span>
+              <span class="sponsor-role">Education Partner</span>
+            </div>
+            <div class="sponsor-card sm tilt-3d-card mc-sponsor-bevel">
+              <span class="sponsor-logo-text">RED BULL</span>
+              <span class="sponsor-role">Energy & Fuel Partner</span>
+            </div>
+            <div class="sponsor-card sm tilt-3d-card mc-sponsor-bevel">
+              <span class="sponsor-logo-text">DBU INCUBATOR</span>
+              <span class="sponsor-role">Centre for Innovation</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Call to Sponsor -->
+        <div class="sponsor-cta-banner tilt-3d-card">
+          <div class="cta-banner-text">
+            <h4>Interested in partnering or sponsoring a track bounty?</h4>
+            <p>Connect with 500+ elite engineers, recruit top talent, and showcase your developer APIs.</p>
+          </div>
+          <a href="mailto:hackathon@deshbhagatuniversity.in" class="pill-cta-btn banner-btn">
+            <span>BECOME A SPONSOR</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 8. ORGANIZERS & MENTORS ================= -->
+    <section id="organizers" class="organizers-section section-padding reveal-3d-section">
+      <div class="container">
+        <div class="section-header-center">
+          <div class="section-badge">
+            <span class="badge-dot dot-green"></span>
+            <span>COUNCIL & GUILD MASTERS</span>
+          </div>
+          <h2 class="section-title">The Organizing Council</h2>
+          <p class="section-subtitle">
+            Mentors, faculty advisors, and student leads orchestrating CRAFTCON '26 at Desh Bhagat University.
+          </p>
+        </div>
+
+        <div class="organizers-grid">
+          <!-- Member 1 -->
+          <div class="organizer-card tilt-3d-card mc-sponsor-bevel">
+            <div class="org-avatar-wrap">
+              <div class="org-avatar-cube avatar-prof">👨‍🏫</div>
+              <span class="org-role-badge">FACULTY CONVENER</span>
+            </div>
+            <h4 class="org-name">Dr. [FACULTY_NAME]</h4>
+            <span class="org-title">Head, Faculty of Computing & IT</span>
+            <span class="org-dept">Desh Bhagat University</span>
+            <div class="org-socials">
+              <a href="#" aria-label="LinkedIn Profile"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z"/></svg></a>
+              <a href="#" aria-label="Email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+            </div>
+          </div>
+
+          <!-- Member 2 -->
+          <div class="organizer-card tilt-3d-card mc-sponsor-bevel">
+            <div class="org-avatar-wrap">
+              <div class="org-avatar-cube avatar-lead">🧑‍💻</div>
+              <span class="org-role-badge">LEAD ORGANIZER</span>
+            </div>
+            <h4 class="org-name">[STUDENT_LEAD_NAME]</h4>
+            <span class="org-title">President, ACM Student Chapter</span>
+            <span class="org-dept">Desh Bhagat University</span>
+            <div class="org-socials">
+              <a href="#" aria-label="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"/></svg></a>
+              <a href="#" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z"/></svg></a>
+            </div>
+          </div>
+
+          <!-- Member 3 -->
+          <div class="organizer-card tilt-3d-card mc-sponsor-bevel">
+            <div class="org-avatar-wrap">
+              <div class="org-avatar-cube avatar-tech">👩‍🔬</div>
+              <span class="org-role-badge">CHIEF ARCHITECT</span>
+            </div>
+            <h4 class="org-name">[TECH_LEAD_NAME]</h4>
+            <span class="org-title">Technical Operations Lead</span>
+            <span class="org-dept">Google Developer Student Clubs</span>
+            <div class="org-socials">
+              <a href="#" aria-label="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"/></svg></a>
+              <a href="#" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z"/></svg></a>
+            </div>
+          </div>
+
+          <!-- Member 4 -->
+          <div class="organizer-card tilt-3d-card mc-sponsor-bevel">
+            <div class="org-avatar-wrap">
+              <div class="org-avatar-cube avatar-ops">⚡</div>
+              <span class="org-role-badge">LOGISTICS & COMMUNITY</span>
+            </div>
+            <h4 class="org-name">[COMMUNITY_LEAD_NAME]</h4>
+            <span class="org-title">Head of Hacker Experience</span>
+            <span class="org-dept">Desh Bhagat University</span>
+            <div class="org-socials">
+              <a href="#" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z"/></svg></a>
+              <a href="#" aria-label="Twitter"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 9. FREQUENTLY ASKED QUESTIONS (VILLAGER QUEST GUI) ================= -->
+    <section id="faq" class="faq-section section-padding reveal-3d-section has-section-backdrop">
+      <!-- 3D Villager Hackathon Hub Clearly Visible Background -->
+      <div class="section-backdrop" aria-hidden="true">
+        <div class="section-bg-layer" id="faq-bg-layer">
+          <img src="assets/images/mc_villager_dialogue_3d.jpg" alt="3D Minecraft Hackathon Village Background" class="section-bg-image" style="object-position: center 40%;">
+        </div>
+        <div class="section-scrim-center"></div>
+        <div class="section-glow-fx glow-purple"></div>
+      </div>
+      <div class="container">
+        <div class="section-header-center">
+          <div class="section-badge">
+            <span class="badge-dot dot-amber"></span>
+            <span>TRANSMISSION ARCHIVE</span>
+          </div>
+          <h2 class="section-title">Frequently Asked Questions</h2>
+          <p class="section-subtitle">
+            Everything you need to know about registering, arriving, hacking, and claiming bounties at CRAFTCON '26.
+          </p>
+        </div>
+
+        <div class="faq-accordion-wrapper">
+          <!-- Item 1 -->
+          <details class="faq-item tilt-3d-card mc-dialogue-card" open>
+            <summary class="faq-question">
+              <span class="mc-npc-prefix">💬 [LIBRARIAN VILLAGER]</span>
+              <span class="faq-q-text">Who is eligible to participate in CRAFTCON '26?</span>
+              <span class="faq-icon-arrow"></span>
+            </summary>
+            <div class="faq-answer">
+              <p>
+                Any currently enrolled student (Undergraduate, Postgraduate, or Polytechnic/Diploma) from any recognized academic institution across India is eligible. You will be required to present your official college ID during on-campus check-in.
+              </p>
+            </div>
+          </details>
+
+          <!-- Item 2 -->
+          <details class="faq-item tilt-3d-card mc-dialogue-card">
+            <summary class="faq-question">
+              <span class="mc-npc-prefix">🪙 [TRADE MASTER]</span>
+              <span class="faq-q-text">What is the registration fee? Are meals and lodging included?</span>
+              <span class="faq-icon-arrow"></span>
+            </summary>
+            <div class="faq-answer">
+              <p>
+                <strong>Zero fee.</strong> Participation is 100% free! Accepted builders will be provided with full 36-hour meals, midnight snacks, unlimited energy drinks, high-speed Wi-Fi, and designated sleeping/rest quarters on campus.
+              </p>
+            </div>
+          </details>
+
+          <!-- Item 3 -->
+          <details class="faq-item tilt-3d-card mc-dialogue-card">
+            <summary class="faq-question">
+              <span class="mc-npc-prefix">🛡️ [GUILD CAPTAIN]</span>
+              <span class="faq-q-text">What is the allowed team size? Can I apply alone?</span>
+              <span class="faq-icon-arrow"></span>
+            </summary>
+            <div class="faq-answer">
+              <p>
+                Teams can range from <strong>1 to 4 crafters</strong>. You can register with an already formed squad, or join our official Discord server to find teammates during the pre-event mixer.
+              </p>
+            </div>
+          </details>
+
+          <!-- Item 4 -->
+          <details class="faq-item tilt-3d-card mc-dialogue-card">
+            <summary class="faq-question">
+              <span class="mc-npc-prefix">⚙️ [REDSTONE GOLEM]</span>
+              <span class="faq-q-text">Can we work on an existing project before the hackathon?</span>
+              <span class="faq-icon-arrow"></span>
+            </summary>
+            <div class="faq-answer">
+              <p>
+                No. To maintain complete fairness, all code, designs, and architectural components must be created from scratch after the opening bell at 12:00 PM on October 24. Utilizing publicly available libraries, APIs, and boilerplate templates is completely permitted.
+              </p>
+            </div>
+          </details>
+
+          <!-- Item 5 -->
+          <details class="faq-item tilt-3d-card mc-dialogue-card">
+            <summary class="faq-question">
+              <span class="mc-npc-prefix">🗺️ [CARTOGRAPHER]</span>
+              <span class="faq-q-text">How do we reach Desh Bhagat University?</span>
+              <span class="faq-icon-arrow"></span>
+            </summary>
+            <div class="faq-answer">
+              <p>
+                Desh Bhagat University is located at Mandi Gobindgarh, Punjab (along National Highway 44). It is well connected by rail (Sirhind Junction / Mandi Gobindgarh station) and road from Chandigarh, Ludhiana, and Delhi. Shuttle buses will be arranged from key transit hubs for verified outstation participants.
+              </p>
+            </div>
+          </details>
+
+          <!-- Item 6 -->
+          <details class="faq-item tilt-3d-card mc-dialogue-card">
+            <summary class="faq-question">
+              <span class="mc-npc-prefix">🔬 [ALCHEMIST]</span>
+              <span class="faq-q-text">Will hardware components or microcontrollers be provided?</span>
+              <span class="faq-icon-arrow"></span>
+            </summary>
+            <div class="faq-answer">
+              <p>
+                For teams participating in <em>Track 03: Redstone Lab</em>, basic sensor modules, ESP32 boards, soldering stations, and 3D printing assistance will be available in the Maker Lab. Teams with specialized hardware needs are welcome to bring their own kits.
+              </p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 10. REPEATED FINAL CTA STRIP ================= -->
+    <section class="final-cta-section reveal-3d-section">
+      <div class="container">
+        <div class="final-cta-box tilt-3d-card">
+          <div class="final-cta-decor"></div>
+          <div class="final-cta-inner">
+            <span class="final-kicker">PORTAL ACCESS OPEN FOR SQUAD REGISTRATION</span>
+            <h2 class="final-heading">Ready to Craft the Extraordinary?</h2>
+            <p class="final-desc">
+              Seats are strictly limited to 500 builders. Secure your team’s inventory pass before applications close on October 10.
+            </p>
+            <div class="final-action-row">
+              <a href="#register" class="pill-cta-btn grand-btn open-modal-btn" data-modal="register-modal">
+                <span>CLAIM YOUR HACKER PASS</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <span class="final-subinfo">Zero entry fees · Free lodging & meals</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= 11. FOOTER ================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top-grid">
+        <!-- Brand & College Credibility -->
+        <div class="footer-brand-block">
+          <a href="#hero" class="brand-wordmark">
+            <span class="brand-cube"></span>
+            <span class="brand-text">CRAFTCON<span class="brand-year">'26</span></span>
+          </a>
+          <p class="footer-tagline">
+            The premier collegiate sandbox hackathon hosted by Desh Bhagat University. Fostering bold engineering, peer collaboration, and student startup incubation.
+          </p>
+          <div class="dbu-seal-box">
+            <div class="seal-icon">🏛️</div>
+            <div class="seal-info">
+              <strong>DESH BHAGAT UNIVERSITY</strong>
+              <span>State Private University · Approved by UGC & AICTE · Punjab</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-links-col">
+          <h5 class="footer-col-title">NAVIGATION</h5>
+          <ul>
+            <li><a href="#about">About DBU Hackathon</a></li>
+            <li><a href="#tracks">Biomes & Tracks</a></li>
+            <li><a href="#timeline">The Crafting Roadmap</a></li>
+            <li><a href="#prizes">Prize Vault</a></li>
+            <li><a href="#rules">Rules & Codex</a></li>
+            <li><a href="#faq">FAQ Archive</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact & Venue -->
+        <div class="footer-links-col">
+          <h5 class="footer-col-title">COORDINATES</h5>
+          <p class="footer-contact-item">
+            <strong>Campus Location:</strong><br>
+            Desh Bhagat University,<br>
+            Amloh Road, Mandi Gobindgarh,<br>
+            Punjab 147301, India
+          </p>
+          <p class="footer-contact-item">
+            <strong>Direct Dispatch:</strong><br>
+            <a href="mailto:hackathon@deshbhagatuniversity.in">hackathon@deshbhagatuniversity.in</a><br>
+            <a href="tel:+911765520520">+91 (1765) 520520</a>
+          </p>
+        </div>
+
+        <!-- Social Channels -->
+        <div class="footer-links-col">
+          <h5 class="footer-col-title">CONNECT GUILD</h5>
+          <div class="footer-social-strip">
+            <a href="#" class="social-box" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="#" class="social-box" aria-label="LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z"/></svg>
+            </a>
+            <a href="#" class="social-box" aria-label="Twitter / X">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="#" class="social-box" aria-label="Discord">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+            </a>
+          </div>
+          <p class="footer-micro-note">Official Discord will open on Oct 1st for registered builders.</p>
+        </div>
+      </div>
+
+      <!-- Bottom Credits & Disclaimers -->
+      <div class="footer-bottom-bar">
+        <div class="footer-legal">
+          <p>© 2026 CRAFTCON · Desh Bhagat University. All rights reserved.</p>
+          <p class="homage-disclaimer">
+            *This student hackathon is a creative stylistic homage. It is an independent educational initiative not affiliated with, endorsed by, or sponsored by Mojang AB or Microsoft.
+          </p>
+        </div>
+
+        <!-- Signature Tri-word mark -->
+        <div class="footer-tri-mark">
+          <span>CREATE</span>
+          <span class="dot">•</span>
+          <span>CONNECT</span>
+          <span class="dot">•</span>
+          <span>INSPIRE</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= 12. REGISTRATION MODAL & HACKER PASS GENERATOR ================= -->
+  <div id="register-modal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" aria-label="Close Registration Modal">&times;</button>
+
+      <!-- Step 1: Form -->
+      <div id="modal-step-form" class="modal-view active">
+        <div class="modal-header">
+          <div class="modal-badge">
+            <span class="modal-dot"></span>
+            <span>INVENTORY REGISTRATION</span>
+          </div>
+          <h3 class="modal-title">Claim Your Squad Pass</h3>
+          <p class="modal-desc">
+            Complete the details below to register your team for CRAFTCON '26. Instant digital pass issued upon submission.
+          </p>
+        </div>
+
+        <form id="hacker-reg-form" class="hacker-form">
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label for="team-name">Team Name <span class="req">*</span></label>
+              <input type="text" id="team-name" required placeholder="e.g. Netherite Architects">
+            </div>
+            <div class="form-group">
+              <label for="team-size">Team Size <span class="req">*</span></label>
+              <select id="team-size" required>
+                <option value="1">1 Builder (Solo)</option>
+                <option value="2">2 Builders</option>
+                <option value="3">3 Builders</option>
+                <option value="4" selected>4 Builders (Full Squad)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label for="leader-name">Team Leader Name <span class="req">*</span></label>
+              <input type="text" id="leader-name" required placeholder="Full Name">
+            </div>
+            <div class="form-group">
+              <label for="leader-email">Leader Email <span class="req">*</span></label>
+              <input type="email" id="leader-email" required placeholder="name@college.edu">
+            </div>
+          </div>
+
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label for="leader-phone">WhatsApp / Phone <span class="req">*</span></label>
+              <input type="tel" id="leader-phone" required placeholder="+91 98765 43210">
+            </div>
+            <div class="form-group">
+              <label for="college-name">College / University Name <span class="req">*</span></label>
+              <input type="text" id="college-name" required placeholder="e.g. Desh Bhagat University">
+            </div>
+          </div>
+
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label for="primary-track">Primary Biome / Track <span class="req">*</span></label>
+              <select id="primary-track" required>
+                <option value="The End: AI & Agentic Workflows">Track 01 — The End (AI & Agents)</option>
+                <option value="The Overworld: Sustainability & AgriTech">Track 02 — The Overworld (ClimateTech)</option>
+                <option value="Redstone Lab: IoT & Hardware">Track 03 — Redstone Lab (IoT & Hardware)</option>
+                <option value="The Deep Dark: Cybersecurity & Web3">Track 04 — The Deep Dark (Security & Web3)</option>
+                <option value="The Nether: FinTech & High-Scale">Track 05 — The Nether (FinTech & Scale)</option>
+                <option value="Open Sandbox: Wildcard & Civic">Track 06 — Open Sandbox (Wildcard)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="portfolio-url">GitHub / Portfolio URL</label>
+              <input type="url" id="portfolio-url" placeholder="https://github.com/team-lead">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="concept-brief">Preliminary Concept Idea (1-2 sentences)</label>
+            <textarea id="concept-brief" rows="2" placeholder="Briefly describe what you plan to forge..."></textarea>
+          </div>
+
+          <div class="form-checkbox-row">
+            <label class="custom-check-container" for="agree-terms">
+              <input type="checkbox" id="agree-terms" required checked>
+              <span class="custom-checkmark"></span>
+              <span class="check-label-text">We agree to abide by the CRAFTCON '26 Code of Conduct & Academic Integrity rules.</span>
+            </label>
+          </div>
+
+          <button type="submit" class="pill-cta-btn modal-submit-btn" id="submit-ticket-btn">
+            <span>GENERATE HACKER TICKET</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- Step 2: Digital Hacker Pass Generated Result -->
+      <div id="modal-step-ticket" class="modal-view">
+        <div class="ticket-celebration">
+          <span class="celebration-badge">🎉 INVENTORY PASS ISSUED</span>
+          <h3>Squad Successfully Registered!</h3>
+          <p>Your team is registered for CRAFTCON '26. A confirmation receipt has been generated.</p>
+        </div>
+
+        <!-- Styled Digital Ticket -->
+        <div class="hacker-pass-ticket tilt-3d-card" id="digital-pass-card">
+          <div class="ticket-header">
+            <div class="ticket-brand">
+              <span class="t-cube"></span>
+              <span class="t-name">CRAFTCON '26</span>
+            </div>
+            <div class="ticket-status-pill">OFFICIAL PASS</div>
+          </div>
+
+          <div class="ticket-body">
+            <div class="ticket-main-field">
+              <span class="t-lbl">SQUAD NAME</span>
+              <h4 id="pass-team-name" class="t-val">Netherite Architects</h4>
+            </div>
+
+            <div class="ticket-grid">
+              <div>
+                <span class="t-lbl">LEADER</span>
+                <span id="pass-leader-name" class="t-val sm">Aryan Sharma</span>
+              </div>
+              <div>
+                <span class="t-lbl">SIZE</span>
+                <span id="pass-team-size" class="t-val sm">4 Members</span>
+              </div>
+              <div>
+                <span class="t-lbl">BIOME / TRACK</span>
+                <span id="pass-track-name" class="t-val sm">The End (AI & Agents)</span>
+              </div>
+              <div>
+                <span class="t-lbl">VENUE</span>
+                <span class="t-val sm">DBU Campus, Punjab</span>
+              </div>
+            </div>
+
+            <div class="ticket-barcode-strip">
+              <div class="barcode-graphic" aria-hidden="true">
+                ||| | |||| | ||| ||||| | || |||| | ||| || ||||
+              </div>
+              <div class="ticket-code-id">PASS-ID: <span id="pass-unique-id">CFT-8942-DBU</span></div>
+            </div>
+          </div>
+
+          <div class="ticket-stub">
+            <span>OCTOBER 24-26, 2026 · ADMIT SQUAD</span>
+          </div>
+        </div>
+
+        <div class="ticket-actions">
+          <button id="download-pass-btn" class="pill-cta-btn print-pass-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>PRINT / SAVE PASS</span>
+          </button>
+          <button id="modal-done-btn" class="ghost-cta-btn">
+            <span>RETURN TO SITE</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
