@@ -499,6 +499,9 @@ a {
   transform: translateX(3px);
 }
 
+.btn-text-full { display: inline; }
+.btn-text-short { display: none; }
+
 .ghost-cta-btn {
   display: inline-flex;
   align-items: center;
@@ -766,7 +769,19 @@ a {
 }
 
 .meta-item { display: flex; flex-direction: column; gap: 2px; }
-.meta-label { font-family: var(--font-pixel); font-size: 0.62rem; letter-spacing: 0.1em; color: var(--text-dim); }
+.meta-label { 
+  font-family: var(--font-pixel); 
+  font-size: 0.62rem; 
+  letter-spacing: 0.1em; 
+  color: var(--text-dim); 
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.meta-label svg {
+  flex-shrink: 0;
+  color: var(--color-purple-bright);
+}
 .meta-val { font-family: var(--font-display); font-size: 0.85rem; font-weight: 700; color: var(--text-white); letter-spacing: 0.02em; }
 .meta-divider { width: 1px; height: 24px; background: var(--border-subtle); }
 .highlight-amber { color: var(--color-amber-bright) !important; text-shadow: 0 0 12px rgba(245, 166, 35, 0.6); }
@@ -2161,42 +2176,159 @@ a {
     animation: slotBounce 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  /* Header & Navigation */
+  /* Header & Navigation (Clean, Spacious, Perfectly Proportioned Mobile App Bar) */
+  :root {
+    --nav-height: 60px;
+  }
+
   .site-header {
-    background: rgba(10, 10, 16, 0.88) !important;
-    backdrop-filter: blur(16px) !important;
-    -webkit-backdrop-filter: blur(16px) !important;
+    height: 60px !important;
+    background: rgba(10, 10, 16, 0.92) !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  .desktop-nav { display: none; }
-  .cube-status-pill {
-    display: flex;
-    padding: 3px 8px;
-    font-size: 0.62rem;
-    gap: 4px;
-    border-color: rgba(112, 224, 0, 0.4);
-    background: rgba(112, 224, 0, 0.1);
+  .header-container {
+    height: 60px !important;
+    padding: 0 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    max-width: 100% !important;
   }
 
-  .hamburger-btn { display: flex; }
-  .brand-wordmark .brand-text { font-size: 1.15rem; }
-  .brand-tag { display: none; }
+  .desktop-nav { display: none !important; }
+
+  /* Hide 3D World pill on mobile to give breathing room */
+  .cube-status-pill {
+    display: none !important;
+  }
+
+  .brand-wordmark {
+    display: flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    font-size: 1.02rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  .brand-cube {
+    width: 10px !important;
+    height: 10px !important;
+    flex-shrink: 0;
+  }
+
+  .brand-wordmark .brand-text {
+    font-size: 1.02rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em;
+  }
+
+  .brand-year {
+    font-size: 0.76rem !important;
+  }
+
+  .brand-tag {
+    display: inline-block !important;
+    font-size: 0.54rem !important;
+    padding: 1px 5px !important;
+    background: rgba(245, 166, 35, 0.14) !important;
+    border: 1px solid rgba(245, 166, 35, 0.35) !important;
+    border-radius: 3px !important;
+    color: var(--color-amber-bright) !important;
+    margin-left: 2px !important;
+  }
 
   .header-actions {
-    gap: 8px;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .icon-toggle-btn {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #cfcfe2 !important;
+    flex-shrink: 0 !important;
+    cursor: pointer;
+  }
+
+  .icon-toggle-btn svg {
+    width: 15px !important;
+    height: 15px !important;
   }
 
   .pill-cta-btn.open-modal-btn {
-    padding: 7px 12px;
-    background: linear-gradient(135deg, #70e000 0%, #38b000 100%);
-    color: #08080d;
-    box-shadow: 0 0 14px rgba(112, 224, 0, 0.4);
+    padding: 6px 13px !important;
+    background: linear-gradient(135deg, #70e000 0%, #38b000 100%) !important;
+    color: #08080d !important;
+    box-shadow: 0 0 14px rgba(112, 224, 0, 0.4) !important;
+    border-radius: 9999px !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    flex-shrink: 0 !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em !important;
   }
 
-  .pill-cta-btn.open-modal-btn span {
-    font-size: 0.72rem;
-    font-weight: 700;
+  .pill-cta-btn.open-modal-btn svg {
+    display: none !important;
+  }
+
+  .btn-text-full {
+    display: none !important;
+  }
+
+  .btn-text-short {
+    display: inline !important;
+  }
+
+  .hamburger-btn {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 4px !important;
+    width: 36px !important;
+    height: 36px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 8px !important;
+    padding: 0 !important;
+    cursor: pointer !important;
+    flex-shrink: 0 !important;
+  }
+
+  .hamburger-btn span {
+    width: 18px !important;
+    height: 2px !important;
+    background-color: #ffffff !important;
+    border-radius: 2px !important;
+    transition: transform 0.25s ease, opacity 0.2s ease !important;
+  }
+
+  .hamburger-btn[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .hamburger-btn[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger-btn[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
   }
 
   /* Mobile Drawer Menu (Minecraft Inventory Theme) */
@@ -2214,7 +2346,7 @@ a {
   .hero-section {
     min-height: 100vh;
     min-height: 100dvh;
-    padding-top: calc(var(--nav-height) + 20px);
+    padding-top: calc(var(--nav-height) + 16px);
     padding-bottom: 28px;
     display: flex;
     flex-direction: column;
@@ -2229,43 +2361,69 @@ a {
     justify-content: space-between;
     padding: 0 16px;
     width: 100%;
+    box-sizing: border-box;
   }
 
   .hero-inner {
     max-width: 100%;
-    padding-top: 8px;
+    padding-top: 6px;
     display: flex;
     flex-direction: column;
   }
 
   .hero-kicker-badge {
     display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 14px;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 8px 12px;
     font-size: 0.72rem;
     margin-bottom: 16px;
     border: 1px solid rgba(199, 125, 255, 0.35);
-    background: rgba(18, 18, 28, 0.75);
+    background: rgba(18, 18, 28, 0.8);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: var(--radius-sm);
     align-self: flex-start;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .kicker-icon {
+    width: 12px;
+    height: 12px;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .kicker-texts {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .kicker-title {
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.3;
+    color: var(--text-white);
   }
 
   .kicker-sub {
-    font-size: 0.62rem;
-    letter-spacing: 0.05em;
+    font-size: 0.60rem;
+    letter-spacing: 0.04em;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.35;
+    color: #cfcfe2;
   }
 
   .hero-headline {
-    font-size: clamp(2.8rem, 11.8vw, 4.4rem);
+    font-size: clamp(2.7rem, 11.5vw, 4.3rem);
     line-height: 0.96;
     letter-spacing: -0.03em;
     font-weight: 800;
@@ -2280,52 +2438,80 @@ a {
   }
 
   .hero-subtext {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     line-height: 1.58;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
     color: #cfcfe2;
-    max-width: 95%;
+    max-width: 100%;
+    word-break: break-word;
   }
 
-  /* Sleek Horizontal Meta Ribbon with Dividers (Just like Desktop) */
+  /* Sleek 2-Column + Full-Width Venue Meta Card (Desh Bhagat University fits completely and beautifully) */
   .hero-meta-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 14px;
     width: 100%;
-    padding: 12px 14px;
-    background: rgba(18, 18, 28, 0.78);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    max-width: 100%;
+    padding: 14px 16px;
+    background: rgba(18, 18, 28, 0.85) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(199, 125, 255, 0.25) !important;
     border-radius: var(--radius-md);
     margin-bottom: 22px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    box-sizing: border-box;
+  }
+
+  .meta-divider {
+    display: none !important;
   }
 
   .meta-item {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .meta-item.meta-venue {
+    grid-column: 1 / -1;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .meta-label {
+    font-family: var(--font-pixel);
     font-size: 0.58rem;
     letter-spacing: 0.1em;
-    color: var(--text-dim);
+    color: var(--color-purple-bright);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-transform: uppercase;
+  }
+
+  .meta-label svg {
+    color: var(--color-purple-bright);
+    flex-shrink: 0;
   }
 
   .meta-val {
-    font-size: 0.80rem;
+    font-family: var(--font-display);
+    font-size: 0.86rem;
     font-weight: 700;
-    white-space: nowrap;
+    color: var(--text-white);
+    letter-spacing: 0.01em;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.35;
   }
 
-  .meta-divider {
-    display: block;
-    width: 1px;
-    height: 24px;
-    background: rgba(255, 255, 255, 0.12);
+  .meta-item.meta-venue .meta-val {
+    font-size: 0.88rem;
+    color: #f1f1f7;
+    font-weight: 600;
   }
 
   /* Side-by-Side Sleek Action Buttons Duo */
@@ -3049,7 +3235,9 @@ a {
   }
 
   .hero-meta-bar {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 12px;
+    padding: 12px 14px;
   }
   
   .cd-number {
@@ -3058,5 +3246,29 @@ a {
 
   .mc-xp-bar-bg {
     width: 120px;
+  }
+}
+
+@media (max-width: 350px) {
+  .header-container {
+    padding: 0 10px !important;
+  }
+
+  .brand-wordmark .brand-text {
+    font-size: 0.94rem !important;
+  }
+
+  .brand-tag {
+    display: none !important;
+  }
+
+  .pill-cta-btn.open-modal-btn {
+    padding: 5px 10px !important;
+    font-size: 0.68rem !important;
+  }
+
+  .hero-meta-bar {
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
 }
