@@ -327,6 +327,7 @@ function initThreeJSScene() {
   });
   threeRenderer.setSize(width, height);
   threeRenderer.setPixelRatio(isMobile ? 1.0 : Math.min(window.devicePixelRatio, 1.75));
+  threeRenderer.setClearColor(0x000000, 0);
 
   // Lighting
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
@@ -505,49 +506,178 @@ function initThreeJSScene() {
 }
 
 /* ==========================================================================
-   4. HERO 3D PORTAL CAMERA DIVE (GSAP SCROLLTRIGGER REEL EFFECT)
+   4. HERO 3D PORTAL CAMERA DIVE (TECHFEST-STYLE PINNED ZOOM SEQUENCE)
    ========================================================================== */
 function initHero3DCameraDive() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
 
   gsap.registerPlugin(ScrollTrigger);
 
-  const heroSection = document.getElementById('hero');
+  const heroWrapper = document.getElementById('hero-pinned-wrapper') || document.getElementById('hero');
+  const heroStage = document.getElementById('hero');
   const heroBgLayer = document.getElementById('hero-bg-layer');
   const heroGlow = document.getElementById('hero-portal-glow');
-  const heroContent = document.getElementById('hero-content-3d');
+  const heroVortex = document.getElementById('hero-portal-vortex');
+  const heroContent = document.getElementById('hero-content-3d') || document.getElementById('tf-grand-hero');
+  const showcase = document.getElementById('hero-portal-showcase');
+  const card1 = document.getElementById('tf-card-1');
+  const card2 = document.getElementById('tf-card-2');
+  const card3 = document.getElementById('tf-card-3');
+  const scrollPrompt = document.getElementById('tf-scroll-prompt');
 
-  if (!heroSection || !heroBgLayer) return;
+  // Cloud Veil Elements
+  const cloudLeft = document.getElementById('cloud-left');
+  const cloudRight = document.getElementById('cloud-right');
+  const cloudBottom = document.getElementById('cloud-bottom');
+  const cloudCenterMist = document.getElementById('cloud-center-mist');
+  const cloudTopDrift = document.getElementById('cloud-top-drift');
 
-  // 3D Portal Zoom In as user scrolls down
-  const diveTimeline = gsap.timeline({
+  if (!heroWrapper || !heroBgLayer) return;
+
+  const isMobile = window.innerWidth <= 768;
+
+  // PINNED MULTI-STAGE CAMERA & CLOUD FLY-THROUGH (DESKTOP & MOBILE)
+  const pinTimeline = gsap.timeline({
     scrollTrigger: {
-      trigger: heroSection,
+      trigger: heroWrapper,
       start: 'top top',
-      end: 'bottom top',
-      scrub: 0.8
+      end: 'bottom bottom',
+      scrub: isMobile ? 0.5 : 0.8,
+      pin: heroStage,
+      anticipatePin: 1
     }
   });
 
-  diveTimeline
-    .to(heroBgLayer, {
-      scale: 1.48,
-      x: -30,
+  // Stage 1: Left Corner Hero Content Moves UP & Dissolves into the Sky (0.00 -> 0.35)
+  if (heroContent) {
+    pinTimeline.to(heroContent, {
+      y: isMobile ? -80 : -140,
+      scale: isMobile ? 1.05 : 1.15,
+      opacity: 0,
+      filter: 'blur(6px)',
+      ease: 'power1.in',
+      pointerEvents: 'none'
+    }, 0.02);
+  }
+
+  if (scrollPrompt) {
+    pinTimeline.to(scrollPrompt, {
+      opacity: 0,
       y: 20,
-      filter: 'brightness(1.15) contrast(1.1)',
+      ease: 'power1.out'
+    }, 0);
+  }
+
+  // Stage 2: White Clouds Veil Parts & Disperses Outwards (Revealing Portal Landscape)
+  if (cloudLeft) {
+    pinTimeline.to(cloudLeft, {
+      xPercent: -110,
+      opacity: 0,
+      ease: 'power1.inOut'
+    }, 0.04);
+  }
+
+  if (cloudRight) {
+    pinTimeline.to(cloudRight, {
+      xPercent: 110,
+      opacity: 0,
+      ease: 'power1.inOut'
+    }, 0.04);
+  }
+
+  if (cloudBottom) {
+    pinTimeline.to(cloudBottom, {
+      yPercent: 85,
+      opacity: 0,
+      ease: 'power1.inOut'
+    }, 0.05);
+  }
+
+  if (cloudCenterMist) {
+    pinTimeline.to(cloudCenterMist, {
+      scale: 2.2,
+      opacity: 0,
+      ease: 'power1.inOut'
+    }, 0.02);
+  }
+
+  if (cloudTopDrift) {
+    pinTimeline.to(cloudTopDrift, {
+      yPercent: -70,
+      opacity: 0,
+      ease: 'power1.inOut'
+    }, 0.03);
+  }
+
+  // Stage 3: Background Portal Zooms in Smoothly (0.00 -> 0.70)
+  pinTimeline
+    .to(heroBgLayer, {
+      scale: isMobile ? 1.4 : 1.65,
+      y: isMobile ? 10 : 20,
+      filter: 'brightness(1.15) contrast(1.08)',
       ease: 'none'
     }, 0)
     .to(heroGlow, {
       scale: 2.2,
       opacity: 1,
       ease: 'none'
-    }, 0)
-    .to(heroContent, {
-      y: -100,
-      opacity: 0.15,
-      scale: 0.94,
+    }, 0);
+
+  if (heroVortex) {
+    pinTimeline.to(heroVortex, {
+      opacity: 0.9,
+      scale: 1.4,
+      ease: 'none'
+    }, 0.1);
+  }
+
+  // Stage 4: Three.js Camera Drives Forward into Portal
+  if (typeof threeCamera !== 'undefined') {
+    pinTimeline.to(threeCamera.position, {
+      z: 14,
       ease: 'none'
     }, 0);
+  }
+
+  // Stage 5: Techfest-Style 3D Floating Showcase Cards Fly In (0.24 -> 0.65)
+  if (showcase) {
+    pinTimeline
+      .set(showcase, { visibility: 'visible' }, 0.22)
+      .to(showcase, {
+        opacity: 1,
+        ease: 'power2.out',
+        duration: 0.15
+      }, 0.24);
+  }
+
+  if (card1 && card2 && card3) {
+    pinTimeline
+      .fromTo(card1,
+        { opacity: 0, y: isMobile ? 60 : 120, scale: 0.75, rotationY: isMobile ? 0 : 14, z: -250 },
+        { opacity: 1, y: 0, scale: 1, rotationY: 0, z: 0, ease: 'power2.out' },
+        0.26
+      )
+      .fromTo(card2,
+        { opacity: 0, y: isMobile ? 80 : 160, scale: 0.65, z: -350 },
+        { opacity: 1, y: 0, scale: 1, z: 0, ease: 'back.out(1.1)' },
+        0.30
+      )
+      .fromTo(card3,
+        { opacity: 0, y: isMobile ? 60 : 120, scale: 0.75, rotationY: isMobile ? 0 : -14, z: -250 },
+        { opacity: 1, y: 0, scale: 1, rotationY: 0, z: 0, ease: 'power2.out' },
+        0.28
+      );
+  }
+
+  // Stage 6: Smooth Outflow Transition to About Section (0.85 -> 1.0)
+  if (showcase) {
+    pinTimeline.to(showcase, {
+      y: -50,
+      opacity: 0,
+      scale: 0.95,
+      ease: 'power1.in'
+    }, 0.88);
+  }
 }
 
 /* ==========================================================================
@@ -1258,11 +1388,12 @@ function initFinalCTAAnimation() {
 }
 
 /* ==========================================================================
-   16. STICKY NAV BLUR & SCROLLSPY
+   16. STICKY NAV BLUR & SCROLLSPY (WITH TECHFEST DOCK SYNC)
    ========================================================================== */
 function initNavScrollspy() {
   const header = document.getElementById('site-header');
   const navLinks = document.querySelectorAll('.desktop-nav .nav-link');
+  const dockLinks = document.querySelectorAll('.tf-dock-left .tf-dock-item');
   const sections = document.querySelectorAll('section[id]');
 
   window.addEventListener('scroll', () => {
@@ -1276,12 +1407,16 @@ function initNavScrollspy() {
 
     let currentSectionId = '';
     sections.forEach((section) => {
-      const sectionTop = section.offsetTop - 140;
+      const sectionTop = section.offsetTop - 180;
       const sectionHeight = section.offsetHeight;
       if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
         currentSectionId = section.getAttribute('id');
       }
     });
+
+    if (!currentSectionId && scrollY < 600) {
+      currentSectionId = 'hero';
+    }
 
     navLinks.forEach((link) => {
       link.classList.remove('active');
@@ -1289,7 +1424,33 @@ function initNavScrollspy() {
         link.classList.add('active');
       }
     });
+
+    dockLinks.forEach((item) => {
+      item.classList.remove('active');
+      const targetSec = item.getAttribute('data-section');
+      if (targetSec === currentSectionId || (currentSectionId === 'hero-pinned-wrapper' && targetSec === 'hero')) {
+        item.classList.add('active');
+      }
+    });
   }, { passive: true });
+
+  // Smooth scroll for left dock items
+  dockLinks.forEach((item) => {
+    item.addEventListener('click', (e) => {
+      const targetSec = item.getAttribute('href');
+      if (targetSec) {
+        e.preventDefault();
+        const targetEl = document.querySelector(targetSec);
+        if (targetEl) {
+          if (typeof lenis !== 'undefined' && lenis) {
+            lenis.scrollTo(targetEl, { offset: -40, duration: 1.2 });
+          } else {
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      }
+    });
+  });
 }
 
 /* ==========================================================================
