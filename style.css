@@ -629,11 +629,10 @@ a {
 }
 
 .hero-sticky-stage {
-  position: sticky;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -740,54 +739,54 @@ a {
   will-change: transform, opacity;
 }
 
-/* Left Cloud Bank: Soft billowing white cumulus cloud */
+/* Left Cloud Bank: Soft translucent ethereal cumulus mist */
 .cloud-left {
   top: 5%;
   left: -12%;
   width: 65vw;
   height: 75vh;
-  background: radial-gradient(ellipse at 40% 50%, rgba(255, 255, 255, 0.92) 0%, rgba(245, 243, 255, 0.72) 38%, rgba(224, 231, 255, 0.35) 60%, transparent 80%);
+  background: radial-gradient(ellipse at 40% 50%, rgba(255, 255, 255, 0.5) 0%, rgba(245, 243, 255, 0.32) 38%, rgba(224, 231, 255, 0.15) 60%, transparent 80%);
   filter: blur(42px);
   border-radius: 50%;
-  opacity: 0.92;
+  opacity: 0.65;
   animation: cloudDriftLeft 14s ease-in-out infinite alternate;
 }
 
-/* Right Cloud Bank: Soft billowing white cloud with purple glow tint */
+/* Right Cloud Bank: Soft translucent misty cloud with purple glow tint */
 .cloud-right {
   top: 8%;
   right: -12%;
   width: 68vw;
   height: 80vh;
-  background: radial-gradient(ellipse at 60% 45%, rgba(255, 255, 255, 0.94) 0%, rgba(243, 232, 255, 0.75) 40%, rgba(216, 180, 254, 0.38) 62%, transparent 82%);
+  background: radial-gradient(ellipse at 60% 45%, rgba(255, 255, 255, 0.52) 0%, rgba(243, 232, 255, 0.35) 40%, rgba(216, 180, 254, 0.18) 62%, transparent 82%);
   filter: blur(46px);
   border-radius: 50%;
-  opacity: 0.92;
+  opacity: 0.65;
   animation: cloudDriftRight 16s ease-in-out infinite alternate;
 }
 
-/* Bottom Cloud Shelf: Misty atmospheric layer blanketing the lower screen */
+/* Bottom Cloud Shelf: Low ambient mist layer */
 .cloud-bottom {
-  bottom: -18%;
+  bottom: -15%;
   left: 0;
   width: 100vw;
-  height: 52vh;
-  background: radial-gradient(ellipse at 50% 85%, rgba(255, 255, 255, 0.96) 0%, rgba(240, 245, 255, 0.82) 42%, rgba(220, 225, 245, 0.4) 68%, transparent 88%);
-  filter: blur(50px);
+  height: 42vh;
+  background: radial-gradient(ellipse at 50% 85%, rgba(255, 255, 255, 0.55) 0%, rgba(240, 245, 255, 0.38) 42%, rgba(220, 225, 245, 0.15) 68%, transparent 88%);
+  filter: blur(45px);
   border-radius: 45%;
-  opacity: 0.95;
+  opacity: 0.6;
   animation: cloudDriftBottom 12s ease-in-out infinite alternate;
 }
 
-/* Center Soft Mist: Dreamy haze behind the grand title */
+/* Center Soft Mist: Subtle haze */
 .cloud-center-mist {
   top: 20%;
   left: 15%;
   width: 70vw;
   height: 60vh;
-  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.55) 0%, rgba(235, 240, 255, 0.35) 45%, transparent 75%);
-  filter: blur(65px);
-  opacity: 0.75;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.32) 0%, rgba(235, 240, 255, 0.18) 45%, transparent 75%);
+  filter: blur(55px);
+  opacity: 0.45;
   pointer-events: none;
 }
 
@@ -797,9 +796,9 @@ a {
   left: 25%;
   width: 50vw;
   height: 35vh;
-  background: radial-gradient(ellipse at 50% 30%, rgba(255, 255, 255, 0.5) 0%, rgba(240, 235, 255, 0.25) 50%, transparent 75%);
-  filter: blur(50px);
-  opacity: 0.65;
+  background: radial-gradient(ellipse at 50% 30%, rgba(255, 255, 255, 0.3) 0%, rgba(240, 235, 255, 0.12) 50%, transparent 75%);
+  filter: blur(45px);
+  opacity: 0.4;
 }
 
 @keyframes cloudDriftLeft {
@@ -3411,37 +3410,37 @@ a {
     height: 24px;
   }
 
-  /* Cloud banks on phones (Lightweight and touch-friendly) */
+  /* Cloud banks on phones (Lightweight translucent mist, NEVER blocking content) */
   .cloud-left {
-    width: 95vw;
-    height: 60vh;
-    left: -28%;
-    filter: blur(28px);
-    opacity: 0.90;
+    width: 70vw;
+    height: 50vh;
+    left: -20%;
+    filter: blur(25px);
+    opacity: 0.45;
   }
 
   .cloud-right {
-    width: 95vw;
-    height: 65vh;
-    right: -28%;
-    filter: blur(30px);
-    opacity: 0.90;
+    width: 70vw;
+    height: 55vh;
+    right: -20%;
+    filter: blur(28px);
+    opacity: 0.45;
   }
 
   .cloud-bottom {
-    width: 120vw;
-    height: 40vh;
-    bottom: -10%;
-    filter: blur(32px);
-    opacity: 0.92;
+    width: 100vw;
+    height: 28vh;
+    bottom: -8%;
+    filter: blur(28px);
+    opacity: 0.40;
   }
 
   .cloud-center-mist {
-    width: 90vw;
-    height: 50vh;
-    left: 5%;
-    filter: blur(40px);
-    opacity: 0.65;
+    width: 80vw;
+    height: 40vh;
+    left: 10%;
+    filter: blur(35px);
+    opacity: 0.28;
   }
 
   /* Mobile Showcase Cards Layout */

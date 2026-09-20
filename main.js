@@ -244,14 +244,17 @@ function initLenisSmoothScroll() {
     return;
   }
 
+  const isMobile = window.innerWidth <= 768;
+
   lenis = new Lenis({
-    duration: 1.2,
+    duration: isMobile ? 0.9 : 1.2,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     orientation: 'vertical',
     gestureOrientation: 'vertical',
     smoothWheel: true,
-    wheelMultiplier: 1.05,
-    touchMultiplier: 1.8
+    wheelMultiplier: 1.0,
+    touchMultiplier: 1.0, // 1:1 touch scroll without jumpy skips on mobile
+    syncTouch: true
   });
 
   const progressBar = document.getElementById('scroll-progress-bar');
@@ -542,9 +545,10 @@ function initHero3DCameraDive() {
       trigger: heroWrapper,
       start: 'top top',
       end: 'bottom bottom',
-      scrub: isMobile ? 0.5 : 0.8,
+      scrub: isMobile ? 0.6 : 0.8,
       pin: heroStage,
-      anticipatePin: 1
+      anticipatePin: isMobile ? 0 : 1,
+      fastScrollEnd: true
     }
   });
 
