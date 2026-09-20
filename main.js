@@ -572,45 +572,47 @@ function initHero3DCameraDive() {
     }, 0);
   }
 
-  // Stage 2: White Clouds Veil Parts & Disperses Outwards (Revealing Portal Landscape)
-  if (cloudLeft) {
-    pinTimeline.to(cloudLeft, {
-      xPercent: -110,
-      opacity: 0,
-      ease: 'power1.inOut'
-    }, 0.04);
-  }
+  // Stage 2: White Clouds Veil Parts & Disperses Outwards (Desktop only - mobile keeps pure Minecraft art)
+  if (!isMobile) {
+    if (cloudLeft) {
+      pinTimeline.to(cloudLeft, {
+        xPercent: -110,
+        opacity: 0,
+        ease: 'power1.inOut'
+      }, 0.04);
+    }
 
-  if (cloudRight) {
-    pinTimeline.to(cloudRight, {
-      xPercent: 110,
-      opacity: 0,
-      ease: 'power1.inOut'
-    }, 0.04);
-  }
+    if (cloudRight) {
+      pinTimeline.to(cloudRight, {
+        xPercent: 110,
+        opacity: 0,
+        ease: 'power1.inOut'
+      }, 0.04);
+    }
 
-  if (cloudBottom) {
-    pinTimeline.to(cloudBottom, {
-      yPercent: 85,
-      opacity: 0,
-      ease: 'power1.inOut'
-    }, 0.05);
-  }
+    if (cloudBottom) {
+      pinTimeline.to(cloudBottom, {
+        yPercent: 85,
+        opacity: 0,
+        ease: 'power1.inOut'
+      }, 0.05);
+    }
 
-  if (cloudCenterMist) {
-    pinTimeline.to(cloudCenterMist, {
-      scale: 2.2,
-      opacity: 0,
-      ease: 'power1.inOut'
-    }, 0.02);
-  }
+    if (cloudCenterMist) {
+      pinTimeline.to(cloudCenterMist, {
+        scale: 2.2,
+        opacity: 0,
+        ease: 'power1.inOut'
+      }, 0.02);
+    }
 
-  if (cloudTopDrift) {
-    pinTimeline.to(cloudTopDrift, {
-      yPercent: -70,
-      opacity: 0,
-      ease: 'power1.inOut'
-    }, 0.03);
+    if (cloudTopDrift) {
+      pinTimeline.to(cloudTopDrift, {
+        yPercent: -70,
+        opacity: 0,
+        ease: 'power1.inOut'
+      }, 0.03);
+    }
   }
 
   // Stage 3: Background Portal Zooms in Smoothly (0.00 -> 0.70)

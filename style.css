@@ -3311,136 +3311,155 @@ a {
     box-sizing: border-box;
   }
 
-  .tf-grand-hero {
-    max-width: 100%;
-    padding: 0 4px;
+  /* Mobile Hero Card & Left-Corner Content Styling */
+  .hero-inner {
+    max-width: 100% !important;
+    background: rgba(10, 10, 18, 0.76) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(199, 125, 255, 0.35) !important;
+    padding: 16px 14px !important;
+    border-radius: 14px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
   }
 
-  .tf-grand-kicker {
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
-    gap: 8px;
-    margin-bottom: 8px;
-    white-space: normal;
+  .hero-kicker-badge {
+    padding: 6px 10px !important;
+    gap: 8px !important;
+    margin-bottom: 10px !important;
   }
 
-  .tf-grand-brand {
-    gap: 12px;
-    margin: 2px 0 8px 0;
+  .kicker-title {
+    font-size: 0.58rem !important;
   }
 
-  .tf-grand-sword-container {
-    width: 24px;
-    height: 75px;
+  .kicker-sub {
+    font-size: 0.58rem !important;
   }
 
-  .tf-grand-title {
-    font-size: clamp(2.4rem, 11vw, 3.6rem);
-    line-height: 0.94;
-    gap: 4px;
+  .hero-headline {
+    font-size: clamp(2.2rem, 9.5vw, 3.2rem) !important;
+    line-height: 0.95 !important;
+    margin-bottom: 12px !important;
   }
 
-  .tf-title-accent-line {
-    width: 90%;
-    margin-top: 4px;
+  .hero-subtext {
+    font-size: 0.84rem !important;
+    line-height: 1.45 !important;
+    margin-bottom: 14px !important;
+    max-width: 100% !important;
   }
 
-  .tf-grand-meta {
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
-    padding: 6px 14px;
-    gap: 8px;
-    margin: 8px 0 10px 0;
+  .hero-meta-bar {
+    padding: 8px 12px !important;
+    gap: 8px 14px !important;
+    margin-bottom: 14px !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
   }
 
-  .tf-grand-subtitle {
-    font-size: 0.88rem;
-    line-height: 1.38;
-    max-width: 320px;
-    margin-bottom: 6px;
+  .meta-item {
+    gap: 2px !important;
   }
 
-  .tf-grand-theme {
-    font-size: 0.72rem;
-    letter-spacing: 0.18em;
-    gap: 6px;
-    margin-bottom: 8px;
+  .meta-label {
+    font-size: 0.55rem !important;
   }
 
-  .tf-grand-pillars {
-    font-size: 0.70rem;
-    letter-spacing: 0.15em;
-    gap: 10px;
-    margin-bottom: 18px;
+  .meta-val {
+    font-size: 0.78rem !important;
   }
 
-  .tf-grand-actions {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    width: 100%;
-    max-width: 340px;
-    margin-bottom: 16px;
+  .hero-cta-group {
+    gap: 10px !important;
+    margin-bottom: 14px !important;
+    flex-wrap: wrap !important;
   }
 
-  .tf-grand-actions .pill-cta-btn {
-    flex: 1.2;
-    padding: 12px 14px;
-    font-size: 0.82rem;
-    white-space: nowrap;
-    justify-content: center;
+  .hero-primary-btn {
+    padding: 10px 18px !important;
+    font-size: 0.8rem !important;
   }
 
-  .tf-grand-actions .ghost-cta-btn {
-    flex: 0.85;
-    padding: 12px 12px;
-    font-size: 0.82rem;
-    white-space: nowrap;
-    justify-content: center;
+  .ghost-cta-btn {
+    padding: 10px 16px !important;
+    font-size: 0.8rem !important;
   }
 
-  .tf-scroll-prompt {
-    font-size: 0.58rem;
-    letter-spacing: 0.12em;
-    gap: 6px;
+  .hero-countdown-box {
+    padding: 10px 12px !important;
   }
 
-  .tf-mouse-icon {
-    width: 15px;
-    height: 24px;
+  .countdown-caption {
+    font-size: 0.58rem !important;
   }
 
-  /* Cloud banks on phones (Lightweight translucent mist, NEVER blocking content) */
-  .cloud-left {
-    width: 70vw;
-    height: 50vh;
-    left: -20%;
-    filter: blur(25px);
-    opacity: 0.45;
+  .cd-number {
+    font-size: 1.25rem !important;
   }
 
-  .cloud-right {
-    width: 70vw;
-    height: 55vh;
-    right: -20%;
-    filter: blur(28px);
-    opacity: 0.45;
+  .cd-label {
+    font-size: 0.52rem !important;
   }
 
-  .cloud-bottom {
-    width: 100vw;
-    height: 28vh;
-    bottom: -8%;
-    filter: blur(28px);
-    opacity: 0.40;
+  .hero-footer-bar {
+    padding-top: 10px !important;
   }
 
-  .cloud-center-mist {
-    width: 80vw;
-    height: 40vh;
-    left: 10%;
-    filter: blur(35px);
-    opacity: 0.28;
+  .hero-crest {
+    display: none !important;
+  }
+
+  .hero-tagline-tri {
+    font-size: 0.62rem !important;
+    letter-spacing: 0.12em !important;
+  }
+
+  /* ELIMINATE ALL WHITE CLOUD OVERLAYS ON PHONE — MINECRAFT ARTWORK FULLY VISIBLE */
+  .hero-clouds-container {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  .cloud-bank,
+  .cloud-left,
+  .cloud-right,
+  .cloud-bottom,
+  .cloud-center-mist,
+  .cloud-top-drift {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+
+  /* FULL MINECRAFT PORTAL BACKGROUND ON MOBILE PHONE */
+  .hero-backdrop {
+    background: #08080d !important;
+  }
+
+  .hero-bg-layer {
+    background-image: url('assets/images/hero_dribbble_portal.jpg') !important;
+    background-size: cover !important;
+    background-position: center bottom !important;
+    background-repeat: no-repeat !important;
+    opacity: 1 !important;
+    display: block !important;
+  }
+
+  .hero-bg-image {
+    display: block !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center bottom !important;
+    filter: brightness(1.06) contrast(1.08) !important;
+  }
+
+  .hero-gradient-scrim {
+    background: linear-gradient(180deg, rgba(8, 8, 13, 0.45) 0%, rgba(8, 8, 13, 0.1) 40%, rgba(8, 8, 13, 0.6) 100%) !important;
   }
 
   /* Mobile Showcase Cards Layout */
