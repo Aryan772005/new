@@ -721,7 +721,7 @@ a {
   pointer-events: none;
 }
 
-/* --- WHITE ETHEREAL CLOUDS VEIL (Parts outward on scroll like Techfest) --- */
+/* --- ETHEREAL CLOUDS VEIL (Parts outward on scroll) --- */
 .hero-clouds-container {
   position: absolute;
   inset: 0;
@@ -733,72 +733,86 @@ a {
   will-change: transform, opacity;
 }
 
+/* HIDE COMPLETELY ON ALL TOUCH DEVICES, PHONES, TABLETS & MOBILE DESKTOP SITES */
+@media (pointer: coarse), (hover: none), (max-width: 1024px) {
+  .hero-clouds-container,
+  .cloud-bank,
+  .cloud-left,
+  .cloud-right,
+  .cloud-bottom,
+  .cloud-center-mist,
+  .cloud-top-drift {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
 .cloud-bank {
   position: absolute;
   pointer-events: none;
   will-change: transform, opacity;
 }
 
-/* Left Cloud Bank: Soft translucent ethereal cumulus mist */
-.cloud-left {
-  top: 5%;
-  left: -12%;
-  width: 65vw;
-  height: 75vh;
-  background: radial-gradient(ellipse at 40% 50%, rgba(255, 255, 255, 0.5) 0%, rgba(245, 243, 255, 0.32) 38%, rgba(224, 231, 255, 0.15) 60%, transparent 80%);
-  filter: blur(42px);
-  border-radius: 50%;
-  opacity: 0.65;
-  animation: cloudDriftLeft 14s ease-in-out infinite alternate;
-}
+/* Desktop Only: Soft translucent ethereal violet/cosmic mist (NEVER turning screen white) */
+@media (hover: hover) and (pointer: fine) {
+  .cloud-left {
+    top: 5%;
+    left: -12%;
+    width: 65vw;
+    height: 75vh;
+    background: radial-gradient(ellipse at 40% 50%, rgba(199, 125, 255, 0.22) 0%, rgba(157, 78, 221, 0.12) 38%, rgba(120, 50, 200, 0.05) 60%, transparent 80%);
+    filter: blur(35px);
+    border-radius: 50%;
+    opacity: 0.45;
+    animation: cloudDriftLeft 14s ease-in-out infinite alternate;
+  }
 
-/* Right Cloud Bank: Soft translucent misty cloud with purple glow tint */
-.cloud-right {
-  top: 8%;
-  right: -12%;
-  width: 68vw;
-  height: 80vh;
-  background: radial-gradient(ellipse at 60% 45%, rgba(255, 255, 255, 0.52) 0%, rgba(243, 232, 255, 0.35) 40%, rgba(216, 180, 254, 0.18) 62%, transparent 82%);
-  filter: blur(46px);
-  border-radius: 50%;
-  opacity: 0.65;
-  animation: cloudDriftRight 16s ease-in-out infinite alternate;
-}
+  .cloud-right {
+    top: 8%;
+    right: -12%;
+    width: 68vw;
+    height: 80vh;
+    background: radial-gradient(ellipse at 60% 45%, rgba(199, 125, 255, 0.22) 0%, rgba(157, 78, 221, 0.14) 40%, rgba(120, 50, 200, 0.06) 62%, transparent 82%);
+    filter: blur(38px);
+    border-radius: 50%;
+    opacity: 0.45;
+    animation: cloudDriftRight 16s ease-in-out infinite alternate;
+  }
 
-/* Bottom Cloud Shelf: Low ambient mist layer */
-.cloud-bottom {
-  bottom: -15%;
-  left: 0;
-  width: 100vw;
-  height: 42vh;
-  background: radial-gradient(ellipse at 50% 85%, rgba(255, 255, 255, 0.55) 0%, rgba(240, 245, 255, 0.38) 42%, rgba(220, 225, 245, 0.15) 68%, transparent 88%);
-  filter: blur(45px);
-  border-radius: 45%;
-  opacity: 0.6;
-  animation: cloudDriftBottom 12s ease-in-out infinite alternate;
-}
+  .cloud-bottom {
+    bottom: -15%;
+    left: 0;
+    width: 100vw;
+    height: 38vh;
+    background: radial-gradient(ellipse at 50% 85%, rgba(157, 78, 221, 0.25) 0%, rgba(120, 50, 200, 0.12) 42%, transparent 75%);
+    filter: blur(35px);
+    border-radius: 45%;
+    opacity: 0.4;
+    animation: cloudDriftBottom 12s ease-in-out infinite alternate;
+  }
 
-/* Center Soft Mist: Subtle haze */
-.cloud-center-mist {
-  top: 20%;
-  left: 15%;
-  width: 70vw;
-  height: 60vh;
-  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.32) 0%, rgba(235, 240, 255, 0.18) 45%, transparent 75%);
-  filter: blur(55px);
-  opacity: 0.45;
-  pointer-events: none;
-}
+  .cloud-center-mist {
+    top: 20%;
+    left: 15%;
+    width: 70vw;
+    height: 60vh;
+    background: radial-gradient(circle at 50% 50%, rgba(199, 125, 255, 0.12) 0%, rgba(157, 78, 221, 0.06) 45%, transparent 70%);
+    filter: blur(40px);
+    opacity: 0.3;
+    pointer-events: none;
+  }
 
-/* Top Subtle Cloud Wisp */
-.cloud-top-drift {
-  top: -10%;
-  left: 25%;
-  width: 50vw;
-  height: 35vh;
-  background: radial-gradient(ellipse at 50% 30%, rgba(255, 255, 255, 0.3) 0%, rgba(240, 235, 255, 0.12) 50%, transparent 75%);
-  filter: blur(45px);
-  opacity: 0.4;
+  .cloud-top-drift {
+    top: -10%;
+    left: 25%;
+    width: 50vw;
+    height: 35vh;
+    background: radial-gradient(ellipse at 50% 30%, rgba(199, 125, 255, 0.15) 0%, rgba(157, 78, 221, 0.05) 50%, transparent 75%);
+    filter: blur(35px);
+    opacity: 0.3;
+  }
 }
 
 @keyframes cloudDriftLeft {

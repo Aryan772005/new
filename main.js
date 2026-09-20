@@ -244,17 +244,19 @@ function initLenisSmoothScroll() {
     return;
   }
 
-  const isMobile = window.innerWidth <= 768;
+  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.matchMedia('(pointer: coarse)').matches;
+  const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isTouchOrMobile = isTouch || isMobileUA || window.innerWidth <= 1024;
 
   lenis = new Lenis({
-    duration: isMobile ? 0.9 : 1.2,
+    duration: isTouchOrMobile ? 0.8 : 1.2,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     orientation: 'vertical',
     gestureOrientation: 'vertical',
     smoothWheel: true,
     wheelMultiplier: 1.0,
-    touchMultiplier: 1.0, // 1:1 touch scroll without jumpy skips on mobile
-    syncTouch: true
+    touchMultiplier: 1.0,
+    syncTouch: false // Native touch momentum on all touch devices prevents jumping/sticking on mobile desktop site!
   });
 
   const progressBar = document.getElementById('scroll-progress-bar');
@@ -272,6 +274,11 @@ function initLenisSmoothScroll() {
   });
 
   if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    ScrollTrigger.config({
+      ignoreMobileResize: true,
+      autoRefreshEvents: "visibilitychange,DOMContentLoaded,load"
+    });
+
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
     });
@@ -319,17 +326,19 @@ function initThreeJSScene() {
   threeCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
   threeCamera.position.z = 24;
 
-  const isMobile = window.innerWidth <= 768;
+  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.matchMedia('(pointer: coarse)').matches;
+  const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isTouchOrMobile = window.innerWidth <= 1024 || isTouch || isMobileUA;
 
   // Renderer
   threeRenderer = new THREE.WebGLRenderer({
     canvas: canvas,
     alpha: true,
-    antialias: !isMobile,
+    antialias: !isTouchOrMobile,
     powerPreference: 'high-performance'
   });
   threeRenderer.setSize(width, height);
-  threeRenderer.setPixelRatio(isMobile ? 1.0 : Math.min(window.devicePixelRatio, 1.75));
+  threeRenderer.setPixelRatio(isTouchOrMobile ? 1.0 : Math.min(window.devicePixelRatio, 1.75));
   threeRenderer.setClearColor(0x000000, 0);
 
   // Lighting
@@ -437,16 +446,18 @@ function initThreeJSScene() {
     });
   });
 
-  // Mouse Parallax on 3D Scene
+  // Mouse Parallax on 3D Scene (Desktop mouse only)
   let mouseX = 0;
   let mouseY = 0;
   let targetCamX = 0;
   let targetCamY = 0;
 
-  window.addEventListener('mousemove', (e) => {
-    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-  });
+  if (!isTouch) {
+    window.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    }, { passive: true });
+  }
 
   // Resize Handler
   window.addEventListener('resize', () => {
@@ -465,8 +476,8 @@ function initThreeJSScene() {
     if (!isAnimating) return;
     requestAnimationFrame(animate);
 
-    // On mobile screens, pause render if user is scrolled past the first 2 viewports
-    if (isMobile && window.pageYOffset > window.innerHeight * 1.6) {
+    // On touch/mobile screens, pause render if user is scrolled past the first 1.5 viewports
+    if (isTouchOrMobile && window.pageYOffset > window.innerHeight * 1.5) {
       return;
     }
 
@@ -499,9 +510,9 @@ function initThreeJSScene() {
 
   animate();
 
-  if (isMobile) {
+  if (isTouchOrMobile) {
     window.addEventListener('scroll', () => {
-      if (window.pageYOffset <= window.innerHeight * 1.6) {
+      if (window.pageYOffset <= window.innerHeight * 1.5) {
         requestAnimationFrame(animate);
       }
     }, { passive: true });
@@ -515,6 +526,11 @@ function initHero3DCameraDive() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
 
   gsap.registerPlugin(ScrollTrigger);
+
+  ScrollTrigger.config({
+    ignoreMobileResize: true,
+    autoRefreshEvents: "visibilitychange,DOMContentLoaded,load"
+  });
 
   const heroWrapper = document.getElementById('hero-pinned-wrapper') || document.getElementById('hero');
   const heroStage = document.getElementById('hero');
@@ -537,7 +553,10 @@ function initHero3DCameraDive() {
 
   if (!heroWrapper || !heroBgLayer) return;
 
-  const isMobile = window.innerWidth <= 768;
+  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.matchMedia('(pointer: coarse)').matches;
+  const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isMobileScreen = window.innerWidth <= 768;
+  const isTouchOrMobile = isMobileScreen || isTouch || isMobileUA;
 
   // PINNED MULTI-STAGE CAMERA & CLOUD FLY-THROUGH (DESKTOP & MOBILE)
   const pinTimeline = gsap.timeline({
@@ -545,20 +564,21 @@ function initHero3DCameraDive() {
       trigger: heroWrapper,
       start: 'top top',
       end: 'bottom bottom',
-      scrub: isMobile ? 0.6 : 0.8,
+      scrub: isTouchOrMobile ? 0.5 : 0.8,
       pin: heroStage,
-      anticipatePin: isMobile ? 0 : 1,
-      fastScrollEnd: true
+      anticipatePin: 0,
+      fastScrollEnd: true,
+      invalidateOnRefresh: true
     }
   });
 
   // Stage 1: Left Corner Hero Content Moves UP & Dissolves into the Sky (0.00 -> 0.35)
   if (heroContent) {
     pinTimeline.to(heroContent, {
-      y: isMobile ? -80 : -140,
-      scale: isMobile ? 1.05 : 1.15,
+      y: isTouchOrMobile ? -60 : -140,
+      scale: isTouchOrMobile ? 1.02 : 1.15,
       opacity: 0,
-      filter: 'blur(6px)',
+      filter: 'blur(4px)',
       ease: 'power1.in',
       pointerEvents: 'none'
     }, 0.02);
@@ -573,7 +593,7 @@ function initHero3DCameraDive() {
   }
 
   // Stage 2: White Clouds Veil Parts & Disperses Outwards (Desktop only - mobile keeps pure Minecraft art)
-  if (!isMobile) {
+  if (!isTouchOrMobile) {
     if (cloudLeft) {
       pinTimeline.to(cloudLeft, {
         xPercent: -110,
@@ -618,8 +638,8 @@ function initHero3DCameraDive() {
   // Stage 3: Background Portal Zooms in Smoothly (0.00 -> 0.70)
   pinTimeline
     .to(heroBgLayer, {
-      scale: isMobile ? 1.4 : 1.65,
-      y: isMobile ? 10 : 20,
+      scale: isTouchOrMobile ? 1.3 : 1.65,
+      y: isTouchOrMobile ? 10 : 20,
       filter: 'brightness(1.15) contrast(1.08)',
       ease: 'none'
     }, 0)
@@ -648,30 +668,30 @@ function initHero3DCameraDive() {
   // Stage 5: Techfest-Style 3D Floating Showcase Cards Fly In (0.24 -> 0.65)
   if (showcase) {
     pinTimeline
-      .set(showcase, { visibility: 'visible' }, 0.22)
+      .set(showcase, { visibility: 'visible' }, 0.20)
       .to(showcase, {
         opacity: 1,
         ease: 'power2.out',
         duration: 0.15
-      }, 0.24);
+      }, 0.22);
   }
 
   if (card1 && card2 && card3) {
     pinTimeline
       .fromTo(card1,
-        { opacity: 0, y: isMobile ? 60 : 120, scale: 0.75, rotationY: isMobile ? 0 : 14, z: -250 },
+        { opacity: 0, y: isTouchOrMobile ? 40 : 120, scale: 0.85, rotationY: isTouchOrMobile ? 0 : 14, z: isTouchOrMobile ? 0 : -250 },
         { opacity: 1, y: 0, scale: 1, rotationY: 0, z: 0, ease: 'power2.out' },
-        0.26
+        0.24
       )
       .fromTo(card2,
-        { opacity: 0, y: isMobile ? 80 : 160, scale: 0.65, z: -350 },
+        { opacity: 0, y: isTouchOrMobile ? 50 : 160, scale: 0.80, z: isTouchOrMobile ? 0 : -350 },
         { opacity: 1, y: 0, scale: 1, z: 0, ease: 'back.out(1.1)' },
-        0.30
+        0.28
       )
       .fromTo(card3,
-        { opacity: 0, y: isMobile ? 60 : 120, scale: 0.75, rotationY: isMobile ? 0 : -14, z: -250 },
+        { opacity: 0, y: isTouchOrMobile ? 40 : 120, scale: 0.85, rotationY: isTouchOrMobile ? 0 : -14, z: isTouchOrMobile ? 0 : -250 },
         { opacity: 1, y: 0, scale: 1, rotationY: 0, z: 0, ease: 'power2.out' },
-        0.28
+        0.26
       );
   }
 
@@ -691,8 +711,10 @@ function initHero3DCameraDive() {
    ========================================================================== */
 function initSectionBackdropParallax() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-  // On mobile screens, bypass heavy multi-layer GSAP parallax scrubs so phone scroll remains locked at 120fps
-  if (window.innerWidth <= 768) return;
+  // On mobile screens and touch devices (including mobile desktop site), bypass heavy multi-layer GSAP parallax scrubs so phone scroll remains locked at 120fps
+  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.matchMedia('(pointer: coarse)').matches;
+  const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  if (window.innerWidth <= 1024 || isTouch || isMobileUA) return;
 
   const backdropConfigs = [
     { id: '#about-bg-layer', trigger: '#about', yStart: -30, yEnd: 40, scale: 1.14 },
@@ -986,13 +1008,20 @@ function initTracks3DAnimation() {
     });
   }
 
+  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.matchMedia('(pointer: coarse)').matches;
+  const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isTouchOrMobile = window.innerWidth <= 1024 || isTouch || isMobileUA;
+
   // 3D Card Deal & Fan-Out:
-  // Left column tilts in from left, center column from bottom with scale, right column from right
+  // On desktop mouse: 3D perspective fan. On touch/mobile: silky clean 2D glide
   trackCards.forEach((card, idx) => {
     const col = idx % 3;
     let fromConfig = { opacity: 0, duration: 0.8, ease: 'power3.out' };
 
-    if (col === 0) {
+    if (isTouchOrMobile) {
+      fromConfig.y = 35;
+      fromConfig.scale = 0.95;
+    } else if (col === 0) {
       fromConfig.x = -80;
       fromConfig.rotationY = -24;
       fromConfig.rotationZ = -3;
