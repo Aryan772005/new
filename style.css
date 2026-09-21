@@ -42,23 +42,24 @@
   --color-cyan: #38bdf8;
   --color-gold: #fbbf24;
 
-  /* Typography Colors */
+  /* Typography Colors - High-Contrast & Crystal Clear */
   --text-white: #ffffff;
-  --text-primary: #f1f1f7;
-  --text-muted: #9e9eb4;
-  --text-dim: #686882;
+  --text-primary: #ffffff;
+  --text-muted: #e4e4f2;
+  --text-dim: #b6b6d2;
 
   /* Borders & Dividers */
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-active: rgba(255, 255, 255, 0.2);
-  --border-purple: rgba(157, 78, 221, 0.4);
-  --border-green: rgba(56, 176, 0, 0.4);
-  --border-amber: rgba(245, 166, 35, 0.4);
+  --border-subtle: rgba(255, 255, 255, 0.12);
+  --border-active: rgba(255, 255, 255, 0.28);
+  --border-purple: rgba(157, 78, 221, 0.55);
+  --border-green: rgba(56, 176, 0, 0.55);
+  --border-amber: rgba(245, 166, 35, 0.55);
 
-  /* Fonts */
-  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-pixel: 'Silkscreen', monospace;
+  /* Fonts - Optimized for Razor-Sharp Visibility */
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-pixel: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+  --font-retro: 'Silkscreen', monospace;
 
   /* Layout */
   --max-width: 1240px;
@@ -93,7 +94,7 @@ html {
 body.smooth-scroll-body {
   font-family: var(--font-body);
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--text-primary);
   background-color: var(--bg-deep);
   width: 100%;
@@ -102,6 +103,7 @@ body.smooth-scroll-body {
   position: relative;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* 3D Scroll Progress Bar */
@@ -140,21 +142,12 @@ body.smooth-scroll-body {
   z-index: 2;
 }
 
-/* --- MINECRAFT HUD OVERLAY (STICKY BOTTOM DOCK) --- */
+/* --- MINECRAFT HUD OVERLAY (REMOVED) --- */
 .mc-hud-overlay {
-  position: fixed;
-  bottom: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 80;
-  background: rgba(14, 14, 22, 0.88);
-  backdrop-filter: blur(10px);
-  border: 2px solid #2e2e42;
-  border-radius: var(--radius-sm);
-  padding: 6px 16px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  pointer-events: auto;
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .mc-hud-container {
@@ -233,13 +226,16 @@ body.smooth-scroll-body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-weight: 700;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
   color: var(--text-white);
-  line-height: 1.15;
+  line-height: 1.2;
 }
 
 p {
   color: var(--text-muted);
+  font-size: 1.02rem;
+  line-height: 1.7;
+  font-weight: 400;
 }
 
 a {
@@ -253,14 +249,15 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 5px 12px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-subtle);
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-active);
   border-radius: var(--radius-sm);
   font-family: var(--font-pixel);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #ffffff;
   text-transform: uppercase;
   margin-bottom: 20px;
 }
@@ -433,6 +430,205 @@ a {
   width: 100%;
 }
 
+/* ==========================================================================
+   PC & LAPTOP EXPANSIVE NAVBAR (Screens >= 1025px & >= 1440px)
+   Unlocks wide desktop space with generous margins, larger typography,
+   glass floating nav pill, and spacious action buttons.
+   ========================================================================== */
+@media (min-width: 1025px) {
+  :root {
+    --max-width: min(96vw, 1780px);
+    --nav-height: 86px;
+  }
+
+  .container {
+    width: 100% !important;
+    max-width: var(--max-width) !important;
+    padding: 0 clamp(28px, 3vw, 64px);
+  }
+
+  .pin-spacer,
+  .pin-spacer > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+  }
+
+  #hero-pinned-wrapper,
+  .hero-pinned-wrapper,
+  #hero,
+  .hero-sticky-stage,
+  .hero-backdrop,
+  .hero-bg-layer,
+  .hero-bg-image {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+  }
+
+  .site-header {
+    height: var(--nav-height);
+  }
+
+  .site-header.scrolled {
+    background-color: rgba(10, 10, 18, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .header-container {
+    max-width: min(96vw, 1780px);
+    padding: 0 clamp(28px, 3vw, 64px);
+    height: 100%;
+  }
+
+  .brand-wordmark {
+    font-size: 1.28rem;
+    gap: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  .nav-dbu-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    padding: 3px;
+  }
+
+  .brand-cube {
+    width: 13px;
+    height: 13px;
+  }
+
+  .brand-year {
+    font-size: 0.95rem;
+  }
+
+  .brand-tag {
+    font-size: 0.72rem;
+    padding: 3px 8px;
+  }
+
+  .desktop-nav {
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: var(--radius-pill);
+    padding: 7px 22px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: border-color var(--transition-smooth), background-color var(--transition-smooth);
+  }
+
+  .desktop-nav:hover {
+    border-color: rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.055);
+  }
+
+  .nav-links {
+    gap: clamp(24px, 2.2vw, 42px);
+  }
+
+  .nav-link {
+    font-size: 0.88rem;
+    letter-spacing: 0.12em;
+    padding: 6px 2px;
+    font-weight: 600;
+  }
+
+  .header-actions {
+    gap: 16px;
+  }
+
+  .cube-status-pill {
+    padding: 7px 16px;
+    font-size: 0.78rem;
+    gap: 8px;
+  }
+
+  .nav-github-pill {
+    padding: 8px 18px;
+    font-size: 0.88rem;
+    gap: 8px;
+  }
+
+  .icon-toggle-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .pill-cta-btn {
+    padding: 11px 26px;
+    font-size: 0.86rem;
+    letter-spacing: 0.08em;
+  }
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --max-width: min(96vw, 1920px);
+    --nav-height: 90px;
+  }
+
+  .container {
+    max-width: var(--max-width) !important;
+    padding: 0 clamp(36px, 3.5vw, 80px);
+  }
+
+  .header-container {
+    max-width: min(96vw, 1920px);
+    padding: 0 clamp(36px, 3.5vw, 80px);
+  }
+
+  .brand-wordmark {
+    font-size: 1.35rem;
+    gap: 14px;
+  }
+
+  .nav-dbu-badge {
+    width: 40px;
+    height: 40px;
+  }
+
+  .desktop-nav {
+    padding: 8px 28px;
+  }
+
+  .nav-links {
+    gap: 46px;
+  }
+
+  .nav-link {
+    font-size: 0.94rem;
+  }
+
+  .header-actions {
+    gap: 18px;
+  }
+
+  .cube-status-pill {
+    padding: 8px 18px;
+    font-size: 0.82rem;
+  }
+
+  .nav-github-pill {
+    padding: 9px 22px;
+    font-size: 0.92rem;
+  }
+
+  .icon-toggle-btn {
+    width: 42px;
+    height: 42px;
+  }
+
+  .pill-cta-btn {
+    padding: 12px 28px;
+    font-size: 0.9rem;
+  }
+}
+
 .header-actions {
   display: flex;
   align-items: center;
@@ -443,12 +639,13 @@ a {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(199, 125, 255, 0.1);
+  background: rgba(199, 125, 255, 0.12);
   border: 1px solid var(--border-purple);
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: var(--radius-pill);
   font-family: var(--font-pixel);
-  font-size: 0.62rem;
+  font-size: 0.75rem;
+  font-weight: 700;
   color: var(--color-purple-bright);
   letter-spacing: 0.08em;
 }
@@ -460,6 +657,36 @@ a {
   border-radius: 50%;
   box-shadow: 0 0 8px var(--color-purple-bright);
   animation: pulse-glow 1.5s infinite ease-in-out;
+}
+
+/* GitHub Header Button */
+.nav-github-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: var(--radius-pill);
+  padding: 7px 15px;
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.nav-github-pill:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: #38bdf8;
+  color: #38bdf8;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.45);
+  transform: translateY(-1px);
+}
+
+.nav-gh-text {
+  font-weight: 600;
 }
 
 .icon-toggle-btn {
@@ -2026,14 +2253,38 @@ a {
 .biome-cyan { background: rgba(56, 189, 248, 0.15); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.4); }
 
 .track-icon-wrap { margin-bottom: 18px; }
-.voxel-box { width: 48px; height: 48px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); transition: transform var(--transition-bounce); }
-.track-card:hover .voxel-box { transform: scale(1.15) rotate(6deg); }
-.purple-glow { box-shadow: 0 0 20px rgba(157, 78, 221, 0.25); border-color: var(--border-purple); }
-.green-glow { box-shadow: 0 0 20px rgba(56, 176, 0, 0.25); border-color: var(--border-green); }
-.red-glow { box-shadow: 0 0 20px rgba(239, 68, 68, 0.25); border-color: rgba(239, 68, 68, 0.4); }
-.teal-glow { box-shadow: 0 0 20px rgba(6, 182, 212, 0.25); border-color: rgba(6, 182, 212, 0.4); }
-.orange-glow { box-shadow: 0 0 20px rgba(249, 115, 22, 0.25); border-color: rgba(249, 115, 22, 0.4); }
-.cyan-glow { box-shadow: 0 0 20px rgba(56, 189, 248, 0.25); border-color: rgba(56, 189, 248, 0.4); }
+.voxel-box {
+  width: 76px;
+  height: 76px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--bg-surface-elevated);
+  border: 2px solid var(--border-subtle);
+  transition: transform var(--transition-bounce), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  position: relative;
+}
+.track-biome-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.track-card:hover .voxel-box {
+  transform: translateY(-4px) scale(1.06);
+}
+.track-card:hover .track-biome-photo {
+  transform: scale(1.12);
+}
+.purple-glow { box-shadow: 0 0 24px rgba(157, 78, 221, 0.35); border-color: var(--border-purple); }
+.green-glow { box-shadow: 0 0 24px rgba(56, 176, 0, 0.35); border-color: var(--border-green); }
+.red-glow { box-shadow: 0 0 24px rgba(239, 68, 68, 0.35); border-color: rgba(239, 68, 68, 0.5); }
+.teal-glow { box-shadow: 0 0 24px rgba(6, 182, 212, 0.35); border-color: rgba(6, 182, 212, 0.5); }
+.orange-glow { box-shadow: 0 0 24px rgba(249, 115, 22, 0.35); border-color: rgba(249, 115, 22, 0.5); }
+.cyan-glow { box-shadow: 0 0 24px rgba(56, 189, 248, 0.35); border-color: rgba(56, 189, 248, 0.5); }
 
 .track-name { font-size: 1.18rem; margin-bottom: 12px; line-height: 1.35; }
 .track-desc { font-size: 0.88rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 20px; flex-grow: 1; }
@@ -2484,17 +2735,68 @@ a {
 /* --- 13. ORGANIZERS & MENTORS --- */
 .organizers-section { background: var(--bg-charcoal); }
 .organizers-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-.organizer-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 28px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+.organizer-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 28px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; transition: border-color var(--transition-fast); }
 .organizer-card:hover { border-color: var(--border-active); }
 .org-avatar-wrap { position: relative; margin-bottom: 16px; }
 .org-avatar-cube { width: 72px; height: 72px; background: var(--bg-surface-elevated); border: 2px solid var(--border-active); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 2rem; }
-.org-role-badge { position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); font-family: var(--font-pixel); font-size: 0.55rem; letter-spacing: 0.08em; background: var(--bg-deep); border: 1px solid var(--border-green); color: var(--color-green-bright); padding: 2px 6px; border-radius: var(--radius-sm); white-space: nowrap; }
-.org-name { font-size: 1.05rem; margin-bottom: 4px; margin-top: 6px; }
-.org-title { font-size: 0.82rem; color: var(--text-primary); margin-bottom: 2px; }
-.org-dept { font-size: 0.74rem; color: var(--text-dim); margin-bottom: 16px; }
-.org-socials { display: flex; gap: 12px; }
-.org-socials a { color: var(--text-dim); transition: color var(--transition-fast); }
-.org-socials a:hover { color: var(--text-white); }
+.org-role-badge { position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); font-family: var(--font-pixel); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; background: var(--bg-deep); border: 1px solid var(--border-green); color: var(--color-green-bright); padding: 3px 8px; border-radius: var(--radius-sm); white-space: nowrap; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6); }
+.org-name { font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; margin-top: 8px; color: #ffffff; }
+.org-title { font-size: 0.86rem; font-weight: 500; color: var(--text-primary); margin-bottom: 3px; }
+.org-dept { font-size: 0.78rem; color: var(--text-dim); margin-bottom: 14px; }
+.org-socials { display: flex; gap: 14px; margin-top: 4px; }
+.org-socials a { color: var(--text-dim); transition: color var(--transition-fast), transform var(--transition-fast); }
+.org-socials a:hover { color: var(--text-white); transform: translateY(-2px); }
+
+/* Direct Lead Contact Pills */
+.org-lead-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+  margin: 6px 0 14px 0;
+}
+.org-lead-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  width: 100%;
+}
+.org-lead-pill.gh-pill {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  color: #38bdf8;
+}
+.org-lead-pill.gh-pill:hover {
+  background: rgba(56, 189, 248, 0.25);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.5);
+  color: #ffffff;
+}
+.org-lead-pill.phone-pill {
+  background: rgba(0, 230, 118, 0.1);
+  border: 1px solid rgba(0, 230, 118, 0.4);
+  color: #00e676;
+}
+.org-lead-pill.phone-pill:hover {
+  background: rgba(0, 230, 118, 0.22);
+  box-shadow: 0 0 12px rgba(0, 230, 118, 0.4);
+}
+.org-lead-pill.email-pill {
+  background: rgba(199, 125, 255, 0.1);
+  border: 1px solid rgba(199, 125, 255, 0.4);
+  color: #c77dff;
+}
+.org-lead-pill.email-pill:hover {
+  background: rgba(199, 125, 255, 0.22);
+  box-shadow: 0 0 12px rgba(199, 125, 255, 0.4);
+}
 
 /* --- 14. FAQ (VILLAGER QUEST DIALOGUE CARDS) --- */
 .mc-dialogue-card {
@@ -4200,3 +4502,88 @@ a {
     gap: 10px;
   }
 }
+
+/* ==========================================================================
+   GLOBAL TYPOGRAPHY CLARITY & ACCESSIBILITY ENHANCEMENTS
+   High-contrast, razor-sharp visibility, modern font scaling
+   ========================================================================== */
+
+/* Universal text crispness */
+body, input, select, textarea, button {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* All badges and status pills: bold, readable, crisp */
+.section-badge,
+.cube-status-pill,
+.org-role-badge,
+.hologram-badge,
+.modal-badge,
+.tier-label,
+.track-tag,
+.biome-pill,
+.track-bounty-badge,
+.loot-tier-ribbon,
+.celebration-badge,
+.ticket-status-pill,
+.t-lbl,
+.ticket-code-id,
+.node-time,
+.node-step-status,
+.final-kicker,
+.kicker-title,
+.crest-kicker,
+.countdown-caption,
+.brand-tag,
+.brand-year {
+  font-family: var(--font-display) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.07em !important;
+  text-transform: uppercase;
+}
+
+/* Ensure secondary and muted texts have high contrast */
+.section-subtitle,
+.about-lead,
+.about-desc p,
+.track-desc,
+.node-desc,
+.loot-card p,
+.faq-answer,
+.final-desc,
+.footer-tagline,
+.modal-desc,
+.criteria-card p,
+.rule-item p {
+  color: #e4e4f2 !important;
+  font-size: 0.98rem;
+  line-height: 1.68;
+}
+
+/* Ensure small labels are at least 12px (0.75rem) and sharp */
+.cd-label {
+  font-size: 0.74rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  color: #cfcfe8 !important;
+}
+
+.countdown-caption {
+  font-size: 0.8rem !important;
+  color: #e0e0f5 !important;
+}
+
+/* Completely remove the floating heart and chicken emoji HUD overlay */
+.mc-hud-overlay,
+#mc-hud-bar {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  width: 0 !important;
+  overflow: hidden !important;
+}
+

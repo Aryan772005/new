@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CRAFTCON '26 — Desh Bhagat University's Flagship Collegiate Hackathon</title>
-  <meta name="description" content="A 36-hour Minecraft-inspired collegiate sandbox hackathon hosted at Desh Bhagat University. 500+ builders assembling to imagine, craft, and ship real-world breakthroughs.">
+  <meta name="description" content="A 24-hour Minecraft-inspired collegiate sandbox hackathon hosted at Desh Bhagat University. 500+ builders assembling to imagine, craft, and ship real-world breakthroughs.">
   <meta name="keywords" content="hackathon, Desh Bhagat University, DBU hackathon, Minecraft hackathon, college hackathon, coding competition, tech festival">
   
   <!-- Open Graph / Meta -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="CRAFTCON '26 — Imagine · Build · Transcend">
-  <meta property="og:description" content="Join 500+ developers, designers, and innovators at Desh Bhagat University for a 36-hour sandbox hackathon.">
+  <meta property="og:description" content="Join 500+ developers, designers, and innovators at Desh Bhagat University for a 24-hour sandbox hackathon.">
   <meta property="og:image" content="assets/images/hero_dribbble_portal.jpg">
 
   <!-- Favicon -->
@@ -40,29 +40,6 @@
   <!-- 3D Scroll Progress Line -->
   <div id="scroll-progress-bar" class="scroll-progress-bar" aria-hidden="true"></div>
 
-  <!-- FLOATING MINECRAFT HUD OVERLAY (Sticky Bottom Center) -->
-  <div class="mc-hud-overlay" id="mc-hud-bar" aria-label="Builder Status HUD">
-    <div class="mc-hud-container">
-      <!-- Hearts Row -->
-      <div class="mc-hud-top-row">
-        <div class="mc-hearts-strip" title="10/10 Hearts: Campus Health & Security Active">
-          <span class="mc-heart">❤️</span><span class="mc-heart">❤️</span><span class="mc-heart">❤️</span><span class="mc-heart">❤️</span><span class="mc-heart">❤️</span>
-          <span class="mc-heart">❤️</span><span class="mc-heart">❤️</span><span class="mc-heart">❤️</span><span class="mc-heart">❤️</span><span class="mc-heart">❤️</span>
-        </div>
-        <div class="mc-hunger-strip" title="Unlimited Free Meals & Midnight Fuel">
-          <span class="mc-hunger">🍗</span><span class="mc-hunger">🍗</span><span class="mc-hunger">🍗</span><span class="mc-hunger">🍗</span><span class="mc-hunger">🍗</span>
-          <span class="mc-hunger">🍗</span><span class="mc-hunger">🍗</span><span class="mc-hunger">🍗</span><span class="mc-hunger">🍗</span><span class="mc-hunger">🍗</span>
-        </div>
-      </div>
-      <!-- XP Level Bar -->
-      <div class="mc-xp-bar-wrap">
-        <div class="mc-xp-bar-bg">
-          <div class="mc-xp-bar-fill" id="mc-xp-fill"></div>
-        </div>
-        <span class="mc-xp-level-number" id="mc-xp-level">26</span>
-      </div>
-    </div>
-  </div>
 
   <!-- ================= HEADER & NAV BAR ================= -->
   <header id="site-header" class="site-header">
@@ -104,6 +81,12 @@
           <svg class="audio-icon off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
         </button>
 
+        <!-- GitHub Profile Link -->
+        <a href="https://github.com/Aryan772005" target="_blank" rel="noopener noreferrer" class="nav-github-pill" aria-label="Aryan's GitHub Profile" title="GitHub: Aryan772005">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"/></svg>
+          <span class="nav-gh-text">GitHub</span>
+        </a>
+
         <a href="#register" class="pill-cta-btn open-modal-btn" data-modal="register-modal">
           <span class="btn-text-full">REGISTER NOW</span>
           <span class="btn-text-short">REGISTER</span>
@@ -139,6 +122,7 @@
         <li><a href="#sponsors" class="mobile-link">SPONSORS</a></li>
         <li><a href="#organizers" class="mobile-link">ORGANIZERS</a></li>
         <li><a href="#faq" class="mobile-link">FAQ</a></li>
+        <li><a href="https://github.com/Aryan772005" target="_blank" rel="noopener noreferrer" class="mobile-link" style="color: #38bdf8;">GITHUB PROFILE (Aryan772005) ↗</a></li>
       </ul>
       <div class="mobile-drawer-footer">
         <a href="#register" class="pill-cta-btn full-width open-modal-btn" data-modal="register-modal">REGISTER FOR FREE -></a>
@@ -261,9 +245,9 @@
               <div class="meta-item">
                 <span class="meta-label">
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                  DATES
+                  TIMEFRAME
                 </span>
-                <span class="meta-val">OCTOBER 24–26, 2026</span>
+                <span class="meta-val">OCTOBER 24–25, 2026</span>
               </div>
               <div class="meta-divider"></div>
               <div class="meta-item">
@@ -271,7 +255,7 @@
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                   BOUNTY POOL
                 </span>
-                <span class="meta-val highlight-amber">₹2,50,000+</span>
+                <span class="meta-val highlight-amber">₹65,000+</span>
               </div>
               <div class="meta-divider"></div>
               <div class="meta-item meta-venue">
@@ -368,7 +352,7 @@
               </div>
               <div class="tf-card-badge"><span class="badge-dot dot-green"></span>CAMPUS QUEST</div>
               <h3 class="tf-card-title">THE SANDBOX</h3>
-              <p class="tf-card-desc">A 36-hour non-stop collegiate build expedition inside Desh Bhagat University's grand auditorium. Assemble your party and build without limits.</p>
+              <p class="tf-card-desc">A 24-hour non-stop collegiate build expedition inside Desh Bhagat University's grand auditorium. Assemble your party and build without limits.</p>
               <div class="tf-card-perks">
                 <div class="tf-perk"><span class="tf-perk-ico">🏰</span> Free Campus Stay & 10/10 Meals</div>
                 <div class="tf-perk"><span class="tf-perk-ico">⚡</span> 1Gbps High-Speed WiFi & Power</div>
@@ -395,7 +379,7 @@
               <div class="tf-trophy-display">
                 <div class="tf-trophy-glow-halo"></div>
                 <img src="assets/images/mc_crafting_trophy_3d.jpg" alt="CraftCon Netherite Trophy" class="tf-trophy-thumb">
-                <div class="tf-bounty-badge">₹2,50,000+ BOUNTY POOL</div>
+                <div class="tf-bounty-badge">₹65,000+ BOUNTY POOL</div>
               </div>
               <p class="tf-card-desc">Mine datasets, train AI agents, craft web3 protocols, and forge the next generation of software tools. Mentored by leading engineers & founders.</p>
               <div class="tf-center-actions">
@@ -479,7 +463,7 @@
               <div class="mc-slot" data-slot="6"><span class="mc-item item-obsidian">⬛</span><span class="mc-item-qty">4</span></div>
               <div class="mc-slot" data-slot="7"><span class="mc-item item-glowstone">🟡</span><span class="mc-item-qty">64</span></div>
               <div class="mc-slot" data-slot="8"><span class="mc-item item-ingot">🪙</span><span class="mc-item-qty">12</span></div>
-              <div class="mc-slot" data-slot="9"><span class="mc-item item-chip">⚡</span><span class="mc-item-qty">36</span></div>
+              <div class="mc-slot" data-slot="9"><span class="mc-item item-chip">⚡</span><span class="mc-item-qty">24</span></div>
             </div>
 
             <!-- Crafting Arrow with Animated Energy Stream -->
@@ -496,7 +480,7 @@
               </div>
               <div class="mc-output-info">
                 <strong class="mc-output-name">CraftCon '26 Netherite Trophy</strong>
-                <span>+ ₹2,50,000 Bounty Cache</span>
+                <span>+ ₹65,000 Bounty Cache</span>
                 <span>+ DBU Pre-Seed Incubation</span>
               </div>
             </div>
@@ -506,7 +490,7 @@
         <div class="about-grid">
           <!-- Left Column: Rich Editorial Storytelling -->
           <div class="about-narrative">
-            <h2 class="section-title">A 36-Hour Sandbox for the Next Generation of Builders</h2>
+            <h2 class="section-title">A 24-Hour Sandbox for the Next Generation of Builders</h2>
             <div class="about-lead">
               Hosted at the sprawling campus of <strong>Desh Bhagat University</strong>, CRAFTCON '26 transforms traditional hackathons into an open-world collaborative expedition.
             </div>
@@ -514,7 +498,7 @@
               Whether you are mining datasets, engineering autonomous agents, or crafting decentralized smart contracts, this hackathon provides the obsidian foundation, high-speed connectivity, and industry mentorship you need to build software that matters.
             </p>
             <p class="about-para">
-              No boring boilerplate slides. No cookie-cutter problem statements. Choose your biome, assemble your party of 1 to 4 crafters, and bring bold solutions to life over 36 non-stop hours.
+              No boring boilerplate slides. No cookie-cutter problem statements. Choose your biome, assemble your party of 1 to 4 crafters, and bring bold solutions to life over 24 non-stop hours.
             </p>
 
             <div class="about-highlights">
@@ -561,7 +545,7 @@
                   <span class="stat-glyph">⏳</span>
                   <span class="stat-biome">DURATION</span>
                 </div>
-                <div class="stat-big-num">36</div>
+                <div class="stat-big-num">24</div>
                 <div class="stat-caption">Continuous Hours of Collaborative Building</div>
               </div>
 
@@ -571,7 +555,7 @@
                   <span class="stat-glyph">🏆</span>
                   <span class="stat-biome">LOOT VAULT</span>
                 </div>
-                <div class="stat-big-num">₹2.5L+</div>
+                <div class="stat-big-num">₹65K+</div>
                 <div class="stat-caption">Cash Bounties, Tech Gear & Cloud Credits</div>
               </div>
 
@@ -642,7 +626,9 @@
               <span class="biome-pill biome-purple">THE END</span>
             </div>
             <div class="track-icon-wrap">
-              <div class="voxel-box purple-glow enchanted-glint">🔮</div>
+              <div class="voxel-box purple-glow enchanted-glint">
+                <img src="assets/images/track_biome_ai.jpg" alt="Artificial Intelligence Biome" class="track-biome-photo" loading="lazy" decoding="async">
+              </div>
             </div>
             <h3 class="track-name">Artificial Intelligence & Agentic Workflows</h3>
             <p class="track-desc">
@@ -655,7 +641,7 @@
               <span>Autonomous Agents</span>
             </div>
             <div class="track-bounty-badge">
-              <span>₹40,000 Track Pool</span>
+              <span>Primary Biome Track</span>
               <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
             </div>
           </div>
@@ -667,7 +653,9 @@
               <span class="biome-pill biome-green">THE OVERWORLD</span>
             </div>
             <div class="track-icon-wrap">
-              <div class="voxel-box green-glow enchanted-glint">🌱</div>
+              <div class="voxel-box green-glow enchanted-glint">
+                <img src="assets/images/track_biome_sustainability.jpg" alt="Sustainable Tech & Agriculture Biome" class="track-biome-photo" loading="lazy" decoding="async">
+              </div>
             </div>
             <h3 class="track-name">Sustainable Tech & Smart Agriculture</h3>
             <p class="track-desc">
@@ -680,7 +668,7 @@
               <span>Green Compute</span>
             </div>
             <div class="track-bounty-badge">
-              <span>₹40,000 Track Pool</span>
+              <span>Primary Biome Track</span>
               <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
             </div>
           </div>
@@ -692,7 +680,9 @@
               <span class="biome-pill biome-red">REDSTONE LAB</span>
             </div>
             <div class="track-icon-wrap">
-              <div class="voxel-box red-glow enchanted-glint">⚙️</div>
+              <div class="voxel-box red-glow enchanted-glint">
+                <img src="assets/images/track_biome_hardware.jpg" alt="IoT and Embedded Hardware Biome" class="track-biome-photo" loading="lazy" decoding="async">
+              </div>
             </div>
             <h3 class="track-name">IoT, Embedded Systems & Smart Hardware</h3>
             <p class="track-desc">
@@ -705,7 +695,7 @@
               <span>Edge AI</span>
             </div>
             <div class="track-bounty-badge">
-              <span>₹40,000 Track Pool</span>
+              <span>Primary Biome Track</span>
               <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
             </div>
           </div>
@@ -717,7 +707,9 @@
               <span class="biome-pill biome-teal">THE DEEP DARK</span>
             </div>
             <div class="track-icon-wrap">
-              <div class="voxel-box teal-glow enchanted-glint">🛡️</div>
+              <div class="voxel-box teal-glow enchanted-glint">
+                <img src="assets/images/track_biome_cybersecurity.jpg" alt="Cybersecurity and Web3 Biome" class="track-biome-photo" loading="lazy" decoding="async">
+              </div>
             </div>
             <h3 class="track-name">Cybersecurity, Privacy & Web3 Infrastructure</h3>
             <p class="track-desc">
@@ -730,7 +722,7 @@
               <span>Decentralized Identity</span>
             </div>
             <div class="track-bounty-badge">
-              <span>₹40,000 Track Pool</span>
+              <span>Primary Biome Track</span>
               <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
             </div>
           </div>
@@ -742,7 +734,9 @@
               <span class="biome-pill biome-orange">THE NETHER</span>
             </div>
             <div class="track-icon-wrap">
-              <div class="voxel-box orange-glow enchanted-glint">🔥</div>
+              <div class="voxel-box orange-glow enchanted-glint">
+                <img src="assets/images/track_biome_fintech.jpg" alt="FinTech and Ultra-Scale Systems Biome" class="track-biome-photo" loading="lazy" decoding="async">
+              </div>
             </div>
             <h3 class="track-name">Next-Gen FinTech & Ultra-Scale Systems</h3>
             <p class="track-desc">
@@ -755,7 +749,7 @@
               <span>Fraud Engines</span>
             </div>
             <div class="track-bounty-badge">
-              <span>₹40,000 Track Pool</span>
+              <span>Primary Biome Track</span>
               <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
             </div>
           </div>
@@ -767,7 +761,9 @@
               <span class="biome-pill biome-cyan">OPEN SANDBOX</span>
             </div>
             <div class="track-icon-wrap">
-              <div class="voxel-box cyan-glow enchanted-glint">✨</div>
+              <div class="voxel-box cyan-glow enchanted-glint">
+                <img src="assets/images/track_biome_sandbox.jpg" alt="Open Sandbox and Civic Innovation Biome" class="track-biome-photo" loading="lazy" decoding="async">
+              </div>
             </div>
             <h3 class="track-name">Open Sandbox & Civic Innovation</h3>
             <p class="track-desc">
@@ -780,7 +776,7 @@
               <span>Cross-Disciplinary</span>
             </div>
             <div class="track-bounty-badge">
-              <span>₹40,000 Track Pool</span>
+              <span>Primary Biome Track</span>
               <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
             </div>
           </div>
@@ -793,17 +789,14 @@
       <!-- 3D Smelting Blast Furnace Clearly Visible Background -->
       <div class="section-backdrop" aria-hidden="true">
         <div class="section-bg-layer" id="timeline-bg-layer">
-          <img src="assets/images/mc_furnace_smelter_3d.jpg" alt="36-Hour Hackathon Blast Furnace Background" class="section-bg-image bg-img-timeline" loading="lazy" decoding="async">
+          <img src="assets/images/mc_furnace_smelter_3d.jpg" alt="24-Hour Hackathon Blast Furnace Background" class="section-bg-image bg-img-timeline" loading="lazy" decoding="async">
         </div>
-        <div class="section-scrim-left"></div>
-        <div class="section-glow-fx glow-amber"></div>
+        <div class="section-scrim-center"></div>
+        <div class="section-glow-fx glow-orange"></div>
       </div>
       <div class="container">
-        <!-- Furnace Smelting Status Bar with 3D Blast Furnace Render -->
+        <!-- Smelting Furnace Interactive Countdown Gauge -->
         <div class="mc-furnace-banner tilt-3d-card flame-orange">
-          <div class="furnace-3d-thumb-wrap">
-            <img src="assets/images/mc_furnace_smelter_3d.jpg" alt="3D Minecraft Blast Furnace Smelter" class="furnace-3d-thumb" loading="lazy" decoding="async">
-          </div>
           <div class="furnace-flame-wrap">
             <span class="furnace-flame-icon">🔥</span>
             <div class="furnace-fuel-gauge">
@@ -811,8 +804,8 @@
             </div>
           </div>
           <div class="furnace-desc">
-            <strong>36-HOUR BLAST SMELTER ENGINE ACTIVE</strong>
-            <span>Continuous hackathon fuel burning. Clockwork countdown: 36:00:00.</span>
+            <strong>24-HOUR BLAST SMELTER ENGINE ACTIVE</strong>
+            <span>Continuous hackathon fuel burning. Clockwork countdown: 24:00:00.</span>
           </div>
           <div class="redstone-indicator">
             <span class="redstone-lamp on"></span>
@@ -825,7 +818,7 @@
             <span class="badge-dot dot-amber"></span>
             <span>THE CRAFTING SEQUENCE</span>
           </div>
-          <h2 class="section-title">36-Hour Expedition Roadmap</h2>
+          <h2 class="section-title">24-Hour Expedition Roadmap</h2>
           <p class="section-subtitle">
             From initial resource gathering to the final grand showcase, here is how the crafting recipe unfolds.
           </p>
@@ -836,7 +829,6 @@
           <button class="day-tab-btn active" data-day="all">ALL STAGES</button>
           <button class="day-tab-btn" data-day="day1">DAY 1 · OCT 24</button>
           <button class="day-tab-btn" data-day="day2">DAY 2 · OCT 25</button>
-          <button class="day-tab-btn" data-day="day3">DAY 3 · OCT 26</button>
         </div>
 
         <!-- Crafting Stepper with Glowing Redstone Wire Connector -->
@@ -877,7 +869,7 @@
             </div>
             <div class="node-content flame-purple">
               <div class="node-time">OCT 24 · 12:00 PM SHARP</div>
-              <h4 class="node-title">Hackathon Commencement: The 36-Hour Clock Starts</h4>
+              <h4 class="node-title">Hackathon Commencement: The 24-Hour Clock Starts</h4>
               <p class="node-desc">
                 The portal opens. Teams claim their workstations, initialize Git repositories, configure sandbox environments, and begin rapid prototyping.
               </p>
@@ -941,28 +933,28 @@
           <div class="crafting-node tilt-3d-card" data-day="day2">
             <div class="node-milestone">
               <span class="node-step-index">05</span>
-              <span class="node-step-status">MIDWAY CHECKPOINT</span>
+              <span class="node-step-status">FINAL SPRINT</span>
             </div>
             <div class="node-marker">
               <div class="marker-cube amber-node"></div>
               <div class="marker-line redstone-wire"></div>
             </div>
             <div class="node-content flame-orange">
-              <div class="node-time">OCT 25 · 11:00 AM – 02:00 PM</div>
-              <h4 class="node-title">Progress Review & Mid-Point Elimination Check</h4>
+              <div class="node-time">OCT 25 · 08:00 AM – 10:30 AM</div>
+              <h4 class="node-title">Morning Breakfast & Final Polish Mentorship</h4>
               <p class="node-desc">
-                Submit your working alpha builds. Mentors help polish deployment setups, API security, and refine pitch scripts for the Sunday jury.
+                Breakfast served. Mentors help finalize production deployments, API security hardening, and refine 2-minute project pitch decks.
               </p>
               <div class="node-tags">
-                <span>Alpha Review</span>
-                <span>Lunch Break</span>
-                <span>Deploy Check</span>
+                <span>Breakfast Fuel</span>
+                <span>Polish Phase</span>
+                <span>Pitch Prep</span>
               </div>
             </div>
           </div>
 
           <!-- Step 6 -->
-          <div class="crafting-node tilt-3d-card" data-day="day3">
+          <div class="crafting-node tilt-3d-card" data-day="day2">
             <div class="node-milestone">
               <span class="node-step-index">06</span>
               <span class="node-step-status">CODE FREEZE</span>
@@ -972,21 +964,21 @@
               <div class="marker-line redstone-wire"></div>
             </div>
             <div class="node-content flame-red">
-              <div class="node-time">OCT 26 · 08:00 AM SHARP</div>
-              <h4 class="node-title">Final Repository Push & Soft Project Freeze</h4>
+              <div class="node-time">OCT 25 · 12:00 PM SHARP</div>
+              <h4 class="node-title">The 24 Hours Conclude: Final Repository Push & Code Freeze</h4>
               <p class="node-desc">
                 Commit your code, upload 2-minute video demonstrations, and publish production links to the evaluation portal. No further commits permitted.
               </p>
               <div class="node-tags">
                 <span>GitHub Freeze</span>
                 <span>Video Demo</span>
-                <span>Breakfast</span>
+                <span>Lunch Break</span>
               </div>
             </div>
           </div>
 
           <!-- Step 7 -->
-          <div class="crafting-node tilt-3d-card" data-day="day3">
+          <div class="crafting-node tilt-3d-card" data-day="day2">
             <div class="node-milestone">
               <span class="node-step-index">07</span>
               <span class="node-step-status">JURY SHOWCASE</span>
@@ -995,14 +987,14 @@
               <div class="marker-cube purple-node"></div>
             </div>
             <div class="node-content flame-purple">
-              <div class="node-time">OCT 26 · 10:00 AM – 03:00 PM</div>
+              <div class="node-time">OCT 25 · 01:30 PM – 04:30 PM</div>
               <h4 class="node-title">Live Stage Pitches, Exhibition Floor & Grand Felicitation</h4>
               <p class="node-desc">
                 Top 12 finalist teams present live on the Main Auditorium stage before angel investors, engineering leads, and university dignitaries. Prize distribution follows.
               </p>
               <div class="node-tags">
                 <span>Auditorium Stage</span>
-                <span>₹2.5L+ Loot Award</span>
+                <span>₹65K+ Loot Award</span>
                 <span>Closing Gala</span>
               </div>
             </div>
@@ -1026,31 +1018,31 @@
         <div class="mc-hotbar-showcase tilt-3d-card flame-orange">
           <div class="mc-hotbar-label">⚡ INVENTORY HOTBAR LOOT — SELECT SLOT TO INSPECT</div>
           <div class="mc-hotbar-slots" id="mc-hotbar-slots">
-            <div class="mc-hotbar-slot active" data-slot="1" data-title="Netherite Trophy (₹1,00,000)" data-desc="Grand Champion First Place Loot + Pre-seed incubation grant">
+            <div class="mc-hotbar-slot active" data-slot="1" data-title="Netherite Trophy (₹50,000)" data-desc="Grand Champion First Place Loot + Pre-seed incubation grant">
               <span class="slot-num">1</span>
               <span class="slot-item enchanted-glint">👑</span>
             </div>
-            <div class="mc-hotbar-slot" data-slot="2" data-title="Diamond Trove (₹60,000)" data-desc="Runner-Up Prize + Mechanical Keyboards for full squad">
+            <div class="mc-hotbar-slot" data-slot="2" data-title="Diamond Trove (₹10,000)" data-desc="Runner-Up Prize + Mechanical Keyboards for full squad">
               <span class="slot-num">2</span>
               <span class="slot-item enchanted-glint">💠</span>
             </div>
-            <div class="mc-hotbar-slot" data-slot="3" data-title="Golden Vault (₹40,000)" data-desc="Second Runner-Up Cash Prize + Smart Wearables">
+            <div class="mc-hotbar-slot" data-slot="3" data-title="Golden Vault (₹5,000)" data-desc="Second Runner-Up Cash Prize + Smart Wearables">
               <span class="slot-num">3</span>
               <span class="slot-item enchanted-glint">🪙</span>
             </div>
-            <div class="mc-hotbar-slot" data-slot="4" data-title="All-Women Team Bounty (₹12,500)" data-desc="Special category bounty for highest scoring women-led squad">
+            <div class="mc-hotbar-slot" data-slot="4" data-title="All-Women Team Bounty" data-desc="Special category bounty for highest scoring women-led squad">
               <span class="slot-num">4</span>
               <span class="slot-item">👩‍💻</span>
             </div>
-            <div class="mc-hotbar-slot" data-slot="5" data-title="Freshmen Crafter Bounty (₹12,500)" data-desc="Special bounty for brightest project built by first-year builders">
+            <div class="mc-hotbar-slot" data-slot="5" data-title="Freshmen Crafter Bounty" data-desc="Special bounty for brightest project built by first-year builders">
               <span class="slot-num">5</span>
               <span class="slot-item">🌱</span>
             </div>
-            <div class="mc-hotbar-slot" data-slot="6" data-title="UI/UX Aesthetics Bounty (₹12,500)" data-desc="Award for supreme frontend craftsmanship & accessibility">
+            <div class="mc-hotbar-slot" data-slot="6" data-title="UI/UX Aesthetics Bounty" data-desc="Award for supreme frontend craftsmanship & accessibility">
               <span class="slot-num">6</span>
               <span class="slot-item">🎨</span>
             </div>
-            <div class="mc-hotbar-slot" data-slot="7" data-title="Open Source Shield (₹12,500)" data-desc="Award for top documented, open-licensed GitHub build">
+            <div class="mc-hotbar-slot" data-slot="7" data-title="Open Source Shield" data-desc="Award for top documented, open-licensed GitHub build">
               <span class="slot-num">7</span>
               <span class="slot-item">🌐</span>
             </div>
@@ -1065,7 +1057,7 @@
           </div>
           <!-- Dynamic Hotbar Tooltip Box -->
           <div class="mc-hotbar-tooltip" id="mc-hotbar-tooltip">
-            <strong id="hotbar-tooltip-title">Netherite Trophy (₹1,00,000)</strong>
+            <strong id="hotbar-tooltip-title">Netherite Trophy (₹50,000)</strong>
             <p id="hotbar-tooltip-desc">Grand Champion First Place Loot + Pre-seed incubation grant</p>
           </div>
         </div>
@@ -1077,7 +1069,7 @@
           </div>
           <h2 class="section-title">Rewards Worth The Grind</h2>
           <p class="section-subtitle">
-            Over ₹2,50,000+ in total rewards, cloud infrastructure credits, specialized tech hardware, and fast-track incubation support.
+            Over ₹65,000+ in direct cash prizes, hardware perks, cloud credits, and fast-track pre-seed incubation support.
           </p>
         </div>
 
@@ -1088,10 +1080,10 @@
             <div class="loot-tier-ribbon ribbon-cyan">2ND PLACE</div>
             <div class="loot-chest-icon enchanted-glint">💠</div>
             <h3 class="loot-tier-name">Architect's Trove</h3>
-            <div class="loot-cash-amount">₹60,000</div>
+            <div class="loot-cash-amount">₹10,000</div>
             <p class="loot-subtitle">Hard Cash Prize + Tech Hardware</p>
             <ul class="loot-perks-list">
-              <li><span>✓</span> ₹60,000 Direct Bank Transfer</li>
+              <li><span>✓</span> ₹10,000 Direct Bank Transfer</li>
               <li><span>✓</span> Mechanical Keyboards for each member</li>
               <li><span>✓</span> $2,000 Cloud Platform Credits</li>
               <li><span>✓</span> Direct fast-track interview with hiring partners</li>
@@ -1106,10 +1098,10 @@
               <img src="assets/images/mc_ender_chest_loot_3d.jpg" alt="3D Minecraft Ender Chest Loot Vault" class="loot-3d-chest-img" loading="lazy" decoding="async">
             </div>
             <h3 class="loot-tier-name">Champion’s Cache</h3>
-            <div class="loot-cash-amount highlight-amber">₹1,00,000</div>
+            <div class="loot-cash-amount highlight-amber">₹50,000</div>
             <p class="loot-subtitle">Cash Prize + Grand Trophy + Incubation</p>
             <ul class="loot-perks-list">
-              <li><span>✓</span> <strong>₹1,00,000 Direct Cash Prize</strong></li>
+              <li><span>✓</span> <strong>₹50,000 Direct Cash Prize</strong></li>
               <li><span>✓</span> Hand-crafted Obsidian Voxel Trophy</li>
               <li><span>✓</span> Full Pre-Seed Incubation Grant support by DBU</li>
               <li><span>✓</span> $5,000 Cloud Credits + Pro GPU Clusters</li>
@@ -1123,10 +1115,10 @@
             <div class="loot-tier-ribbon ribbon-gold">3RD PLACE</div>
             <div class="loot-chest-icon enchanted-glint">🪙</div>
             <h3 class="loot-tier-name">Artisan's Vault</h3>
-            <div class="loot-cash-amount">₹40,000</div>
+            <div class="loot-cash-amount">₹5,000</div>
             <p class="loot-subtitle">Hard Cash Prize + Goodies</p>
             <ul class="loot-perks-list">
-              <li><span>✓</span> ₹40,000 Direct Bank Transfer</li>
+              <li><span>✓</span> ₹5,000 Direct Bank Transfer</li>
               <li><span>✓</span> Smart Wearable Fitness Trackers</li>
               <li><span>✓</span> $1,000 Cloud Platform Credits</li>
               <li><span>✓</span> 1-Year JetBrains Pro Licenses</li>
@@ -1195,7 +1187,7 @@
             </div>
             <div class="swag-item">
               <span class="swag-emoji">🍕</span>
-              <span>36-Hour Meals, Drinks & Fuel Kit</span>
+              <span>24-Hour Meals, Drinks & Fuel Kit</span>
             </div>
           </div>
         </div>
@@ -1319,7 +1311,7 @@
                   <div class="codex-bullet">📦</div>
                   <div class="codex-text">
                     <strong>Original Codebase Requirement</strong>
-                    <p>All core development must be written during the official 36-hour duration. Utilizing open-source libraries, APIs, and frameworks is encouraged, but pre-built proprietary software is disqualified.</p>
+                    <p>All core development must be written during the official 24-hour duration. Utilizing open-source libraries, APIs, and frameworks is encouraged, but pre-built proprietary software is disqualified.</p>
                   </div>
                 </li>
                 <li>
@@ -1526,10 +1518,26 @@
             <h4 class="org-name">Aryan Singh Tariani</h4>
             <span class="org-title">Tech Lead & Technical Operations</span>
             <span class="org-dept">Google Developer Student Clubs</span>
+
+            <div class="org-lead-contacts">
+              <a href="https://github.com/Aryan772005" target="_blank" rel="noopener noreferrer" class="org-lead-pill gh-pill" title="GitHub: Aryan772005">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"/></svg>
+                <span>GitHub: Aryan772005</span>
+              </a>
+              <a href="tel:+919475002048" class="org-lead-pill phone-pill" title="Call Aryan">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <span>+91 9475002048</span>
+              </a>
+              <a href="mailto:aryansinghtariani@gmail.com" class="org-lead-pill email-pill" title="Email Aryan">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <span>aryansinghtariani@gmail.com</span>
+              </a>
+            </div>
+
             <div class="org-socials">
+              <a href="https://github.com/Aryan772005" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"/></svg></a>
               <a href="tel:+919475002048" aria-label="Call +91 9475002048"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
               <a href="mailto:aryansinghtariani@gmail.com" aria-label="Email aryansinghtariani@gmail.com"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
-              <a href="https://github.com/Aryan772005" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"/></svg></a>
               <a href="#" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z"/></svg></a>
             </div>
           </div>
@@ -1538,10 +1546,10 @@
           <div class="organizer-card tilt-3d-card mc-sponsor-bevel flame-orange">
             <div class="org-avatar-wrap">
               <div class="org-avatar-cube avatar-ops">⚡</div>
-              <span class="org-role-badge">LOGISTICS & COMMUNITY</span>
+              <span class="org-role-badge">COMMUNITY LEADER</span>
             </div>
-            <h4 class="org-name">[COMMUNITY_LEAD_NAME]</h4>
-            <span class="org-title">Head of Hacker Experience</span>
+            <h4 class="org-name">Manohar Kumar</h4>
+            <span class="org-title">Community Leader & Operations</span>
             <span class="org-dept">Desh Bhagat University</span>
             <div class="org-socials">
               <a href="#" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z"/></svg></a>
@@ -1598,7 +1606,7 @@
             </summary>
             <div class="faq-answer">
               <p>
-                <strong>Zero fee.</strong> Participation is 100% free! Accepted builders will be provided with full 36-hour meals, midnight snacks, unlimited energy drinks, high-speed Wi-Fi, and designated sleeping/rest quarters on campus.
+                <strong>Zero fee.</strong> Participation is 100% free! Accepted builders will be provided with full 24-hour meals, midnight snacks, unlimited energy drinks, high-speed Wi-Fi, and designated sleeping/rest quarters on campus.
               </p>
             </div>
           </details>
@@ -1769,6 +1777,9 @@
         <div class="footer-links-col">
           <h5 class="footer-col-title">CONNECT GUILD</h5>
           <div class="footer-social-strip">
+            <a href="https://github.com/Aryan772005" target="_blank" rel="noopener noreferrer" class="social-box" aria-label="GitHub Profile">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"/></svg>
+            </a>
             <a href="#" class="social-box" aria-label="Instagram">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
             </a>

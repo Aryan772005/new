@@ -275,8 +275,7 @@ function initLenisSmoothScroll() {
 
   if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
     ScrollTrigger.config({
-      ignoreMobileResize: true,
-      autoRefreshEvents: "visibilitychange,DOMContentLoaded,load"
+      autoRefreshEvents: "visibilitychange,DOMContentLoaded,load,resize"
     });
 
     gsap.ticker.add((time) => {
@@ -463,9 +462,16 @@ function initThreeJSScene() {
   window.addEventListener('resize', () => {
     width = window.innerWidth;
     height = window.innerHeight;
-    threeCamera.aspect = width / height;
-    threeCamera.updateProjectionMatrix();
-    threeRenderer.setSize(width, height);
+    if (threeCamera) {
+      threeCamera.aspect = width / height;
+      threeCamera.updateProjectionMatrix();
+    }
+    if (threeRenderer) {
+      threeRenderer.setSize(width, height);
+    }
+    if (typeof ScrollTrigger !== 'undefined') {
+      ScrollTrigger.refresh(true);
+    }
   });
 
   // Animation Loop
@@ -816,8 +822,8 @@ function initHUDScrollTracker() {
     const fillPercent = Math.min(100, Math.max(5, progress * 100));
     xpFill.style.width = `${fillPercent}%`;
 
-    // Dynamic Level from 1 up to 36 as you scroll
-    const currentLevel = Math.max(1, Math.floor(1 + progress * 35));
+    // Dynamic Level from 1 up to 24 as you scroll (matching 24-hour hackathon)
+    const currentLevel = Math.max(1, Math.floor(1 + progress * 23));
     if (currentLevel !== lastLevel) {
       xpLevel.textContent = currentLevel;
 
