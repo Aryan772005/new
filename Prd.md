@@ -1,7 +1,8 @@
 # PRD — Desh Bhagat University Hackathon Website
 **Codename:** BlockHacks (placeholder — swap for your actual event name)
 **Theme:** Minecraft-inspired, built for a college hackathon
-**Owner:** Aryan Singh Tariani
+**Tech Lead:** Aryan Singh Tariani (Phone: +91 9475002048 | Email: aryansinghtariani@gmail.com)  
+**Student Lead Head:** Rounak Kumar  
 **Status:** Draft v1
 
 ---
@@ -57,7 +58,7 @@ Single scrollable landing page with anchored nav, unless stated otherwise:
 - Rules: team size, eligibility (open to all colleges or DBU-only), submission format
 - Timeline with exact times
 - Sponsor logos/tiers (if finalized)
-- Organizer names, faculty coordinator name(s), contact email/phone, Instagram/LinkedIn handles
+- Student Lead Head: Rounak Kumar, Tech Lead: Aryan Singh Tariani (+91 9475002048, aryansinghtariani@gmail.com)
 - Desh Bhagat University logo and official brand colors (for footer/credibility, kept separate from the Minecraft palette so it doesn't clash — usually placed in nav/footer only)
 
 ## 9. Technical Notes (for whoever builds in Antigravity)

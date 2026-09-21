@@ -1784,174 +1784,232 @@ a {
 .tracks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
 
 /* ==========================================================================
-   DRAGON FLAME SYSTEM (Blue, Red, Orange, White, Green Dragon Fire on Info Boxes)
+   DRAGON FLAME SYSTEM (Full 4-Sided Roaring Fire Borders Across All Content Boxes)
+   Colors: Orange (Blaze), Blue (Soul), Red (Nether), Green (Emerald), Purple (Ender), White (Astral)
    ========================================================================== */
 
-/* Base Dragon Flame Box Container */
+/* ==========================================================================
+   DRAGON FLAME SYSTEM (Realistic Fire Licking From Borders Only)
+   - Zero color inside content (content stays 100% dark & clean)
+   - No LED neon tubes: organic licking fire tongues around borders
+   - Colors: Orange (Blaze), Blue (Soul), Red (Nether), Green (Emerald), Purple (Ender), White (Astral)
+   ========================================================================== */
+
+/* All Target Content Boxes: Solid Dark Interior, Zero Color Bleed */
 .track-card,
 .loot-card,
 .voxel-stat-card,
 .tf-hero-card,
 .special-bounty-card,
-.dbu-institutional-card {
-  position: relative;
+.dbu-institutional-card,
+.mc-crafting-table-ui,
+.mc-furnace-banner,
+.node-content,
+.mc-hotbar-showcase,
+.mc-codex-3d-feature,
+.codex-pane,
+.criteria-card,
+.metric-box,
+.sponsor-card,
+.sponsor-cta-banner,
+.organizer-card,
+.faq-item,
+.final-cta-box,
+.footer-hologram-card,
+.hero-inner,
+.bounty-pill-card,
+.loot-swag-box,
+.rules-tabs-container,
+.highlight-item,
+.dbu-seal-box,
+.modal-dialog,
+.flame-box {
+  position: relative !important;
   overflow: visible !important;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+  background: #0d0d16 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
+  z-index: 1;
 }
 
-/* Dragon Flame Ambient Outer Aura */
+/* Realistic Licking Flame Border (Behind the Card, Licking Outward) */
 .track-card::before,
 .loot-card::before,
 .voxel-stat-card::before,
 .tf-hero-card::before,
-.special-bounty-card::before {
+.special-bounty-card::before,
+.dbu-institutional-card::before,
+.mc-crafting-table-ui::before,
+.mc-furnace-banner::before,
+.node-content::before,
+.mc-hotbar-showcase::before,
+.mc-codex-3d-feature::before,
+.codex-pane::before,
+.criteria-card::before,
+.metric-box::before,
+.sponsor-card::before,
+.sponsor-cta-banner::before,
+.organizer-card::before,
+.faq-item::before,
+.final-cta-box::before,
+.footer-hologram-card::before,
+.hero-inner::before,
+.bounty-pill-card::before,
+.loot-swag-box::before,
+.rules-tabs-container::before,
+.highlight-item::before,
+.dbu-seal-box::before,
+.modal-dialog::before,
+.flame-box::before {
   content: '';
   position: absolute;
-  inset: -2px;
+  inset: -10px;
   border-radius: inherit;
-  background: radial-gradient(circle at 50% 0%, var(--flame-glow, rgba(199, 125, 255, 0.5)) 0%, transparent 70%);
-  filter: blur(10px);
-  opacity: 0.65;
   z-index: -1;
   pointer-events: none;
-  animation: dragonAuraBreathe 3s infinite ease-in-out alternate;
-  transition: opacity 0.3s ease, filter 0.3s ease;
+  background:
+    /* Top border tall leaping flame tongues */
+    radial-gradient(ellipse 18px 22px at 14% -4px, var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 45%, var(--flame-outer, #ff2200) 70%, transparent 95%),
+    radial-gradient(ellipse 24px 28px at 36% -8px, var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 40%, var(--flame-outer, #cc1100) 72%, transparent 98%),
+    radial-gradient(ellipse 20px 24px at 60% -5px, var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 45%, var(--flame-outer, #ff2200) 70%, transparent 95%),
+    radial-gradient(ellipse 22px 26px at 84% -7px, var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 40%, var(--flame-outer, #cc1100) 72%, transparent 98%),
+    /* Bottom border roaring flames */
+    radial-gradient(ellipse 20px 18px at 22% calc(100% + 4px), var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 45%, var(--flame-outer, #ff2200) 70%, transparent 95%),
+    radial-gradient(ellipse 26px 20px at 54% calc(100% + 6px), var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 40%, var(--flame-outer, #cc1100) 72%, transparent 98%),
+    radial-gradient(ellipse 20px 18px at 80% calc(100% + 4px), var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 45%, var(--flame-outer, #ff2200) 70%, transparent 95%),
+    /* Left border licking flame tongues */
+    radial-gradient(ellipse 18px 22px at -4px 28%, var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 45%, var(--flame-outer, #ff2200) 70%, transparent 95%),
+    radial-gradient(ellipse 20px 24px at -6px 72%, var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 40%, var(--flame-outer, #cc1100) 72%, transparent 98%),
+    /* Right border licking flame tongues */
+    radial-gradient(ellipse 18px 22px at calc(100% + 4px) 32%, var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 45%, var(--flame-outer, #ff2200) 70%, transparent 95%),
+    radial-gradient(ellipse 20px 24px at calc(100% + 6px) 76%, var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 40%, var(--flame-outer, #cc1100) 72%, transparent 98%);
+  filter: blur(2.5px) brightness(1.3) contrast(1.35);
+  opacity: 0.92;
+  animation: realisticFireFlicker 1.8s infinite ease-in-out alternate;
 }
 
-/* Dragon Flame Flickering Top Crest (Living Flame Tongues) */
-.track-card::after,
-.loot-card::after,
-.voxel-stat-card::after,
-.tf-hero-card::after,
-.special-bounty-card::after {
-  content: '';
-  position: absolute;
-  top: -12px;
-  left: 10%;
-  right: 10%;
-  height: 20px;
-  background: 
-    radial-gradient(ellipse at 20% 100%, var(--flame-core, #ffffff) 0%, var(--flame-mid, #c77dff) 35%, transparent 70%),
-    radial-gradient(ellipse at 50% 100%, var(--flame-core, #ffffff) 0%, var(--flame-outer, #7b2cbf) 40%, transparent 72%),
-    radial-gradient(ellipse at 80% 100%, var(--flame-core, #ffffff) 0%, var(--flame-mid, #c77dff) 35%, transparent 70%);
-  filter: blur(4px) brightness(1.25);
-  opacity: 0.85;
-  pointer-events: none;
-  animation: dragonFlameLick 1.6s infinite ease-in-out alternate;
-  transform-origin: center bottom;
-  border-radius: 50% 50% 0 0;
-}
-
-/* Hover Intense Dragon Flare */
+/* Hover: Flames flare higher */
 .track-card:hover::before,
 .loot-card:hover::before,
 .voxel-stat-card:hover::before,
 .tf-hero-card:hover::before,
-.special-bounty-card:hover::before {
+.special-bounty-card:hover::before,
+.dbu-institutional-card:hover::before,
+.mc-crafting-table-ui:hover::before,
+.mc-furnace-banner:hover::before,
+.node-content:hover::before,
+.mc-hotbar-showcase:hover::before,
+.mc-codex-3d-feature:hover::before,
+.codex-pane:hover::before,
+.criteria-card:hover::before,
+.metric-box:hover::before,
+.sponsor-card:hover::before,
+.sponsor-cta-banner:hover::before,
+.organizer-card:hover::before,
+.faq-item:hover::before,
+.final-cta-box:hover::before,
+.footer-hologram-card:hover::before,
+.hero-inner:hover::before,
+.bounty-pill-card:hover::before,
+.loot-swag-box:hover::before,
+.rules-tabs-container:hover::before,
+.highlight-item:hover::before,
+.dbu-seal-box:hover::before,
+.modal-dialog:hover::before,
+.flame-box:hover::before {
+  inset: -14px;
+  filter: blur(2.8px) brightness(1.6) contrast(1.45);
   opacity: 1;
-  filter: blur(16px);
 }
 
-.track-card:hover::after,
-.loot-card:hover::after,
-.voxel-stat-card:hover::after,
-.tf-hero-card:hover::after,
-.special-bounty-card:hover::after {
-  opacity: 1;
-  height: 28px;
-  top: -18px;
-  filter: blur(5px) brightness(1.45);
-}
-
-/* 1. BLUE SOUL DRAGON FLAME (Track 4 - Deep Dark, Loot 2nd Place, Stat 4) */
+/* 1. BLUE SOUL FLAME */
+.flame-blue,
 .track-deepdark,
 .loot-runner-up,
-.card-cyan,
-.flame-blue {
-  --flame-core: #ffffff;
-  --flame-mid: #00f0ff;
-  --flame-outer: #0077ff;
-  --flame-glow: rgba(0, 240, 255, 0.7);
-  border-color: rgba(0, 240, 255, 0.45) !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 24px rgba(0, 240, 255, 0.28) !important;
+.card-cyan {
+  --flame-core: #f0faff;
+  --flame-mid: #00d4ff;
+  --flame-outer: #0055ff;
 }
 
-/* 2. RED DRAGON FLAME (Track 3 - Redstone Lab, Timeline markers, etc.) */
+/* 2. RED NETHER FLAME */
+.flame-red,
 .track-redstone,
-.card-red,
-.flame-red {
-  --flame-core: #fff5eb;
-  --flame-mid: #ff2222;
-  --flame-outer: #ff5500;
-  --flame-glow: rgba(255, 34, 34, 0.75);
-  border-color: rgba(255, 34, 34, 0.5) !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 26px rgba(255, 34, 34, 0.3) !important;
+.card-red {
+  --flame-core: #fff5f5;
+  --flame-mid: #ff2238;
+  --flame-outer: #990011;
 }
 
-/* 3. ORANGE DRAGON FLAME (Track 5 - Nether, Loot Champion 1st, Stat 2) */
+/* 3. ORANGE BLAZE FLAME (Matches user's reference image) */
+.flame-orange,
 .track-nether,
 .loot-champion,
-.card-amber,
-.flame-orange {
-  --flame-core: #ffffff;
-  --flame-mid: #ff7700;
-  --flame-outer: #ffaa00;
-  --flame-glow: rgba(255, 119, 0, 0.8);
-  border-color: rgba(255, 136, 0, 0.5) !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 28px rgba(255, 119, 0, 0.32) !important;
+.loot-grand-champion,
+.card-amber {
+  --flame-core: #fffbe6;
+  --flame-mid: #ff6600;
+  --flame-outer: #cc1100;
 }
 
-/* 4. GREEN DRAGON BREATH FLAME (Track 2 - Overworld, Stat 3, Hero Card 1) */
+/* 4. GREEN EMERALD FLAME */
+.flame-green,
 .track-overworld,
 .card-green,
-.tf-card-left,
-.flame-green {
-  --flame-core: #f0fdf4;
-  --flame-mid: #00ff66;
-  --flame-outer: #70e000;
-  --flame-glow: rgba(0, 255, 102, 0.75);
-  border-color: rgba(0, 255, 102, 0.45) !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 26px rgba(0, 255, 102, 0.3) !important;
+.tf-card-left {
+  --flame-core: #f0fff4;
+  --flame-mid: #00e676;
+  --flame-outer: #007722;
 }
 
-/* 5. WHITE / ASTRAL DRAGON FLAME (Track 6 - Sandbox Wildcard, Loot 3rd, etc.) */
+/* 5. WHITE / SOLAR ASTRAL FLAME */
+.flame-white,
 .track-sandbox,
 .loot-third,
-.flame-white {
+.loot-third-place {
   --flame-core: #ffffff;
-  --flame-mid: #fef08a;
-  --flame-outer: #c77dff;
-  --flame-glow: rgba(255, 255, 255, 0.8);
-  border-color: rgba(255, 255, 255, 0.45) !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 255, 255, 0.28) !important;
+  --flame-mid: #fff8cc;
+  --flame-outer: #cbd5e1;
 }
 
-/* 6. PURPLE ENDER DRAGON FLAME (Track 1 - The End, Hero Card 3, Stat 1) */
+/* 6. PURPLE ENDER FLAME */
+.flame-purple,
 .track-the-end,
 .card-purple,
 .tf-card-right,
-.flame-purple {
-  --flame-core: #ffffff;
+.hero-inner {
+  --flame-core: #faf5ff;
   --flame-mid: #c77dff;
-  --flame-outer: #7b2cbf;
-  --flame-glow: rgba(199, 125, 255, 0.8);
-  border-color: rgba(199, 125, 255, 0.5) !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 28px rgba(199, 125, 255, 0.32) !important;
+  --flame-outer: #6a0dad;
 }
 
-/* Dragon Flame Keyframe Animations */
-@keyframes dragonAuraBreathe {
-  0% { transform: scale(0.99); opacity: 0.55; filter: blur(8px); }
-  50% { transform: scale(1.02); opacity: 0.85; filter: blur(14px); }
-  100% { transform: scale(0.99); opacity: 0.55; filter: blur(8px); }
-}
-
-@keyframes dragonFlameLick {
-  0% { transform: scaleY(0.9) skewX(-2deg); opacity: 0.75; }
-  25% { transform: scaleY(1.3) skewX(5deg); opacity: 1; }
-  50% { transform: scaleY(0.85) skewX(-4deg); opacity: 0.7; }
-  75% { transform: scaleY(1.35) skewX(3deg); opacity: 0.95; }
-  100% { transform: scaleY(1.05) skewX(-1deg); opacity: 0.8; }
+/* Organic Fire Flickering & Licking Animation */
+@keyframes realisticFireFlicker {
+  0% {
+    transform: scale(1) skewX(-1deg);
+    filter: blur(2.2px) brightness(1.25) contrast(1.3);
+    opacity: 0.88;
+  }
+  25% {
+    transform: scale(1.01, 1.025) skewX(1.5deg);
+    filter: blur(2.6px) brightness(1.4) contrast(1.4);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.995, 1.01) skewX(-1.5deg);
+    filter: blur(2px) brightness(1.2) contrast(1.25);
+    opacity: 0.85;
+  }
+  75% {
+    transform: scale(1.015, 1.03) skewX(1deg);
+    filter: blur(2.7px) brightness(1.45) contrast(1.45);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) skewX(-0.5deg);
+    filter: blur(2.3px) brightness(1.3) contrast(1.35);
+    opacity: 0.9;
+  }
 }
 
 .track-card { background: rgba(20, 20, 32, 0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 28px 24px; display: flex; flex-direction: column; position: relative; }
