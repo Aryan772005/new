@@ -417,7 +417,7 @@
   // ================= STATUS & CRUD ACTIONS ================= //
   async function updateSquadStatus(id, status, selectElement = null) {
     try {
-      const res = await apiFetch(`/api/admin/registrations/${id}/status`, {
+      const res = await apiFetch(`/api/admin/registrations/${id}`, {
         method: 'PATCH',
         body: { status }
       });

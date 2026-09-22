@@ -14,15 +14,13 @@ let client;
 if (isTurso) {
   const { createClient } = require('@libsql/client');
   let tursoUrl = process.env.TURSO_DATABASE_URL.trim();
-  if (tursoUrl.startsWith('libsql://')) {
-    tursoUrl = tursoUrl.replace('libsql://', 'https://');
-  }
+  // @libsql/client natively supports both libsql:// and https:// URLs
 
   client = createClient({
     url: tursoUrl,
     authToken: process.env.TURSO_AUTH_TOKEN.trim()
   });
-  console.log('⚡ Connected to Turso Cloud SQLite Database (AWS Mumbai)');
+  console.log('⚡ Connected to Turso Cloud SQLite Database');
 } else {
   // Use local file SQLite for offline local dev
   const { createClient } = require('@libsql/client');
@@ -187,11 +185,23 @@ async function initDb() {
   }
 }
 
-// Auto init on load
-initDb().catch(console.error);
+// Auto init on load — store the promise so API methods can await it
+let _initPromise = null;
+function ensureInit() {
+  if (!_initPromise) {
+    _initPromise = initDb().catch((err) => {
+      console.error('[DB] Init failed:', err);
+      _initPromise = null; // Allow retry on next call
+      throw err;
+    });
+  }
+  return _initPromise;
+}
+ensureInit();
 
 // Unique pass ID helper
 async function generateUniquePassId() {
+  await ensureInit();
   for (let attempt = 0; attempt < 50; attempt++) {
     const randomCode = Math.floor(1000 + Math.random() * 9000);
     const passId = `CFT-${randomCode}-DBU`;
@@ -209,6 +219,7 @@ async function generateUniquePassId() {
 // ---------------- API Methods ---------------- //
 
 async function registerTeam(data) {
+  await ensureInit();
   const {
     team_name,
     team_size,
@@ -264,6 +275,7 @@ async function registerTeam(data) {
 }
 
 async function authenticateAdmin(username, password) {
+  await ensureInit();
   if (!username || !password) {
     throw new Error('Username and password are required.');
   }
@@ -295,6 +307,7 @@ async function authenticateAdmin(username, password) {
 }
 
 async function validateSession(token) {
+  await ensureInit();
   if (!token) return null;
   const res = await client.execute({
     sql: 'SELECT s.token, s.username, s.expires_at, a.role FROM sessions s JOIN admins a ON s.username = a.username WHERE s.token = ?',
@@ -313,11 +326,13 @@ async function validateSession(token) {
 }
 
 async function logoutSession(token) {
+  await ensureInit();
   if (!token) return;
   await client.execute({ sql: 'DELETE FROM sessions WHERE token = ?', args: [token] });
 }
 
 async function getRegistrations({ search = '', track = '', status = '', sort = 'newest' } = {}) {
+  await ensureInit();
   let query = 'SELECT * FROM registrations WHERE 1=1';
   const params = [];
 
@@ -357,6 +372,7 @@ async function getRegistrations({ search = '', track = '', status = '', sort = '
 }
 
 async function getStats() {
+  await ensureInit();
   const countTeamsRes = await client.execute('SELECT COUNT(*) as count FROM registrations');
   const totalTeams = Number(countTeamsRes.rows[0]?.count || 0);
 
@@ -397,6 +413,7 @@ async function getStats() {
 }
 
 async function updateRegistrationStatus(id, newStatus) {
+  await ensureInit();
   const allowed = ['confirmed', 'approved', 'waitlist', 'checked_in', 'rejected'];
   if (!allowed.includes(newStatus)) {
     throw new Error(`Invalid status: ${newStatus}`);
@@ -420,6 +437,7 @@ async function updateRegistrationStatus(id, newStatus) {
 }
 
 async function deleteRegistration(id) {
+  await ensureInit();
   await client.execute({
     sql: 'DELETE FROM registrations WHERE id = ?',
     args: [id]

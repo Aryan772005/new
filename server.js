@@ -134,7 +134,7 @@ apiRouter.get('/admin/registrations', requireAdmin, async (req, res) => {
 /**
  * Update Registration Status
  */
-apiRouter.patch('/admin/registrations/:id/status', requireAdmin, async (req, res) => {
+apiRouter.patch('/admin/registrations/:id', requireAdmin, async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
     const { status } = req.body;

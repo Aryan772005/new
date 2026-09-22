@@ -1665,45 +1665,39 @@ function initRegistrationModal() {
       }
 
       try {
-        let passId = `CFT-${Math.floor(1000 + Math.random() * 9000)}-DBU`;
-        
-        // Attempt sending to backend SQLite endpoint
+        const response = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            team_name: teamName,
+            team_size: teamSize,
+            leader_name: leaderName,
+            leader_email: leaderEmail,
+            leader_phone: leaderPhone,
+            college_name: collegeName,
+            primary_track: track,
+            portfolio_url: portfolioUrl,
+            concept_brief: conceptBrief
+          })
+        });
+
+        let data = {};
         try {
-          const response = await fetch('/api/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              team_name: teamName,
-              team_size: teamSize,
-              leader_name: leaderName,
-              leader_email: leaderEmail,
-              leader_phone: leaderPhone,
-              college_name: collegeName,
-              primary_track: track,
-              portfolio_url: portfolioUrl,
-              concept_brief: conceptBrief
-            })
-          });
-
-          let data = {};
-          try {
-            data = await response.json();
-          } catch (jsonErr) {
-            // Non-JSON response
-          }
-
-          if (!response.ok) {
-            throw new Error(data.error || `Server responded with status ${response.status}.`);
-          }
-
-          if (data.registration && data.registration.pass_id) {
-            passId = data.registration.pass_id;
-          }
-        } catch (apiErr) {
-          console.warn('API sync notice:', apiErr.message);
+          data = await response.json();
+        } catch (jsonErr) {
+          // Non-JSON response
         }
 
-        // Always populate and generate hall ticket pass
+        if (!response.ok) {
+          throw new Error(data.error || `Server responded with status ${response.status}. Please try again.`);
+        }
+
+        // Use the pass ID from the database response
+        const passId = (data.registration && data.registration.pass_id) 
+          ? data.registration.pass_id 
+          : `CFT-${Math.floor(1000 + Math.random() * 9000)}-DBU`;
+
+        // Populate and generate hall ticket pass
         document.getElementById('pass-team-name').textContent = teamName;
         document.getElementById('pass-leader-name').textContent = leaderName;
         document.getElementById('pass-team-size').textContent = `${teamSize} Crafters`;
@@ -1728,6 +1722,11 @@ function initRegistrationModal() {
         }
       } catch (err) {
         console.error('Registration flow error:', err);
+        // Show error to user
+        if (errorBox) {
+          errorBox.textContent = err.message || 'Registration failed. Please try again.';
+          errorBox.style.display = 'block';
+        }
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
