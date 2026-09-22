@@ -1685,16 +1685,22 @@ function initRegistrationModal() {
             })
           });
 
-          const data = await response.json();
+          let data = {};
+          try {
+            data = await response.json();
+          } catch (jsonErr) {
+            // Non-JSON response
+          }
+
           if (!response.ok) {
-            throw new Error(data.error || 'Registration failed. Please check your details.');
+            throw new Error(data.error || `Server responded with status ${response.status}.`);
           }
 
           if (data.registration && data.registration.pass_id) {
             passId = data.registration.pass_id;
           }
         } catch (apiErr) {
-          // If server returned a business validation error (e.g. duplicate email/team)
+          // If server returned a validation error (e.g. duplicate email/team)
           if (apiErr.message && !apiErr.message.includes('Failed to fetch') && !apiErr.message.includes('NetworkError')) {
             throw apiErr;
           }
@@ -1728,8 +1734,6 @@ function initRegistrationModal() {
         if (errorBox) {
           errorBox.textContent = `⚠️ ${err.message || 'Unable to register. Please try again.'}`;
           errorBox.style.display = 'block';
-        } else {
-          alert(err.message);
         }
       } finally {
         if (submitBtn) {
