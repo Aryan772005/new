@@ -45,12 +45,13 @@ async function requireAdmin(req, res, next) {
   next();
 }
 
-// ---------------- PUBLIC API ROUTES ---------------- //
+// ---------------- API ROUTER ---------------- //
+const apiRouter = express.Router();
 
 /**
  * Public Team Registration Endpoint
  */
-app.post('/api/register', async (req, res) => {
+apiRouter.post('/register', async (req, res) => {
   try {
     const registration = await db.registerTeam(req.body);
     return res.status(201).json({
@@ -67,12 +68,10 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// ---------------- ADMIN AUTH ROUTES ---------------- //
-
 /**
  * Admin Login
  */
-app.post('/api/admin/login', async (req, res) => {
+apiRouter.post('/admin/login', async (req, res) => {
   try {
     const { username, password } = req.body;
     const session = await db.authenticateAdmin(username, password);
@@ -92,7 +91,7 @@ app.post('/api/admin/login', async (req, res) => {
 /**
  * Verify Current Admin Session
  */
-app.get('/api/admin/me', requireAdmin, (req, res) => {
+apiRouter.get('/admin/me', requireAdmin, (req, res) => {
   res.json({
     success: true,
     user: req.admin
@@ -102,17 +101,15 @@ app.get('/api/admin/me', requireAdmin, (req, res) => {
 /**
  * Admin Logout
  */
-app.post('/api/admin/logout', requireAdmin, async (req, res) => {
+apiRouter.post('/admin/logout', requireAdmin, async (req, res) => {
   await db.logoutSession(req.token);
   res.json({ success: true, message: 'Logged out successfully.' });
 });
 
-// ---------------- ADMIN DASHBOARD ROUTES ---------------- //
-
 /**
  * Registration Statistics Overview
  */
-app.get('/api/admin/stats', requireAdmin, async (req, res) => {
+apiRouter.get('/admin/stats', requireAdmin, async (req, res) => {
   try {
     const stats = await db.getStats();
     res.json({ success: true, stats });
@@ -124,7 +121,7 @@ app.get('/api/admin/stats', requireAdmin, async (req, res) => {
 /**
  * List / Search Registrations with Filters
  */
-app.get('/api/admin/registrations', requireAdmin, async (req, res) => {
+apiRouter.get('/admin/registrations', requireAdmin, async (req, res) => {
   try {
     const { search = '', track = '', status = '', sort = 'newest' } = req.query;
     const registrations = await db.getRegistrations({ search, track, status, sort });
@@ -137,7 +134,7 @@ app.get('/api/admin/registrations', requireAdmin, async (req, res) => {
 /**
  * Update Registration Status
  */
-app.patch('/api/admin/registrations/:id/status', requireAdmin, async (req, res) => {
+apiRouter.patch('/admin/registrations/:id/status', requireAdmin, async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
     const { status } = req.body;
@@ -151,7 +148,7 @@ app.patch('/api/admin/registrations/:id/status', requireAdmin, async (req, res) 
 /**
  * Organizer manual registration
  */
-app.post('/api/admin/registrations', requireAdmin, async (req, res) => {
+apiRouter.post('/admin/registrations', requireAdmin, async (req, res) => {
   try {
     const registration = await db.registerTeam(req.body);
     res.status(201).json({ success: true, registration });
@@ -163,7 +160,7 @@ app.post('/api/admin/registrations', requireAdmin, async (req, res) => {
 /**
  * Delete a Registration Record
  */
-app.delete('/api/admin/registrations/:id', requireAdmin, async (req, res) => {
+apiRouter.delete('/admin/registrations/:id', requireAdmin, async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
     await db.deleteRegistration(id);
@@ -176,7 +173,7 @@ app.delete('/api/admin/registrations/:id', requireAdmin, async (req, res) => {
 /**
  * Export Registrations to CSV
  */
-app.get('/api/admin/export-csv', requireAdmin, async (req, res) => {
+apiRouter.get('/admin/export-csv', requireAdmin, async (req, res) => {
   try {
     const registrations = await db.getRegistrations();
     
@@ -225,6 +222,10 @@ app.get('/api/admin/export-csv', requireAdmin, async (req, res) => {
     res.status(500).json({ success: false, error: err.message });
   }
 });
+
+// Mount on BOTH /api and root so it works regardless of how Vercel proxies
+app.use('/api', apiRouter);
+app.use(apiRouter);
 
 // Start Server locally if run directly
 if (require.main === module) {

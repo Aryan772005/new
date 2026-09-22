@@ -21,7 +21,8 @@ if (isTurso) {
 
   client = createClient({
     url: tursoUrl,
-    authToken: process.env.TURSO_AUTH_TOKEN.trim()
+    authToken: process.env.TURSO_AUTH_TOKEN.trim(),
+    fetch: (url, opts) => fetch(url, { ...opts, keepalive: false })
   });
   console.log('⚡ Connected to Turso Cloud SQLite Database (AWS Mumbai)');
 } else {
