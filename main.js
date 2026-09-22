@@ -1635,41 +1635,108 @@ function initRegistrationModal() {
     }
   });
 
-  // Handle Form Submission
+  // Handle Form Submission with SQLite Database Persistence
   if (regForm) {
-    regForm.addEventListener('submit', (e) => {
+    const errorBox = document.getElementById('reg-error-box');
+    const submitBtn = document.getElementById('submit-ticket-btn');
+
+    regForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const teamName = document.getElementById('team-name').value || 'Netherite Architects';
-      const teamSize = document.getElementById('team-size').value || '4';
-      const leaderName = document.getElementById('leader-name').value || 'Builder Lead';
-      const track = document.getElementById('primary-track').value || 'Track 01 — The End (AI)';
+      if (errorBox) {
+        errorBox.style.display = 'none';
+        errorBox.textContent = '';
+      }
 
-      // Populate Ticket
-      document.getElementById('pass-team-name').textContent = teamName;
-      document.getElementById('pass-leader-name').textContent = leaderName;
-      document.getElementById('pass-team-size').textContent = `${teamSize} Crafters`;
-      document.getElementById('pass-track-name').textContent = track.split('—')[1]?.trim() || track;
+      const teamName = document.getElementById('team-name').value.trim();
+      const teamSize = document.getElementById('team-size').value;
+      const leaderName = document.getElementById('leader-name').value.trim();
+      const leaderEmail = document.getElementById('leader-email').value.trim();
+      const leaderPhone = document.getElementById('leader-phone').value.trim();
+      const collegeName = document.getElementById('college-name').value.trim();
+      const track = document.getElementById('primary-track').value;
+      const portfolioUrl = (document.getElementById('portfolio-url')?.value || '').trim();
+      const conceptBrief = (document.getElementById('concept-brief')?.value || '').trim();
 
-      // Unique pass code
-      const randomNum = Math.floor(1000 + Math.random() * 9000);
-      document.getElementById('pass-unique-id').textContent = `CFT-${randomNum}-DBU`;
+      // Loading state on button
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>FORGING SQUAD PASS IN DATABASE...</span>';
+      }
 
-      // Switch View
-      stepForm.classList.remove('active');
-      stepTicket.classList.add('active');
+      try {
+        let passId = `CFT-${Math.floor(1000 + Math.random() * 9000)}-DBU`;
+        
+        // Attempt sending to backend SQLite endpoint
+        try {
+          const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              team_name: teamName,
+              team_size: teamSize,
+              leader_name: leaderName,
+              leader_email: leaderEmail,
+              leader_phone: leaderPhone,
+              college_name: collegeName,
+              primary_track: track,
+              portfolio_url: portfolioUrl,
+              concept_brief: conceptBrief
+            })
+          });
 
-      playMinecraftSound('level_up');
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.error || 'Registration failed. Please check your details.');
+          }
 
-      // 3D Entrance on Ticket
-      if (typeof gsap !== 'undefined') {
-        gsap.from('#digital-pass-card', {
-          scale: 0.85,
-          rotationY: 15,
-          opacity: 0,
-          duration: 0.6,
-          ease: 'back.out(1.7)'
-        });
+          if (data.registration && data.registration.pass_id) {
+            passId = data.registration.pass_id;
+          }
+        } catch (apiErr) {
+          // If server returned a business validation error (e.g. duplicate email/team)
+          if (apiErr.message && !apiErr.message.includes('Failed to fetch') && !apiErr.message.includes('NetworkError')) {
+            throw apiErr;
+          }
+          console.warn('[Offline Mode] Backend unreachable, generating local pass preview:', apiErr);
+        }
+
+        // Populate Ticket with validated data
+        document.getElementById('pass-team-name').textContent = teamName;
+        document.getElementById('pass-leader-name').textContent = leaderName;
+        document.getElementById('pass-team-size').textContent = `${teamSize} Crafters`;
+        document.getElementById('pass-track-name').textContent = track.split('—')[1]?.trim() || track;
+        document.getElementById('pass-unique-id').textContent = passId;
+
+        // Switch View to Ticket Celebration
+        stepForm.classList.remove('active');
+        stepTicket.classList.add('active');
+
+        playMinecraftSound('level_up');
+
+        // 3D Entrance on Ticket
+        if (typeof gsap !== 'undefined') {
+          gsap.from('#digital-pass-card', {
+            scale: 0.85,
+            rotationY: 15,
+            opacity: 0,
+            duration: 0.6,
+            ease: 'back.out(1.7)'
+          });
+        }
+      } catch (err) {
+        if (errorBox) {
+          errorBox.textContent = `⚠️ ${err.message || 'Unable to register. Please try again.'}`;
+          errorBox.style.display = 'block';
+        } else {
+          alert(err.message);
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<span>GENERATE HACKER TICKET</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+        }
       }
     });
   }

@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CRAFTCON '26 — Desh Bhagat University's Flagship Collegiate Hackathon</title>
-  <meta name="description" content="A 24-hour Minecraft-inspired collegiate sandbox hackathon hosted at Desh Bhagat University. 500+ builders assembling to imagine, craft, and ship real-world breakthroughs.">
-  <meta name="keywords" content="hackathon, Desh Bhagat University, DBU hackathon, Minecraft hackathon, college hackathon, coding competition, tech festival">
-  
+  <meta name="description"
+    content="A 24-hour Minecraft-inspired collegiate sandbox hackathon hosted at Desh Bhagat University. 500+ builders assembling to imagine, craft, and ship real-world breakthroughs.">
+  <meta name="keywords"
+    content="hackathon, Desh Bhagat University, DBU hackathon, Minecraft hackathon, college hackathon, coding competition, tech festival">
+
   <!-- Open Graph / Meta -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="CRAFTCON '26 — Imagine · Build · Transcend">
-  <meta property="og:description" content="Join 500+ developers, designers, and innovators at Desh Bhagat University for a 24-hour sandbox hackathon.">
+  <meta property="og:description"
+    content="Join 500+ developers, designers, and innovators at Desh Bhagat University for a 24-hour sandbox hackathon.">
   <meta property="og:image" content="assets/images/hero_dribbble_portal.jpg">
 
   <!-- Favicon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%2312121a'/><rect x='4' y='4' width='24' height='24' fill='%233f8f2f'/><rect x='8' y='8' width='16' height='16' fill='%238b2fd1'/><rect x='12' y='12' width='8' height='8' fill='%23f5a623'/></svg>">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%2312121a'/><rect x='4' y='4' width='24' height='24' fill='%233f8f2f'/><rect x='8' y='8' width='16' height='16' fill='%238b2fd1'/><rect x='12' y='12' width='8' height='8' fill='%23f5a623'/></svg>">
 
   <!-- Google Fonts: Space Grotesk, Inter, Silkscreen (Pixel Accent) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
 
   <!-- External 3D & Animation Libraries for Reel-Style Modern Experience (Deferred for instant mobile paint) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
@@ -29,6 +36,7 @@
 
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body class="smooth-scroll-body">
 
   <!-- WebGL 3D Floating Voxel Canvas Layer (Three.js real-time 3D scene) -->
@@ -47,7 +55,8 @@
       <!-- Wordmark Logo -->
       <a href="#hero" class="brand-wordmark" aria-label="CRAFTCON '26 Home">
         <span class="nav-dbu-badge" title="Desh Bhagat University (NAAC A+)">
-          <img src="assets/images/dbu_logo_cropped.png" alt="Desh Bhagat University Logo" class="nav-dbu-img" width="30" height="30" loading="eager">
+          <img src="assets/images/dbu_logo_cropped.png" alt="Desh Bhagat University Logo" class="nav-dbu-img" width="30"
+            height="30" loading="eager">
         </span>
         <span class="brand-cube"></span>
         <span class="brand-text">CRAFTCON<span class="brand-year">'26</span></span>
@@ -76,21 +85,38 @@
         </div>
 
         <!-- Audio Ambiance Toggle -->
-        <button id="audio-toggle" class="icon-toggle-btn" aria-label="Toggle ambient portal sound" title="Toggle portal ambiance">
-          <svg class="audio-icon on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
-          <svg class="audio-icon off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        <button id="audio-toggle" class="icon-toggle-btn" aria-label="Toggle ambient portal sound"
+          title="Toggle portal ambiance">
+          <svg class="audio-icon on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+          <svg class="audio-icon off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
         </button>
 
         <!-- GitHub Profile Link -->
-        <a href="https://github.com/Aryan772005" target="_blank" rel="noopener noreferrer" class="nav-github-pill" aria-label="Aryan's GitHub Profile" title="GitHub: Aryan772005">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"/></svg>
+        <a href="https://github.com/Aryan772005" target="_blank" rel="noopener noreferrer" class="nav-github-pill"
+          aria-label="Aryan's GitHub Profile" title="GitHub: Aryan772005">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z" />
+          </svg>
           <span class="nav-gh-text">GitHub</span>
         </a>
 
         <a href="#register" class="pill-cta-btn open-modal-btn" data-modal="register-modal">
           <span class="btn-text-full">REGISTER NOW</span>
           <span class="btn-text-short">REGISTER</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
         </a>
 
         <!-- Mobile Menu Hamburger -->
@@ -106,7 +132,8 @@
     <div id="mobile-drawer" class="mobile-drawer" aria-hidden="true">
       <div class="mobile-drawer-header">
         <div class="drawer-dbu-brand">
-          <img src="assets/images/dbu_logo_cropped.png" alt="Desh Bhagat University Logo" class="drawer-dbu-img" width="36" height="36">
+          <img src="assets/images/dbu_logo_cropped.png" alt="Desh Bhagat University Logo" class="drawer-dbu-img"
+            width="36" height="36">
           <div class="drawer-dbu-text">
             <span class="drawer-dbu-title">Desh Bhagat University</span>
             <span class="drawer-dbu-naac">NAAC GRADE A+ ACCREDITED</span>
@@ -122,10 +149,12 @@
         <li><a href="#sponsors" class="mobile-link">SPONSORS</a></li>
         <li><a href="#organizers" class="mobile-link">ORGANIZERS</a></li>
         <li><a href="#faq" class="mobile-link">FAQ</a></li>
-        <li><a href="https://github.com/Aryan772005" target="_blank" rel="noopener noreferrer" class="mobile-link" style="color: #38bdf8;">GITHUB PROFILE (Aryan772005) ↗</a></li>
+        <li><a href="https://github.com/Aryan772005" target="_blank" rel="noopener noreferrer" class="mobile-link"
+            style="color: #38bdf8;">GITHUB PROFILE (Aryan772005) ↗</a></li>
       </ul>
       <div class="mobile-drawer-footer">
-        <a href="#register" class="pill-cta-btn full-width open-modal-btn" data-modal="register-modal">REGISTER FOR FREE -></a>
+        <a href="#register" class="pill-cta-btn full-width open-modal-btn" data-modal="register-modal">REGISTER FOR FREE
+          -></a>
       </div>
     </div>
   </header>
@@ -172,20 +201,43 @@
   <!-- Right Social & Action Dock -->
   <aside class="tf-dock-right" id="tf-dock-right" aria-label="Social Community Docks">
     <div class="tf-dock-pill">
-      <a href="https://discord.com" target="_blank" rel="noopener noreferrer" class="tf-dock-social" title="Join Discord Community">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+      <a href="https://discord.com" target="_blank" rel="noopener noreferrer" class="tf-dock-social"
+        title="Join Discord Community">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+        </svg>
       </a>
-      <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="tf-dock-social" title="GitHub Organization">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="tf-dock-social"
+        title="GitHub Organization">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+        </svg>
       </a>
-      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="tf-dock-social" title="Instagram Updates">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="tf-dock-social"
+        title="Instagram Updates">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+        </svg>
       </a>
-      <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="tf-dock-social" title="LinkedIn Network">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+      <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="tf-dock-social"
+        title="LinkedIn Network">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+          <rect x="2" y="9" width="4" height="12"></rect>
+          <circle cx="4" cy="4" r="2"></circle>
+        </svg>
       </a>
-      <a href="https://wa.me" target="_blank" rel="noopener noreferrer" class="tf-dock-social" title="WhatsApp Builder Support">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+      <a href="https://wa.me" target="_blank" rel="noopener noreferrer" class="tf-dock-social"
+        title="WhatsApp Builder Support">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+          </path>
+        </svg>
       </a>
     </div>
   </aside>
@@ -197,7 +249,8 @@
         <!-- Full-Bleed Portal Visual & 3D Layered Depth -->
         <div class="hero-backdrop" id="hero-backdrop" aria-hidden="true">
           <div class="hero-bg-layer" id="hero-bg-layer">
-            <img src="assets/images/hero_dribbble_portal.jpg" alt="Voxel Portal Hero Art" class="hero-bg-image" id="hero-portal-img" loading="eager" fetchpriority="high">
+            <img src="assets/images/hero_dribbble_portal.jpg" alt="Voxel Portal Hero Art" class="hero-bg-image"
+              id="hero-portal-img" loading="eager" fetchpriority="high">
           </div>
           <div class="hero-gradient-scrim"></div>
           <div class="hero-portal-glow-layer" id="hero-portal-glow"></div>
@@ -236,7 +289,7 @@
 
             <!-- Subtitle / Elevator Pitch -->
             <p class="hero-subtext elem-3d-sub">
-              Innovation isn’t just code. It’s a canvas, a crafting toolkit, a boundless sandbox where 
+              Innovation isn’t just code. It’s a canvas, a crafting toolkit, a boundless sandbox where
               500+ student developers assemble to forge the next dimension of technology.
             </p>
 
@@ -244,7 +297,12 @@
             <div class="hero-meta-bar elem-3d-meta">
               <div class="meta-item">
                 <span class="meta-label">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                  </svg>
                   TIMEFRAME
                 </span>
                 <span class="meta-val">OCTOBER 24–25, 2026</span>
@@ -252,7 +310,11 @@
               <div class="meta-divider"></div>
               <div class="meta-item">
                 <span class="meta-label">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polygon
+                      points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                    </polygon>
+                  </svg>
                   BOUNTY POOL
                 </span>
                 <span class="meta-val highlight-amber">₹65,000+</span>
@@ -260,7 +322,10 @@
               <div class="meta-divider"></div>
               <div class="meta-item meta-venue">
                 <span class="meta-label">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
                   VENUE
                 </span>
                 <span class="meta-val">Auditorium, Desh Bhagat University</span>
@@ -271,10 +336,16 @@
             <div class="hero-cta-group elem-3d-cta">
               <a href="#register" class="pill-cta-btn hero-primary-btn open-modal-btn" data-modal="register-modal">
                 <span>ENTER THE ARENA</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
               </a>
               <a href="#brochure" id="brochure-btn" class="ghost-cta-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
                 <span>BROCHURE</span>
               </a>
             </div>
@@ -313,7 +384,11 @@
           <div class="hero-footer-bar">
             <div class="hero-crest">
               <div class="crest-wreath-icon">
-                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 21a10 10 0 0 1-4-8 10 10 0 0 1 10-10 10 10 0 0 1 10-10 10 10 0 0 1-4 8"/><path d="M12 7v10"/><path d="m9 11 3-3 3 3"/></svg>
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <path d="M7 21a10 10 0 0 1-4-8 10 10 0 0 1 10-10 10 10 0 0 1 10-10 10 10 0 0 1-4 8" />
+                  <path d="M12 7v10" />
+                  <path d="m9 11 3-3 3 3" />
+                </svg>
               </div>
               <div class="crest-meta">
                 <span class="crest-kicker">THE PREMIER SANDBOX</span>
@@ -352,7 +427,8 @@
               </div>
               <div class="tf-card-badge"><span class="badge-dot dot-green"></span>CAMPUS QUEST</div>
               <h3 class="tf-card-title">THE SANDBOX</h3>
-              <p class="tf-card-desc">A 24-hour non-stop collegiate build expedition inside Desh Bhagat University's grand auditorium. Assemble your party and build without limits.</p>
+              <p class="tf-card-desc">A 24-hour non-stop collegiate build expedition inside Desh Bhagat University's
+                grand auditorium. Assemble your party and build without limits.</p>
               <div class="tf-card-perks">
                 <div class="tf-perk"><span class="tf-perk-ico">🏰</span> Free Campus Stay & 10/10 Meals</div>
                 <div class="tf-perk"><span class="tf-perk-ico">⚡</span> 1Gbps High-Speed WiFi & Power</div>
@@ -361,7 +437,9 @@
               <div class="tf-card-btn-wrap">
                 <a href="#about" class="tf-card-link-btn">
                   <span>EXPLORE CRAFTING</span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
                 </a>
               </div>
             </div>
@@ -378,14 +456,18 @@
               <h3 class="tf-card-title text-glow-gold">CRAFTCON '26</h3>
               <div class="tf-trophy-display">
                 <div class="tf-trophy-glow-halo"></div>
-                <img src="assets/images/mc_crafting_trophy_3d.jpg" alt="CraftCon Netherite Trophy" class="tf-trophy-thumb">
+                <img src="assets/images/mc_crafting_trophy_3d.jpg" alt="CraftCon Netherite Trophy"
+                  class="tf-trophy-thumb">
                 <div class="tf-bounty-badge">₹65,000+ BOUNTY POOL</div>
               </div>
-              <p class="tf-card-desc">Mine datasets, train AI agents, craft web3 protocols, and forge the next generation of software tools. Mentored by leading engineers & founders.</p>
+              <p class="tf-card-desc">Mine datasets, train AI agents, craft web3 protocols, and forge the next
+                generation of software tools. Mentored by leading engineers & founders.</p>
               <div class="tf-center-actions">
                 <a href="#register" class="pill-cta-btn open-modal-btn" data-modal="register-modal">
                   <span>SPAWN YOUR TEAM</span>
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
                 </a>
                 <a href="#tracks" class="ghost-cta-btn">
                   <span>VIEW BIOMES</span>
@@ -403,7 +485,8 @@
               </div>
               <div class="tf-card-badge"><span class="badge-dot dot-purple"></span>LOOT VAULT</div>
               <h3 class="tf-card-title">BOUNTIES & SWAG</h3>
-              <p class="tf-card-desc">Every participant earns verifiable credentials, exclusive pixel hoodies, stickers, and direct eligibility for pre-seed incubation grants.</p>
+              <p class="tf-card-desc">Every participant earns verifiable credentials, exclusive pixel hoodies, stickers,
+                and direct eligibility for pre-seed incubation grants.</p>
               <div class="tf-card-perks">
                 <div class="tf-perk"><span class="tf-perk-ico">💎</span> Custom Ender Hoodies & Swag</div>
                 <div class="tf-perk"><span class="tf-perk-ico">🚀</span> DBU Pre-Seed Incubation Support</div>
@@ -412,7 +495,9 @@
               <div class="tf-card-btn-wrap">
                 <a href="#prizes" class="tf-card-link-btn">
                   <span>VIEW LOOT TABLE</span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
                 </a>
               </div>
             </div>
@@ -434,7 +519,8 @@
       <!-- 3D Clearly Visible Background Atmosphere: Netherite Hackathon Trophy -->
       <div class="section-backdrop" aria-hidden="true">
         <div class="section-bg-layer" id="about-bg-layer">
-          <img src="assets/images/mc_crafting_trophy_3d.jpg" alt="Netherite Trophy 3D Background" class="section-bg-image bg-img-about" loading="lazy" decoding="async">
+          <img src="assets/images/mc_crafting_trophy_3d.jpg" alt="Netherite Trophy 3D Background"
+            class="section-bg-image bg-img-about" loading="lazy" decoding="async">
         </div>
         <div class="section-scrim-left"></div>
         <div class="section-glow-fx glow-purple"></div>
@@ -455,15 +541,24 @@
           <div class="mc-crafting-body">
             <!-- 3x3 Grid -->
             <div class="mc-grid-3x3" id="crafting-grid">
-              <div class="mc-slot" data-slot="1"><span class="mc-item item-chip">💻</span><span class="mc-item-qty">64</span></div>
-              <div class="mc-slot" data-slot="2"><span class="mc-item item-redstone">🔴</span><span class="mc-item-qty">32</span></div>
-              <div class="mc-slot" data-slot="3"><span class="mc-item item-emerald">🟢</span><span class="mc-item-qty">16</span></div>
-              <div class="mc-slot" data-slot="4"><span class="mc-item item-obsidian">⬛</span><span class="mc-item-qty">4</span></div>
-              <div class="mc-slot" data-slot="5"><span class="mc-item item-diamond">💠</span><span class="mc-item-qty">8</span></div>
-              <div class="mc-slot" data-slot="6"><span class="mc-item item-obsidian">⬛</span><span class="mc-item-qty">4</span></div>
-              <div class="mc-slot" data-slot="7"><span class="mc-item item-glowstone">🟡</span><span class="mc-item-qty">64</span></div>
-              <div class="mc-slot" data-slot="8"><span class="mc-item item-ingot">🪙</span><span class="mc-item-qty">12</span></div>
-              <div class="mc-slot" data-slot="9"><span class="mc-item item-chip">⚡</span><span class="mc-item-qty">24</span></div>
+              <div class="mc-slot" data-slot="1"><span class="mc-item item-chip">💻</span><span
+                  class="mc-item-qty">64</span></div>
+              <div class="mc-slot" data-slot="2"><span class="mc-item item-redstone">🔴</span><span
+                  class="mc-item-qty">32</span></div>
+              <div class="mc-slot" data-slot="3"><span class="mc-item item-emerald">🟢</span><span
+                  class="mc-item-qty">16</span></div>
+              <div class="mc-slot" data-slot="4"><span class="mc-item item-obsidian">⬛</span><span
+                  class="mc-item-qty">4</span></div>
+              <div class="mc-slot" data-slot="5"><span class="mc-item item-diamond">💠</span><span
+                  class="mc-item-qty">8</span></div>
+              <div class="mc-slot" data-slot="6"><span class="mc-item item-obsidian">⬛</span><span
+                  class="mc-item-qty">4</span></div>
+              <div class="mc-slot" data-slot="7"><span class="mc-item item-glowstone">🟡</span><span
+                  class="mc-item-qty">64</span></div>
+              <div class="mc-slot" data-slot="8"><span class="mc-item item-ingot">🪙</span><span
+                  class="mc-item-qty">12</span></div>
+              <div class="mc-slot" data-slot="9"><span class="mc-item item-chip">⚡</span><span
+                  class="mc-item-qty">24</span></div>
             </div>
 
             <!-- Crafting Arrow with Animated Energy Stream -->
@@ -475,7 +570,8 @@
             <!-- Output Slot (Enchanted Trophy with Hologram Glint) -->
             <div class="mc-output-slot-wrap">
               <div class="mc-slot mc-output-slot enchanted-glint" id="crafting-output-slot">
-                <img src="assets/images/mc_crafting_trophy_3d.jpg" alt="CraftCon Netherite Trophy" class="mc-trophy-thumb" loading="lazy" decoding="async">
+                <img src="assets/images/mc_crafting_trophy_3d.jpg" alt="CraftCon Netherite Trophy"
+                  class="mc-trophy-thumb" loading="lazy" decoding="async">
                 <span class="mc-item-qty highlight">x1</span>
               </div>
               <div class="mc-output-info">
@@ -492,13 +588,17 @@
           <div class="about-narrative">
             <h2 class="section-title">A 24-Hour Sandbox for the Next Generation of Builders</h2>
             <div class="about-lead">
-              Hosted at the sprawling campus of <strong>Desh Bhagat University</strong>, CRAFTCON '26 transforms traditional hackathons into an open-world collaborative expedition.
+              Hosted at the sprawling campus of <strong>Desh Bhagat University</strong>, CRAFTCON '26 transforms
+              traditional hackathons into an open-world collaborative expedition.
             </div>
             <p class="about-para">
-              Whether you are mining datasets, engineering autonomous agents, or crafting decentralized smart contracts, this hackathon provides the obsidian foundation, high-speed connectivity, and industry mentorship you need to build software that matters.
+              Whether you are mining datasets, engineering autonomous agents, or crafting decentralized smart contracts,
+              this hackathon provides the obsidian foundation, high-speed connectivity, and industry mentorship you need
+              to build software that matters.
             </p>
             <p class="about-para">
-              No boring boilerplate slides. No cookie-cutter problem statements. Choose your biome, assemble your party of 1 to 4 crafters, and bring bold solutions to life over 24 non-stop hours.
+              No boring boilerplate slides. No cookie-cutter problem statements. Choose your biome, assemble your party
+              of 1 to 4 crafters, and bring bold solutions to life over 24 non-stop hours.
             </p>
 
             <div class="about-highlights">
@@ -588,7 +688,8 @@
       <!-- 3D Panoramic Minecraft Biomes Clearly Visible Background -->
       <div class="section-backdrop" aria-hidden="true">
         <div class="section-bg-layer" id="tracks-bg-layer">
-          <img src="assets/images/mc_tracks_biomes_3d.jpg" alt="Panoramic 3D Minecraft Biomes Background" class="section-bg-image bg-img-tracks" loading="lazy" decoding="async">
+          <img src="assets/images/mc_tracks_biomes_3d.jpg" alt="Panoramic 3D Minecraft Biomes Background"
+            class="section-bg-image bg-img-tracks" loading="lazy" decoding="async">
         </div>
         <div class="section-scrim-center"></div>
         <div class="section-glow-fx glow-green"></div>
@@ -614,7 +715,8 @@
           </div>
           <h2 class="section-title">Select Your Biome</h2>
           <p class="section-subtitle">
-            Six uniquely crafted problem domains designed to challenge your technical ingenuity. Choose one primary track or merge domains for wildcard bonus points.
+            Six uniquely crafted problem domains designed to challenge your technical ingenuity. Choose one primary
+            track or merge domains for wildcard bonus points.
           </p>
         </div>
 
@@ -627,12 +729,14 @@
             </div>
             <div class="track-icon-wrap">
               <div class="voxel-box purple-glow enchanted-glint">
-                <img src="assets/images/track_biome_ai.jpg" alt="Artificial Intelligence Biome" class="track-biome-photo" loading="lazy" decoding="async">
+                <img src="assets/images/track_biome_ai.jpg" alt="Artificial Intelligence Biome"
+                  class="track-biome-photo" loading="lazy" decoding="async">
               </div>
             </div>
             <h3 class="track-name">Artificial Intelligence & Agentic Workflows</h3>
             <p class="track-desc">
-              Harness LLMs, autonomous multi-agent frameworks, computer vision, and neural reasoning to solve friction in education, healthcare, and developer velocity.
+              Harness LLMs, autonomous multi-agent frameworks, computer vision, and neural reasoning to solve friction
+              in education, healthcare, and developer velocity.
             </p>
             <div class="track-tech-tags">
               <span>LangChain</span>
@@ -654,12 +758,14 @@
             </div>
             <div class="track-icon-wrap">
               <div class="voxel-box green-glow enchanted-glint">
-                <img src="assets/images/track_biome_sustainability.jpg" alt="Sustainable Tech & Agriculture Biome" class="track-biome-photo" loading="lazy" decoding="async">
+                <img src="assets/images/track_biome_sustainability.jpg" alt="Sustainable Tech & Agriculture Biome"
+                  class="track-biome-photo" loading="lazy" decoding="async">
               </div>
             </div>
             <h3 class="track-name">Sustainable Tech & Smart Agriculture</h3>
             <p class="track-desc">
-              Develop high-impact solutions for clean energy optimization, regenerative agriculture monitoring, circular supply chains, and carbon accountability.
+              Develop high-impact solutions for clean energy optimization, regenerative agriculture monitoring, circular
+              supply chains, and carbon accountability.
             </p>
             <div class="track-tech-tags">
               <span>IoT Sensing</span>
@@ -681,12 +787,14 @@
             </div>
             <div class="track-icon-wrap">
               <div class="voxel-box red-glow enchanted-glint">
-                <img src="assets/images/track_biome_hardware.jpg" alt="IoT and Embedded Hardware Biome" class="track-biome-photo" loading="lazy" decoding="async">
+                <img src="assets/images/track_biome_hardware.jpg" alt="IoT and Embedded Hardware Biome"
+                  class="track-biome-photo" loading="lazy" decoding="async">
               </div>
             </div>
             <h3 class="track-name">IoT, Embedded Systems & Smart Hardware</h3>
             <p class="track-desc">
-              Build physical prototypes with microcontrollers, edge sensors, robotics, and industrial automation to bridge the digital and tactile worlds.
+              Build physical prototypes with microcontrollers, edge sensors, robotics, and industrial automation to
+              bridge the digital and tactile worlds.
             </p>
             <div class="track-tech-tags">
               <span>ESP32</span>
@@ -708,12 +816,14 @@
             </div>
             <div class="track-icon-wrap">
               <div class="voxel-box teal-glow enchanted-glint">
-                <img src="assets/images/track_biome_cybersecurity.jpg" alt="Cybersecurity and Web3 Biome" class="track-biome-photo" loading="lazy" decoding="async">
+                <img src="assets/images/track_biome_cybersecurity.jpg" alt="Cybersecurity and Web3 Biome"
+                  class="track-biome-photo" loading="lazy" decoding="async">
               </div>
             </div>
             <h3 class="track-name">Cybersecurity, Privacy & Web3 Infrastructure</h3>
             <p class="track-desc">
-              Architect bulletproof defense tools, zero-knowledge verification protocols, threat intelligence visualizers, and decentralized ledger trust networks.
+              Architect bulletproof defense tools, zero-knowledge verification protocols, threat intelligence
+              visualizers, and decentralized ledger trust networks.
             </p>
             <div class="track-tech-tags">
               <span>Zero Knowledge</span>
@@ -735,12 +845,14 @@
             </div>
             <div class="track-icon-wrap">
               <div class="voxel-box orange-glow enchanted-glint">
-                <img src="assets/images/track_biome_fintech.jpg" alt="FinTech and Ultra-Scale Systems Biome" class="track-biome-photo" loading="lazy" decoding="async">
+                <img src="assets/images/track_biome_fintech.jpg" alt="FinTech and Ultra-Scale Systems Biome"
+                  class="track-biome-photo" loading="lazy" decoding="async">
               </div>
             </div>
             <h3 class="track-name">Next-Gen FinTech & Ultra-Scale Systems</h3>
             <p class="track-desc">
-              Engineer distributed financial rails, fraud anomaly detection pipelines, micro-payment routing, and resilient distributed backend architectures.
+              Engineer distributed financial rails, fraud anomaly detection pipelines, micro-payment routing, and
+              resilient distributed backend architectures.
             </p>
             <div class="track-tech-tags">
               <span>Go / Kafka</span>
@@ -762,12 +874,14 @@
             </div>
             <div class="track-icon-wrap">
               <div class="voxel-box cyan-glow enchanted-glint">
-                <img src="assets/images/track_biome_sandbox.jpg" alt="Open Sandbox and Civic Innovation Biome" class="track-biome-photo" loading="lazy" decoding="async">
+                <img src="assets/images/track_biome_sandbox.jpg" alt="Open Sandbox and Civic Innovation Biome"
+                  class="track-biome-photo" loading="lazy" decoding="async">
               </div>
             </div>
             <h3 class="track-name">Open Sandbox & Civic Innovation</h3>
             <p class="track-desc">
-              Have an audacious concept that doesn’t fit into a tidy box? Build groundbreaking tools for civic improvement, mental health, accessibility, or gaming.
+              Have an audacious concept that doesn’t fit into a tidy box? Build groundbreaking tools for civic
+              improvement, mental health, accessibility, or gaming.
             </p>
             <div class="track-tech-tags">
               <span>Creative Tech</span>
@@ -789,7 +903,8 @@
       <!-- 3D Smelting Blast Furnace Clearly Visible Background -->
       <div class="section-backdrop" aria-hidden="true">
         <div class="section-bg-layer" id="timeline-bg-layer">
-          <img src="assets/images/mc_furnace_smelter_3d.jpg" alt="24-Hour Hackathon Blast Furnace Background" class="section-bg-image bg-img-timeline" loading="lazy" decoding="async">
+          <img src="assets/images/mc_furnace_smelter_3d.jpg" alt="24-Hour Hackathon Blast Furnace Background"
+            class="section-bg-image bg-img-timeline" loading="lazy" decoding="async">
         </div>
         <div class="section-scrim-center"></div>
         <div class="section-glow-fx glow-orange"></div>
@@ -847,7 +962,8 @@
               <div class="node-time">OCT 24 · 09:00 AM – 11:30 AM</div>
               <h4 class="node-title">Hacker Check-In, Kit Distribution & Opening Ceremony</h4>
               <p class="node-desc">
-                Arrive at the DBU Main Auditorium. Collect your physical Hacker NFC Pass, official CraftCon swag bag, Wi-Fi credentials, and fuel up with welcome refreshments.
+                Arrive at the DBU Main Auditorium. Collect your physical Hacker NFC Pass, official CraftCon swag bag,
+                Wi-Fi credentials, and fuel up with welcome refreshments.
               </p>
               <div class="node-tags">
                 <span>Auditorium Floor</span>
@@ -871,7 +987,8 @@
               <div class="node-time">OCT 24 · 12:00 PM SHARP</div>
               <h4 class="node-title">Hackathon Commencement: The 24-Hour Clock Starts</h4>
               <p class="node-desc">
-                The portal opens. Teams claim their workstations, initialize Git repositories, configure sandbox environments, and begin rapid prototyping.
+                The portal opens. Teams claim their workstations, initialize Git repositories, configure sandbox
+                environments, and begin rapid prototyping.
               </p>
               <div class="node-tags">
                 <span>Hack Floor</span>
@@ -895,7 +1012,8 @@
               <div class="node-time">OCT 24 · 06:00 PM – 09:00 PM</div>
               <h4 class="node-title">Round 1 Mentorship & Architectural Dry Runs</h4>
               <p class="node-desc">
-                Industry architects and DBU faculty visit each team table to review technical feasibility, data pipelines, and UX roadmaps.
+                Industry architects and DBU faculty visit each team table to review technical feasibility, data
+                pipelines, and UX roadmaps.
               </p>
               <div class="node-tags">
                 <span>1-on-1 Reviews</span>
@@ -919,7 +1037,8 @@
               <div class="node-time">OCT 25 · 01:00 AM – 03:00 AM</div>
               <h4 class="node-title">Midnight Snack Sprint, Red Bull Drops & Retro Mini-Games</h4>
               <p class="node-desc">
-                Recharge with artisanal pizza, cold brew, and quick 10-minute retro arcade challenges before diving back into the midnight code trench.
+                Recharge with artisanal pizza, cold brew, and quick 10-minute retro arcade challenges before diving back
+                into the midnight code trench.
               </p>
               <div class="node-tags">
                 <span>Fuel Station</span>
@@ -943,7 +1062,8 @@
               <div class="node-time">OCT 25 · 08:00 AM – 10:30 AM</div>
               <h4 class="node-title">Morning Breakfast & Final Polish Mentorship</h4>
               <p class="node-desc">
-                Breakfast served. Mentors help finalize production deployments, API security hardening, and refine 2-minute project pitch decks.
+                Breakfast served. Mentors help finalize production deployments, API security hardening, and refine
+                2-minute project pitch decks.
               </p>
               <div class="node-tags">
                 <span>Breakfast Fuel</span>
@@ -967,7 +1087,8 @@
               <div class="node-time">OCT 25 · 12:00 PM SHARP</div>
               <h4 class="node-title">The 24 Hours Conclude: Final Repository Push & Code Freeze</h4>
               <p class="node-desc">
-                Commit your code, upload 2-minute video demonstrations, and publish production links to the evaluation portal. No further commits permitted.
+                Commit your code, upload 2-minute video demonstrations, and publish production links to the evaluation
+                portal. No further commits permitted.
               </p>
               <div class="node-tags">
                 <span>GitHub Freeze</span>
@@ -990,7 +1111,8 @@
               <div class="node-time">OCT 25 · 01:30 PM – 04:30 PM</div>
               <h4 class="node-title">Live Stage Pitches, Exhibition Floor & Grand Felicitation</h4>
               <p class="node-desc">
-                Top 12 finalist teams present live on the Main Auditorium stage before angel investors, engineering leads, and university dignitaries. Prize distribution follows.
+                Top 12 finalist teams present live on the Main Auditorium stage before angel investors, engineering
+                leads, and university dignitaries. Prize distribution follows.
               </p>
               <div class="node-tags">
                 <span>Auditorium Stage</span>
@@ -1008,7 +1130,8 @@
       <!-- 3D Ender Chest Loot Vault Clearly Visible Background -->
       <div class="section-backdrop" aria-hidden="true">
         <div class="section-bg-layer" id="prizes-bg-layer">
-          <img src="assets/images/mc_ender_chest_loot_3d.jpg" alt="3D Minecraft Ender Chest Loot Vault Background" class="section-bg-image bg-img-prizes" loading="lazy" decoding="async">
+          <img src="assets/images/mc_ender_chest_loot_3d.jpg" alt="3D Minecraft Ender Chest Loot Vault Background"
+            class="section-bg-image bg-img-prizes" loading="lazy" decoding="async">
         </div>
         <div class="section-scrim-center"></div>
         <div class="section-glow-fx glow-gold"></div>
@@ -1018,39 +1141,48 @@
         <div class="mc-hotbar-showcase tilt-3d-card flame-orange">
           <div class="mc-hotbar-label">⚡ INVENTORY HOTBAR LOOT — SELECT SLOT TO INSPECT</div>
           <div class="mc-hotbar-slots" id="mc-hotbar-slots">
-            <div class="mc-hotbar-slot active" data-slot="1" data-title="Netherite Trophy (₹50,000)" data-desc="Grand Champion First Place Loot + Pre-seed incubation grant">
+            <div class="mc-hotbar-slot active" data-slot="1" data-title="Netherite Trophy (₹50,000)"
+              data-desc="Grand Champion First Place Loot + Pre-seed incubation grant">
               <span class="slot-num">1</span>
               <span class="slot-item enchanted-glint">👑</span>
             </div>
-            <div class="mc-hotbar-slot" data-slot="2" data-title="Diamond Trove (₹10,000)" data-desc="Runner-Up Prize + Mechanical Keyboards for full squad">
+            <div class="mc-hotbar-slot" data-slot="2" data-title="Diamond Trove (₹10,000)"
+              data-desc="Runner-Up Prize + Mechanical Keyboards for full squad">
               <span class="slot-num">2</span>
               <span class="slot-item enchanted-glint">💠</span>
             </div>
-            <div class="mc-hotbar-slot" data-slot="3" data-title="Golden Vault (₹5,000)" data-desc="Second Runner-Up Cash Prize + Smart Wearables">
+            <div class="mc-hotbar-slot" data-slot="3" data-title="Golden Vault (₹5,000)"
+              data-desc="Second Runner-Up Cash Prize + Smart Wearables">
               <span class="slot-num">3</span>
               <span class="slot-item enchanted-glint">🪙</span>
             </div>
-            <div class="mc-hotbar-slot" data-slot="4" data-title="All-Women Team Bounty" data-desc="Special category bounty for highest scoring women-led squad">
+            <div class="mc-hotbar-slot" data-slot="4" data-title="All-Women Team Bounty"
+              data-desc="Special category bounty for highest scoring women-led squad">
               <span class="slot-num">4</span>
               <span class="slot-item">👩‍💻</span>
             </div>
-            <div class="mc-hotbar-slot" data-slot="5" data-title="Freshmen Crafter Bounty" data-desc="Special bounty for brightest project built by first-year builders">
+            <div class="mc-hotbar-slot" data-slot="5" data-title="Freshmen Crafter Bounty"
+              data-desc="Special bounty for brightest project built by first-year builders">
               <span class="slot-num">5</span>
               <span class="slot-item">🌱</span>
             </div>
-            <div class="mc-hotbar-slot" data-slot="6" data-title="UI/UX Aesthetics Bounty" data-desc="Award for supreme frontend craftsmanship & accessibility">
+            <div class="mc-hotbar-slot" data-slot="6" data-title="UI/UX Aesthetics Bounty"
+              data-desc="Award for supreme frontend craftsmanship & accessibility">
               <span class="slot-num">6</span>
               <span class="slot-item">🎨</span>
             </div>
-            <div class="mc-hotbar-slot" data-slot="7" data-title="Open Source Shield" data-desc="Award for top documented, open-licensed GitHub build">
+            <div class="mc-hotbar-slot" data-slot="7" data-title="Open Source Shield"
+              data-desc="Award for top documented, open-licensed GitHub build">
               <span class="slot-num">7</span>
               <span class="slot-item">🌐</span>
             </div>
-            <div class="mc-hotbar-slot" data-slot="8" data-title="Sponsor API Bounty Pack ($5,000+)" data-desc="Cloud compute clusters, GPU quotas & developer API grants">
+            <div class="mc-hotbar-slot" data-slot="8" data-title="Sponsor API Bounty Pack ($5,000+)"
+              data-desc="Cloud compute clusters, GPU quotas & developer API grants">
               <span class="slot-num">8</span>
               <span class="slot-item">☁️</span>
             </div>
-            <div class="mc-hotbar-slot" data-slot="9" data-title="Hacker Swag Armor Set" data-desc="Custom cotton hoodie, NFC badge & holographic stickers">
+            <div class="mc-hotbar-slot" data-slot="9" data-title="Hacker Swag Armor Set"
+              data-desc="Custom cotton hoodie, NFC badge & holographic stickers">
               <span class="slot-num">9</span>
               <span class="slot-item">👕</span>
             </div>
@@ -1069,7 +1201,8 @@
           </div>
           <h2 class="section-title">Rewards Worth The Grind</h2>
           <p class="section-subtitle">
-            Over ₹65,000+ in direct cash prizes, hardware perks, cloud credits, and fast-track pre-seed incubation support.
+            Over ₹65,000+ in direct cash prizes, hardware perks, cloud credits, and fast-track pre-seed incubation
+            support.
           </p>
         </div>
 
@@ -1095,7 +1228,8 @@
           <div class="loot-card loot-grand-champion featured-loot tilt-3d-card flame-orange">
             <div class="loot-tier-ribbon ribbon-amber">🏆 GRAND CHAMPION</div>
             <div class="loot-3d-chest-hero">
-              <img src="assets/images/mc_ender_chest_loot_3d.jpg" alt="3D Minecraft Ender Chest Loot Vault" class="loot-3d-chest-img" loading="lazy" decoding="async">
+              <img src="assets/images/mc_ender_chest_loot_3d.jpg" alt="3D Minecraft Ender Chest Loot Vault"
+                class="loot-3d-chest-img" loading="lazy" decoding="async">
             </div>
             <h3 class="loot-tier-name">Champion’s Cache</h3>
             <div class="loot-cash-amount highlight-amber">₹50,000</div>
@@ -1199,7 +1333,8 @@
       <!-- 3D Enchanted Written Codex Book Clearly Visible Background -->
       <div class="section-backdrop" aria-hidden="true">
         <div class="section-bg-layer" id="rules-bg-layer">
-          <img src="assets/images/mc_codex_book_3d.jpg" alt="3D Minecraft Enchanted Codex Book Background" class="section-bg-image bg-img-rules" loading="lazy" decoding="async">
+          <img src="assets/images/mc_codex_book_3d.jpg" alt="3D Minecraft Enchanted Codex Book Background"
+            class="section-bg-image bg-img-rules" loading="lazy" decoding="async">
         </div>
         <div class="section-scrim-left"></div>
         <div class="section-glow-fx glow-purple"></div>
@@ -1214,12 +1349,14 @@
             </div>
             <h2 class="section-title">Rules & Eligibility Guidelines</h2>
             <p class="section-subtitle">
-              Transparent, straightforward guidelines ensuring fair play, academic integrity, and an inclusive sandbox environment.
+              Transparent, straightforward guidelines ensuring fair play, academic integrity, and an inclusive sandbox
+              environment.
             </p>
 
             <!-- 3D Enchanted Written Codex Book Illustration -->
             <div class="mc-codex-3d-feature tilt-3d-card flame-purple">
-              <img src="assets/images/mc_codex_book_3d.jpg" alt="3D Minecraft Enchanted Codex Book" class="codex-3d-img" loading="lazy" decoding="async">
+              <img src="assets/images/mc_codex_book_3d.jpg" alt="3D Minecraft Enchanted Codex Book" class="codex-3d-img"
+                loading="lazy" decoding="async">
               <span class="codex-3d-tag">OFFICIAL ENCHANTED CODEX</span>
             </div>
 
@@ -1258,21 +1395,24 @@
                   <div class="codex-bullet">01</div>
                   <div class="codex-text">
                     <strong>Team Composition</strong>
-                    <p>Teams can consist of <strong>1 to 4 crafters</strong>. Cross-college and cross-departmental teams are strongly encouraged. Solo builders are welcome!</p>
+                    <p>Teams can consist of <strong>1 to 4 crafters</strong>. Cross-college and cross-departmental teams
+                      are strongly encouraged. Solo builders are welcome!</p>
                   </div>
                 </li>
                 <li>
                   <div class="codex-bullet">02</div>
                   <div class="codex-text">
                     <strong>Student Status</strong>
-                    <p>Open to all enrolled undergraduate, postgraduate, and diploma students from any recognized university or college across India. Valid student ID required at check-in.</p>
+                    <p>Open to all enrolled undergraduate, postgraduate, and diploma students from any recognized
+                      university or college across India. Valid student ID required at check-in.</p>
                   </div>
                 </li>
                 <li>
                   <div class="codex-bullet">03</div>
                   <div class="codex-text">
                     <strong>Zero Registration Fee</strong>
-                    <p>Participation in CRAFTCON '26 is 100% free of charge, sponsored by Desh Bhagat University and partner technology organizations.</p>
+                    <p>Participation in CRAFTCON '26 is 100% free of charge, sponsored by Desh Bhagat University and
+                      partner technology organizations.</p>
                   </div>
                 </li>
               </ul>
@@ -1284,22 +1424,26 @@
                 <div class="metric-box flame-purple">
                   <div class="metric-pct">30%</div>
                   <h5>Technical Craftsmanship</h5>
-                  <p>Architecture resilience, depth of implementation, code quality, and proper integration of modern tools.</p>
+                  <p>Architecture resilience, depth of implementation, code quality, and proper integration of modern
+                    tools.</p>
                 </div>
                 <div class="metric-box flame-green">
                   <div class="metric-pct">30%</div>
                   <h5>Innovation & Originality</h5>
-                  <p>How uniquely does your build tackle the problem? Is it an ambitious leap or an incremental iteration?</p>
+                  <p>How uniquely does your build tackle the problem? Is it an ambitious leap or an incremental
+                    iteration?</p>
                 </div>
                 <div class="metric-box flame-orange">
                   <div class="metric-pct">20%</div>
                   <h5>Design & Usability</h5>
-                  <p>Intuitive user experience, thoughtful aesthetics, accessible interactions, and responsive UI execution.</p>
+                  <p>Intuitive user experience, thoughtful aesthetics, accessible interactions, and responsive UI
+                    execution.</p>
                 </div>
                 <div class="metric-box flame-blue">
                   <div class="metric-pct">20%</div>
                   <h5>Viability & Pitch</h5>
-                  <p>Clarity of the live presentation, real-world utility, business feasibility, and roadmap clarity.</p>
+                  <p>Clarity of the live presentation, real-world utility, business feasibility, and roadmap clarity.
+                  </p>
                 </div>
               </div>
             </div>
@@ -1311,21 +1455,25 @@
                   <div class="codex-bullet">📦</div>
                   <div class="codex-text">
                     <strong>Original Codebase Requirement</strong>
-                    <p>All core development must be written during the official 24-hour duration. Utilizing open-source libraries, APIs, and frameworks is encouraged, but pre-built proprietary software is disqualified.</p>
+                    <p>All core development must be written during the official 24-hour duration. Utilizing open-source
+                      libraries, APIs, and frameworks is encouraged, but pre-built proprietary software is disqualified.
+                    </p>
                   </div>
                 </li>
                 <li>
                   <div class="codex-bullet">🔗</div>
                   <div class="codex-text">
                     <strong>Public Git Repository & Deployment</strong>
-                    <p>Teams must provide a public GitHub/GitLab repository with a descriptive README, setup instructions, and an active hosted demo URL (where applicable).</p>
+                    <p>Teams must provide a public GitHub/GitLab repository with a descriptive README, setup
+                      instructions, and an active hosted demo URL (where applicable).</p>
                   </div>
                 </li>
                 <li>
                   <div class="codex-bullet">🎥</div>
                   <div class="codex-text">
                     <strong>2-Minute Video Walkthrough</strong>
-                    <p>A concise screen recording demonstrating the core problem statement, architecture diagram, and working live prototype.</p>
+                    <p>A concise screen recording demonstrating the core problem statement, architecture diagram, and
+                      working live prototype.</p>
                   </div>
                 </li>
               </ul>
@@ -1338,14 +1486,16 @@
                   <div class="codex-bullet">🤝</div>
                   <div class="codex-text">
                     <strong>Inclusive & Respectful Culture</strong>
-                    <p>CRAFTCON '26 is dedicated to providing a harassment-free experience for everyone, regardless of gender, sexual orientation, disability, physical appearance, or race.</p>
+                    <p>CRAFTCON '26 is dedicated to providing a harassment-free experience for everyone, regardless of
+                      gender, sexual orientation, disability, physical appearance, or race.</p>
                   </div>
                 </li>
                 <li>
                   <div class="codex-bullet">🛡️</div>
                   <div class="codex-text">
                     <strong>Academic Integrity & Zero Tolerance</strong>
-                    <p>Plagiarism, credential spoofing, unauthorized access to network infrastructure, or sabotage of fellow teams results in immediate disqualification and campus escort.</p>
+                    <p>Plagiarism, credential spoofing, unauthorized access to network infrastructure, or sabotage of
+                      fellow teams results in immediate disqualification and campus escort.</p>
                   </div>
                 </li>
               </ul>
@@ -1360,7 +1510,8 @@
       <!-- 3D Skyward Beacon Monument Clearly Visible Background -->
       <div class="section-backdrop" aria-hidden="true">
         <div class="section-bg-layer" id="sponsors-bg-layer">
-          <img src="assets/images/mc_beacon_sponsors_3d.jpg" alt="3D Skyward Beacon Monument Background" class="section-bg-image bg-img-sponsors" loading="lazy" decoding="async">
+          <img src="assets/images/mc_beacon_sponsors_3d.jpg" alt="3D Skyward Beacon Monument Background"
+            class="section-bg-image bg-img-sponsors" loading="lazy" decoding="async">
         </div>
         <div class="section-scrim-center"></div>
         <div class="section-glow-fx glow-cyan"></div>
@@ -1369,7 +1520,8 @@
         <!-- Skyward Beacon Beam Visual -->
         <div class="mc-beacon-container" aria-hidden="true">
           <div class="beacon-3d-visual tilt-3d-card">
-            <img src="assets/images/mc_beacon_sponsors_3d.jpg" alt="3D Skyward Beacon Monument" class="beacon-3d-monument-img" loading="lazy" decoding="async">
+            <img src="assets/images/mc_beacon_sponsors_3d.jpg" alt="3D Skyward Beacon Monument"
+              class="beacon-3d-monument-img" loading="lazy" decoding="async">
             <div class="beacon-beam-ray"></div>
           </div>
           <div class="beacon-meta">
@@ -1458,7 +1610,9 @@
           </div>
           <a href="mailto:aryansinghtariani@gmail.com" class="pill-cta-btn banner-btn">
             <span>BECOME A SPONSOR</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
           </a>
         </div>
       </div>
@@ -1489,8 +1643,16 @@
             <span class="org-title">Head, Faculty of Computing & IT</span>
             <span class="org-dept">Desh Bhagat University</span>
             <div class="org-socials">
-              <a href="#" aria-label="LinkedIn Profile"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z"/></svg></a>
-              <a href="#" aria-label="Email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+              <a href="#" aria-label="LinkedIn Profile"><svg width="16" height="16" viewBox="0 0 24 24"
+                  fill="currentColor">
+                  <path
+                    d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z" />
+                </svg></a>
+              <a href="#" aria-label="Email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg></a>
             </div>
           </div>
 
@@ -1505,24 +1667,48 @@
             <span class="org-dept">Desh Bhagat University</span>
 
             <div class="org-lead-contacts">
-              <a href="https://www.linkedin.com/in/rounak-kumar-0aab6b341?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" class="org-lead-pill linkedin-pill" title="LinkedIn: Rounak Kumar">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z"/></svg>
+              <a href="https://www.linkedin.com/in/rounak-kumar-0aab6b341?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+                target="_blank" rel="noopener noreferrer" class="org-lead-pill linkedin-pill"
+                title="LinkedIn: Rounak Kumar">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z" />
+                </svg>
                 <span>LinkedIn Profile</span>
               </a>
               <a href="tel:+917061559601" class="org-lead-pill phone-pill" title="Call Rounak">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
                 <span>+91 7061559601</span>
               </a>
               <a href="mailto:roukumar55@gmail.com" class="org-lead-pill email-pill" title="Email Rounak">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
                 <span>roukumar55@gmail.com</span>
               </a>
             </div>
 
             <div class="org-socials">
-              <a href="https://www.linkedin.com/in/rounak-kumar-0aab6b341?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z"/></svg></a>
-              <a href="tel:+917061559601" aria-label="Call +91 7061559601"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
-              <a href="mailto:roukumar55@gmail.com" aria-label="Email roukumar55@gmail.com"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+              <a href="https://www.linkedin.com/in/rounak-kumar-0aab6b341?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+                target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg width="16" height="16"
+                  viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z" />
+                </svg></a>
+              <a href="tel:+917061559601" aria-label="Call +91 7061559601"><svg width="16" height="16"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg></a>
+              <a href="mailto:roukumar55@gmail.com" aria-label="Email roukumar55@gmail.com"><svg width="16" height="16"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg></a>
             </div>
           </div>
 
@@ -1534,28 +1720,53 @@
             </div>
             <h4 class="org-name">Aryan Singh Tariani</h4>
             <span class="org-title">Tech Lead & Technical Operations</span>
-            <span class="org-dept">Google Developer Student Clubs</span>
+            <span class="org-dept">Google Developer Student Clubs and Desh Bhagat University</span>
 
             <div class="org-lead-contacts">
-              <a href="https://github.com/Aryan772005" target="_blank" rel="noopener noreferrer" class="org-lead-pill gh-pill" title="GitHub: Aryan772005">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"/></svg>
+              <a href="https://github.com/Aryan772005" target="_blank" rel="noopener noreferrer"
+                class="org-lead-pill gh-pill" title="GitHub: Aryan772005">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z" />
+                </svg>
                 <span>GitHub: Aryan772005</span>
               </a>
               <a href="tel:+919475002048" class="org-lead-pill phone-pill" title="Call Aryan">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
                 <span>+91 9475002048</span>
               </a>
               <a href="mailto:aryansinghtariani@gmail.com" class="org-lead-pill email-pill" title="Email Aryan">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
                 <span>aryansinghtariani@gmail.com</span>
               </a>
             </div>
 
             <div class="org-socials">
-              <a href="https://github.com/Aryan772005" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"/></svg></a>
-              <a href="tel:+919475002048" aria-label="Call +91 9475002048"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
-              <a href="mailto:aryansinghtariani@gmail.com" aria-label="Email aryansinghtariani@gmail.com"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
-              <a href="#" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z"/></svg></a>
+              <a href="https://github.com/Aryan772005" target="_blank" rel="noopener noreferrer"
+                aria-label="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z" />
+                </svg></a>
+              <a href="tel:+919475002048" aria-label="Call +91 9475002048"><svg width="16" height="16"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg></a>
+              <a href="mailto:aryansinghtariani@gmail.com" aria-label="Email aryansinghtariani@gmail.com"><svg
+                  width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg></a>
+              <a href="#" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z" />
+                </svg></a>
             </div>
           </div>
 
@@ -1569,8 +1780,14 @@
             <span class="org-title">Community Leader & Operations</span>
             <span class="org-dept">Desh Bhagat University</span>
             <div class="org-socials">
-              <a href="#" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z"/></svg></a>
-              <a href="#" aria-label="Twitter"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+              <a href="#" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z" />
+                </svg></a>
+              <a href="#" aria-label="Twitter"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg></a>
             </div>
           </div>
         </div>
@@ -1582,7 +1799,8 @@
       <!-- 3D Villager Hackathon Hub Clearly Visible Background -->
       <div class="section-backdrop" aria-hidden="true">
         <div class="section-bg-layer" id="faq-bg-layer">
-          <img src="assets/images/mc_villager_dialogue_3d.jpg" alt="3D Minecraft Hackathon Village Background" class="section-bg-image bg-img-faq" loading="lazy" decoding="async">
+          <img src="assets/images/mc_villager_dialogue_3d.jpg" alt="3D Minecraft Hackathon Village Background"
+            class="section-bg-image bg-img-faq" loading="lazy" decoding="async">
         </div>
         <div class="section-scrim-center"></div>
         <div class="section-glow-fx glow-purple"></div>
@@ -1609,7 +1827,9 @@
             </summary>
             <div class="faq-answer">
               <p>
-                Any currently enrolled student (Undergraduate, Postgraduate, or Polytechnic/Diploma) from any recognized academic institution across India is eligible. You will be required to present your official college ID during on-campus check-in.
+                Any currently enrolled student (Undergraduate, Postgraduate, or Polytechnic/Diploma) from any recognized
+                academic institution across India is eligible. You will be required to present your official college ID
+                during on-campus check-in.
               </p>
             </div>
           </details>
@@ -1623,7 +1843,9 @@
             </summary>
             <div class="faq-answer">
               <p>
-                <strong>Zero fee.</strong> Participation is 100% free! Accepted builders will be provided with full 24-hour meals, midnight snacks, unlimited energy drinks, high-speed Wi-Fi, and designated sleeping/rest quarters on campus.
+                <strong>Zero fee.</strong> Participation is 100% free! Accepted builders will be provided with full
+                24-hour meals, midnight snacks, unlimited energy drinks, high-speed Wi-Fi, and designated sleeping/rest
+                quarters on campus.
               </p>
             </div>
           </details>
@@ -1637,7 +1859,8 @@
             </summary>
             <div class="faq-answer">
               <p>
-                Teams can range from <strong>1 to 4 crafters</strong>. You can register with an already formed squad, or join our official Discord server to find teammates during the pre-event mixer.
+                Teams can range from <strong>1 to 4 crafters</strong>. You can register with an already formed squad, or
+                join our official Discord server to find teammates during the pre-event mixer.
               </p>
             </div>
           </details>
@@ -1651,7 +1874,9 @@
             </summary>
             <div class="faq-answer">
               <p>
-                No. To maintain complete fairness, all code, designs, and architectural components must be created from scratch after the opening bell at 12:00 PM on October 24. Utilizing publicly available libraries, APIs, and boilerplate templates is completely permitted.
+                No. To maintain complete fairness, all code, designs, and architectural components must be created from
+                scratch after the opening bell at 12:00 PM on October 24. Utilizing publicly available libraries, APIs,
+                and boilerplate templates is completely permitted.
               </p>
             </div>
           </details>
@@ -1665,7 +1890,9 @@
             </summary>
             <div class="faq-answer">
               <p>
-                Desh Bhagat University is located at Mandi Gobindgarh, Punjab (along National Highway 44). It is well connected by rail (Sirhind Junction / Mandi Gobindgarh station) and road from Chandigarh, Ludhiana, and Delhi. Shuttle buses will be arranged from key transit hubs for verified outstation participants.
+                Desh Bhagat University is located at Mandi Gobindgarh, Punjab (along National Highway 44). It is well
+                connected by rail (Sirhind Junction / Mandi Gobindgarh station) and road from Chandigarh, Ludhiana, and
+                Delhi. Shuttle buses will be arranged from key transit hubs for verified outstation participants.
               </p>
             </div>
           </details>
@@ -1679,7 +1906,9 @@
             </summary>
             <div class="faq-answer">
               <p>
-                For teams participating in <em>Track 03: Redstone Lab</em>, basic sensor modules, ESP32 boards, soldering stations, and 3D printing assistance will be available in the Maker Lab. Teams with specialized hardware needs are welcome to bring their own kits.
+                For teams participating in <em>Track 03: Redstone Lab</em>, basic sensor modules, ESP32 boards,
+                soldering stations, and 3D printing assistance will be available in the Maker Lab. Teams with
+                specialized hardware needs are welcome to bring their own kits.
               </p>
             </div>
           </details>
@@ -1696,12 +1925,15 @@
             <span class="final-kicker">PORTAL ACCESS OPEN FOR SQUAD REGISTRATION</span>
             <h2 class="final-heading">Ready to Craft the Extraordinary?</h2>
             <p class="final-desc">
-              Seats are strictly limited to 500 builders. Secure your team’s inventory pass before applications close on October 10.
+              Seats are strictly limited to 500 builders. Secure your team’s inventory pass before applications close on
+              October 10.
             </p>
             <div class="final-action-row">
               <a href="#register" class="pill-cta-btn grand-btn open-modal-btn" data-modal="register-modal">
                 <span>CLAIM YOUR HACKER PASS</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
               </a>
               <span class="final-subinfo">Zero entry fees · Free lodging & meals</span>
             </div>
@@ -1718,7 +1950,8 @@
       <div class="footer-hologram-showcase">
         <div class="footer-hologram-card flame-purple">
           <div class="hologram-video-wrapper">
-            <video class="footer-hologram-video" autoplay loop muted playsinline poster="assets/images/dbu_hologram_poster.jpg" preload="auto">
+            <video class="footer-hologram-video" autoplay loop muted playsinline
+              poster="assets/images/dbu_hologram_poster.jpg" preload="auto">
               <source src="assets/videos/dbu_holographic_footer.mp4" type="video/mp4">
               Your browser does not support the video tag.
             </video>
@@ -1731,7 +1964,9 @@
             </div>
             <h4 class="hologram-title">DESH BHAGAT UNIVERSITY</h4>
             <p class="hologram-sub">
-              A premier NAAC Grade A+ accredited university approved by UGC and AICTE. Empowering 500+ student developers with state-of-the-art tech infrastructure, high-performance compute, expert faculty mentorship, and venture incubation.
+              A premier NAAC Grade A+ accredited university approved by UGC and AICTE. Empowering 500+ student
+              developers with state-of-the-art tech infrastructure, high-performance compute, expert faculty mentorship,
+              and venture incubation.
             </p>
             <div class="hologram-tags">
               <span class="hologram-tag">NAAC GRADE A+</span>
@@ -1750,7 +1985,8 @@
             <span class="brand-text">CRAFTCON<span class="brand-year">'26</span></span>
           </a>
           <p class="footer-tagline">
-            The premier collegiate sandbox hackathon hosted by Desh Bhagat University. Fostering bold engineering, peer collaboration, and student startup incubation.
+            The premier collegiate sandbox hackathon hosted by Desh Bhagat University. Fostering bold engineering, peer
+            collaboration, and student startup incubation.
           </p>
           <div class="dbu-seal-box flame-orange">
             <div class="seal-icon">🏛️</div>
@@ -1785,10 +2021,12 @@
           </p>
           <p class="footer-contact-item">
             <strong>Direct Dispatch:</strong><br>
-            <span style="font-size: 0.78rem; color: var(--text-dim); display: block; margin-top: 4px;">Student Lead (Rounak Kumar):</span>
+            <span style="font-size: 0.78rem; color: var(--text-dim); display: block; margin-top: 4px;">Student Lead
+              (Rounak Kumar):</span>
             <a href="mailto:roukumar55@gmail.com">roukumar55@gmail.com</a><br>
             <a href="tel:+917061559601">+91 7061559601</a><br>
-            <span style="font-size: 0.78rem; color: var(--text-dim); display: block; margin-top: 6px;">Tech Lead (Aryan Singh Tariani):</span>
+            <span style="font-size: 0.78rem; color: var(--text-dim); display: block; margin-top: 6px;">Tech Lead (Aryan
+              Singh Tariani):</span>
             <a href="mailto:aryansinghtariani@gmail.com">aryansinghtariani@gmail.com</a><br>
             <a href="tel:+919475002048">+91 9475002048</a>
           </p>
@@ -1798,20 +2036,36 @@
         <div class="footer-links-col">
           <h5 class="footer-col-title">CONNECT GUILD</h5>
           <div class="footer-social-strip">
-            <a href="https://github.com/Aryan772005" target="_blank" rel="noopener noreferrer" class="social-box" aria-label="GitHub Profile">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"/></svg>
+            <a href="https://github.com/Aryan772005" target="_blank" rel="noopener noreferrer" class="social-box"
+              aria-label="GitHub Profile">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z" />
+              </svg>
             </a>
             <a href="#" class="social-box" aria-label="Instagram">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+              </svg>
             </a>
             <a href="#" class="social-box" aria-label="LinkedIn">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.64 1.64 0 0 0-1.64 1.64c0 .91.73 1.64 1.64 1.64s1.64-.73 1.64-1.64c0-.91-.73-1.64-1.64-1.64Z" />
+              </svg>
             </a>
             <a href="#" class="social-box" aria-label="Twitter / X">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
             </a>
             <a href="#" class="social-box" aria-label="Discord">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+              </svg>
             </a>
           </div>
           <p class="footer-micro-note">Official Discord will open on Oct 1st for registered builders.</p>
@@ -1823,7 +2077,8 @@
         <div class="footer-legal">
           <p>© 2026 CRAFTCON · Desh Bhagat University. All rights reserved.</p>
           <p class="homage-disclaimer">
-            *This student hackathon is a creative stylistic homage. It is an independent educational initiative not affiliated with, endorsed by, or sponsored by Mojang AB or Microsoft.
+            *This student hackathon is a creative stylistic homage. It is an independent educational initiative not
+            affiliated with, endorsed by, or sponsored by Mojang AB or Microsoft.
           </p>
         </div>
 
@@ -1853,7 +2108,8 @@
           </div>
           <h3 class="modal-title">Claim Your Squad Pass</h3>
           <p class="modal-desc">
-            Complete the details below to register your team for CRAFTCON '26. Instant digital pass issued upon submission.
+            Complete the details below to register your team for CRAFTCON '26. Instant digital pass issued upon
+            submission.
           </p>
         </div>
 
@@ -1923,13 +2179,16 @@
             <label class="custom-check-container" for="agree-terms">
               <input type="checkbox" id="agree-terms" required checked>
               <span class="custom-checkmark"></span>
-              <span class="check-label-text">We agree to abide by the CRAFTCON '26 Code of Conduct & Academic Integrity rules.</span>
+              <span class="check-label-text">We agree to abide by the CRAFTCON '26 Code of Conduct & Academic Integrity
+                rules.</span>
             </label>
           </div>
 
           <button type="submit" class="pill-cta-btn modal-submit-btn" id="submit-ticket-btn">
             <span>GENERATE HACKER TICKET</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
           </button>
         </form>
       </div>
@@ -1992,7 +2251,11 @@
 
         <div class="ticket-actions">
           <button id="download-pass-btn" class="pill-cta-btn print-pass-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
             <span>PRINT / SAVE PASS</span>
           </button>
           <button id="modal-done-btn" class="ghost-cta-btn">
@@ -2005,4 +2268,5 @@
 
   <script src="main.js" defer></script>
 </body>
+
 </html>

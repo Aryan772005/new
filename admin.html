@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRAFTCON '26 — Organizer Admin Console</title>
+  <meta name="description" content="Official Organizer Admin Panel & Database Dashboard for CRAFTCON '26 Hackathon.">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%2312121a'/><rect x='4' y='4' width='24' height='24' fill='%233f8f2f'/><rect x='8' y='8' width='16' height='16' fill='%238b2fd1'/><rect x='12' y='12' width='8' height='8' fill='%23f5a623'/></svg>">
+
+  <!-- Google Fonts: Space Grotesk, Inter, Silkscreen -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- Ambient glowing voxel background overlay -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="grid-overlay"></div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- ================= 1. LOGIN SCREEN ================= -->
+  <main id="login-section" class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="brand-row">
+          <span class="auth-cube"></span>
+          <h1 class="brand-title">CRAFTCON<span class="brand-year">'26</span></h1>
+        </div>
+        <div class="portal-badge">
+          <span class="pulse-dot"></span>
+          <span>ORGANIZER CONSOLE</span>
+        </div>
+        <p class="auth-subtitle">Sign in to manage hacker squads, monitor database records, and issue approvals.</p>
+      </div>
+
+      <form id="admin-login-form" class="auth-form" autocomplete="off">
+        <div class="form-group">
+          <label for="admin-id">ORGANIZER ID</label>
+          <div class="input-with-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <input type="text" id="admin-id" placeholder="Enter admin ID" required autofocus value="admin">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="admin-password">PASSWORD</label>
+          <div class="input-with-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <input type="password" id="admin-password" placeholder="Enter master password" required value="CraftCon2026!Admin">
+            <button type="button" id="toggle-pwd-btn" class="toggle-pwd-btn" aria-label="Show password">👁</button>
+          </div>
+        </div>
+
+        <div id="login-error-box" class="error-banner" style="display: none;"></div>
+
+        <button type="submit" class="admin-btn primary-btn full-btn" id="login-submit-btn">
+          <span>ENTER ORGANIZER TERMINAL</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+
+        <div class="quick-credentials-hint">
+          <span class="hint-label">Default Access Credentials:</span>
+          <div class="cred-chip" id="auto-fill-chip" title="Click to auto-fill credentials">
+            <code>admin</code> / <code>CraftCon2026!Admin</code>
+            <span class="click-hint">⚡ Click to Fill</span>
+          </div>
+        </div>
+
+        <div class="auth-footer-nav">
+          <a href="/" class="back-link">← Return to Public Website</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- ================= 2. ORGANIZER DASHBOARD ================= -->
+  <div id="dashboard-section" class="dashboard-wrapper" style="display: none;">
+    <!-- Top Navigation Bar -->
+    <header class="dash-navbar">
+      <div class="dash-nav-left">
+        <a href="/" class="brand-link" title="Open Public Website">
+          <span class="auth-cube sm"></span>
+          <span class="brand-title-sm">CRAFTCON<span class="year-sm">'26</span></span>
+        </a>
+        <div class="nav-divider"></div>
+        <span class="system-status-pill">
+          <span class="live-dot-green"></span>
+          <span>SQLITE DATABASE ACTIVE</span>
+        </span>
+      </div>
+
+      <div class="dash-nav-right">
+        <a href="/" target="_blank" class="nav-action-link" title="View Public Landing Page in New Tab">
+          <span>Public Website</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+
+        <button id="refresh-data-btn" class="nav-icon-btn" title="Refresh Database Records">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+        </button>
+
+        <div class="user-badge" id="current-user-badge">
+          <span class="user-role-dot"></span>
+          <span id="current-username-display">admin</span>
+        </div>
+
+        <button id="logout-btn" class="logout-btn" title="Sign Out">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="dash-content-container">
+      <!-- Section 1: KPI Stats Cards -->
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">REGISTERED SQUADS</span>
+            <span class="stat-icon-wrap green">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </span>
+          </div>
+          <div class="stat-value" id="stat-total-teams">0</div>
+          <div class="stat-meta">Across all 6 hackathon biomes</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">TOTAL CRAFTERS</span>
+            <span class="stat-icon-wrap purple">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            </span>
+          </div>
+          <div class="stat-value" id="stat-total-builders">0</div>
+          <div class="stat-meta">Developers, designers & founders</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">VERIFIED / CHECKED-IN</span>
+            <span class="stat-icon-wrap amber">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </span>
+          </div>
+          <div class="stat-value" id="stat-checked-in">0</div>
+          <div class="stat-meta"><span id="stat-approved-count">0</span> approved pending arrival</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">COLLEGES & INSTITUTIONS</span>
+            <span class="stat-icon-wrap blue">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </span>
+          </div>
+          <div class="stat-value" id="stat-unique-colleges">0</div>
+          <div class="stat-meta">Desh Bhagat University & regional</div>
+        </div>
+      </section>
+
+      <!-- Section 2: Toolbar & Filters -->
+      <section class="toolbar-section">
+        <div class="search-filter-box">
+          <div class="search-input-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="search-input" placeholder="Search team, leader, email, phone, college, pass ID..." autocomplete="off">
+            <button id="clear-search-btn" class="clear-btn" style="display: none;">&times;</button>
+          </div>
+
+          <div class="filter-dropdowns">
+            <div class="select-wrap">
+              <select id="filter-track">
+                <option value="all">All Tracks / Biomes</option>
+                <option value="The End">Track 01 — The End (AI & Agents)</option>
+                <option value="The Overworld">Track 02 — The Overworld (ClimateTech)</option>
+                <option value="Redstone Lab">Track 03 — Redstone Lab (IoT & Hardware)</option>
+                <option value="The Deep Dark">Track 04 — The Deep Dark (Security & Web3)</option>
+                <option value="The Nether">Track 05 — The Nether (FinTech & Scale)</option>
+                <option value="Open Sandbox">Track 06 — Open Sandbox (Wildcard)</option>
+              </select>
+            </div>
+
+            <div class="select-wrap">
+              <select id="filter-status">
+                <option value="all">All Statuses</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="approved">Approved</option>
+                <option value="checked_in">Checked In</option>
+                <option value="waitlist">Waitlist</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions-group">
+          <button id="export-csv-btn" class="admin-btn outline-btn" title="Download Full Registrations as CSV">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Export CSV</span>
+          </button>
+
+          <button id="copy-emails-btn" class="admin-btn outline-btn" title="Copy all leader emails to clipboard for announcement emails">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span>Copy Emails</span>
+          </button>
+
+          <button id="open-add-modal-btn" class="admin-btn primary-btn" title="Manually register an on-site team">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>+ Add Squad</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Section 3: Data Table -->
+      <section class="table-section">
+        <div class="table-meta-bar">
+          <div class="meta-left">
+            <span>Showing <strong id="visible-count">0</strong> registrations</span>
+          </div>
+          <div class="meta-right">
+            <span class="table-tip">💡 Click on any status pill to quickly change team status</span>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="data-table" id="registrations-table">
+            <thead>
+              <tr>
+                <th>PASS ID</th>
+                <th>SQUAD NAME</th>
+                <th>LEADER & CONTACT</th>
+                <th>COLLEGE / UNIVERSITY</th>
+                <th>PRIMARY BIOME / TRACK</th>
+                <th>SIZE</th>
+                <th>STATUS</th>
+                <th class="text-right">ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+
+          <!-- Empty State -->
+          <div id="table-empty-state" class="empty-state" style="display: none;">
+            <div class="empty-icon">⛏️</div>
+            <h3>No registrations match your filter</h3>
+            <p>Try adjusting your search query, biome filter, or clear filters.</p>
+            <button id="reset-filters-btn" class="admin-btn outline-btn sm">Reset Filters</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ================= 3. SQUAD DOSSIER MODAL ================= -->
+  <div id="dossier-modal" class="modal-backdrop" aria-hidden="true" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-badge-row">
+          <span class="dossier-pass-id" id="modal-pass-id">CFT-0000-DBU</span>
+          <span class="status-pill" id="modal-status-badge">Confirmed</span>
+        </div>
+        <button class="close-modal-btn" id="close-dossier-btn">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="dossier-title-block">
+          <h2 id="modal-team-name">Netherite Architects</h2>
+          <span class="dossier-track" id="modal-track-name">Track 01 — The End (AI & Agents)</span>
+        </div>
+
+        <div class="dossier-grid">
+          <div class="dossier-item">
+            <span class="d-label">TEAM LEADER</span>
+            <span class="d-val" id="modal-leader-name">Aryan Singh Tariani</span>
+          </div>
+          <div class="dossier-item">
+            <span class="d-label">SQUAD SIZE</span>
+            <span class="d-val" id="modal-team-size">4 Crafters</span>
+          </div>
+          <div class="dossier-item">
+            <span class="d-label">LEADER EMAIL</span>
+            <a href="mailto:" class="d-val link" id="modal-leader-email">leader@example.com</a>
+          </div>
+          <div class="dossier-item">
+            <span class="d-label">WHATSAPP / PHONE</span>
+            <a href="tel:" class="d-val link" id="modal-leader-phone">+91 00000 00000</a>
+          </div>
+          <div class="dossier-item full">
+            <span class="d-label">COLLEGE / INSTITUTION</span>
+            <span class="d-val" id="modal-college-name">Desh Bhagat University</span>
+          </div>
+          <div class="dossier-item full" id="dossier-portfolio-row">
+            <span class="d-label">PORTFOLIO / GITHUB</span>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="d-val link" id="modal-portfolio-url">https://github.com</a>
+          </div>
+          <div class="dossier-item full">
+            <span class="d-label">CONCEPT / IDEA BRIEF</span>
+            <p class="d-val text-block" id="modal-concept-brief">No idea brief submitted.</p>
+          </div>
+          <div class="dossier-item full">
+            <span class="d-label">SUBMITTED ON</span>
+            <span class="d-val text-muted" id="modal-created-at">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="modal-actions-left">
+          <button id="modal-quick-checkin-btn" class="admin-btn sm green-btn">
+            ✓ Check-In Team
+          </button>
+          <button id="modal-quick-approve-btn" class="admin-btn sm purple-btn">
+            ★ Approve
+          </button>
+        </div>
+        <button class="admin-btn outline-btn sm" id="modal-close-action-btn">Close Dossier</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 4. ADD SQUAD MANUALLY MODAL ================= -->
+  <div id="add-squad-modal" class="modal-backdrop" aria-hidden="true" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>+ Register Squad On-Site</h3>
+        <button class="close-modal-btn" id="close-add-modal-btn">&times;</button>
+      </div>
+
+      <form id="admin-add-squad-form" class="modal-form">
+        <div class="form-row two-col">
+          <div class="form-group">
+            <label for="add-team-name">Team Name <span class="req">*</span></label>
+            <input type="text" id="add-team-name" required placeholder="e.g. Ender Wardens">
+          </div>
+          <div class="form-group">
+            <label for="add-team-size">Team Size <span class="req">*</span></label>
+            <select id="add-team-size" required>
+              <option value="1">1 Builder (Solo)</option>
+              <option value="2">2 Builders</option>
+              <option value="3">3 Builders</option>
+              <option value="4" selected>4 Builders (Full Squad)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row two-col">
+          <div class="form-group">
+            <label for="add-leader-name">Leader Name <span class="req">*</span></label>
+            <input type="text" id="add-leader-name" required placeholder="Full Name">
+          </div>
+          <div class="form-group">
+            <label for="add-leader-email">Leader Email <span class="req">*</span></label>
+            <input type="email" id="add-leader-email" required placeholder="email@college.edu">
+          </div>
+        </div>
+
+        <div class="form-row two-col">
+          <div class="form-group">
+            <label for="add-leader-phone">WhatsApp / Phone <span class="req">*</span></label>
+            <input type="tel" id="add-leader-phone" required placeholder="+91 98765 43210">
+          </div>
+          <div class="form-group">
+            <label for="add-college-name">College Name <span class="req">*</span></label>
+            <input type="text" id="add-college-name" required placeholder="Desh Bhagat University">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="add-primary-track">Primary Biome / Track <span class="req">*</span></label>
+          <select id="add-primary-track" required>
+            <option value="Track 01 — The End (AI & Agents)">Track 01 — The End (AI & Agents)</option>
+            <option value="Track 02 — The Overworld (ClimateTech)">Track 02 — The Overworld (ClimateTech)</option>
+            <option value="Track 03 — Redstone Lab (IoT & Hardware)">Track 03 — Redstone Lab (IoT & Hardware)</option>
+            <option value="Track 04 — The Deep Dark (Security & Web3)">Track 04 — The Deep Dark (Security & Web3)</option>
+            <option value="Track 05 — The Nether (FinTech & Scale)">Track 05 — The Nether (FinTech & Scale)</option>
+            <option value="Track 06 — Open Sandbox (Wildcard)">Track 06 — Open Sandbox (Wildcard)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="add-concept-brief">Idea Brief / Note</label>
+          <textarea id="add-concept-brief" rows="2" placeholder="Brief project summary..."></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="admin-btn outline-btn sm" id="cancel-add-btn">Cancel</button>
+          <button type="submit" class="admin-btn primary-btn sm" id="submit-add-btn">
+            <span>Save & Issue Pass</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

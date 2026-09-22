@@ -1,0 +1,25 @@
+{
+  "name": "craftcon-hackathon-2026",
+  "version": "1.0.0",
+  "description": "Desh Bhagat University Flagship Hackathon with SQLite Registration & Organizer Admin Panel",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.18.0",
+    "cors": "^2.8.5",
+    "dotenv": "^18.0.3",
+    "express": "^4.21.2"
+  },
+  "keywords": [
+    "hackathon",
+    "dbu",
+    "minecraft",
+    "sqlite",
+    "admin-portal"
+  ],
+  "author": "Aryan Singh Tariani",
+  "license": "ISC"
+}
