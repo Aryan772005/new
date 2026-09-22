@@ -12,8 +12,7 @@ const isTurso = Boolean(process.env.TURSO_DATABASE_URL && process.env.TURSO_AUTH
 let client;
 
 if (isTurso) {
-  // Use @libsql/client/web for instant HTTPS pipeline (ideal for Vercel Serverless)
-  const { createClient } = require('@libsql/client/web');
+  const { createClient } = require('@libsql/client');
   let tursoUrl = process.env.TURSO_DATABASE_URL.trim();
   if (tursoUrl.startsWith('libsql://')) {
     tursoUrl = tursoUrl.replace('libsql://', 'https://');
@@ -21,8 +20,7 @@ if (isTurso) {
 
   client = createClient({
     url: tursoUrl,
-    authToken: process.env.TURSO_AUTH_TOKEN.trim(),
-    fetch: (url, opts) => fetch(url, { ...opts, keepalive: false })
+    authToken: process.env.TURSO_AUTH_TOKEN.trim()
   });
   console.log('⚡ Connected to Turso Cloud SQLite Database (AWS Mumbai)');
 } else {
@@ -227,21 +225,13 @@ async function registerTeam(data) {
     throw new Error('All required fields must be provided.');
   }
 
-  // Duplicate checks
-  const checkEmail = await client.execute({
-    sql: 'SELECT id FROM registrations WHERE leader_email = ?',
-    args: [leader_email.trim()]
-  });
-  if (checkEmail.rows.length > 0) {
-    throw new Error('A team has already been registered with this Leader Email address.');
-  }
-
+  let finalTeamName = team_name.trim();
   const checkTeam = await client.execute({
     sql: 'SELECT id FROM registrations WHERE team_name = ?',
-    args: [team_name.trim()]
+    args: [finalTeamName]
   });
   if (checkTeam.rows.length > 0) {
-    throw new Error('This Squad / Team Name has already been claimed. Please choose a unique team name.');
+    finalTeamName = `${finalTeamName} #${Math.floor(10 + Math.random() * 90)}`;
   }
 
   const pass_id = await generateUniquePassId();
@@ -253,7 +243,7 @@ async function registerTeam(data) {
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'confirmed')`,
     args: [
       pass_id,
-      team_name.trim(),
+      finalTeamName,
       parseInt(team_size, 10) || 4,
       leader_name.trim(),
       leader_email.trim(),
