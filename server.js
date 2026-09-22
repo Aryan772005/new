@@ -235,7 +235,7 @@ if (require.main === module) {
     console.log(`🌐 Public Website:  http://localhost:${PORT}`);
     console.log(`🛡️  Admin Portal:    http://localhost:${PORT}/admin`);
     console.log(`🔑 Admin ID:        admin`);
-    console.log(`🔒 Admin Password:  CraftCon2026!Admin`);
+    console.log(`🔒 Admin Password:  9475`);
     console.log('====================================================');
   });
 }

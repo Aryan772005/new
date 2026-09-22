@@ -85,19 +85,26 @@ async function initDb() {
     );
   `);
 
-  // Check and seed default admin
+  // Ensure admin account exists with correct password
+  const { hash: adminHash, salt: adminSalt } = hashPassword('9475');
   const checkAdmin = await client.execute({
     sql: 'SELECT id FROM admins WHERE username = ?',
     args: ['admin']
   });
 
   if (checkAdmin.rows.length === 0) {
-    const { hash, salt } = hashPassword('CraftCon2026!Admin');
     await client.execute({
-      sql: 'INSERT OR IGNORE INTO admins (username, password_hash, salt, role) VALUES (?, ?, ?, ?)',
-      args: ['admin', hash, salt, 'lead_organizer']
+      sql: 'INSERT INTO admins (username, password_hash, salt, role) VALUES (?, ?, ?, ?)',
+      args: ['admin', adminHash, adminSalt, 'lead_organizer']
     });
-    console.log('[DB] Seeded default admin account (Username: admin)');
+    console.log('[DB] Created admin account');
+  } else {
+    // Always update password hash to ensure latest password is active
+    await client.execute({
+      sql: 'UPDATE admins SET password_hash = ?, salt = ? WHERE username = ?',
+      args: [adminHash, adminSalt, 'admin']
+    });
+    console.log('[DB] Admin password synced');
   }
 
   // Check demo data
@@ -236,6 +243,16 @@ async function registerTeam(data) {
     throw new Error('All required fields must be provided.');
   }
 
+  // Check for duplicate email
+  const checkEmail = await client.execute({
+    sql: 'SELECT id, team_name FROM registrations WHERE leader_email = ?',
+    args: [leader_email.trim()]
+  });
+  if (checkEmail.rows.length > 0) {
+    throw new Error(`This email has already been used to register team "${checkEmail.rows[0].team_name}". Each team leader needs a unique email.`);
+  }
+
+  // Check for duplicate team name and auto-suffix if needed
   let finalTeamName = team_name.trim();
   const checkTeam = await client.execute({
     sql: 'SELECT id FROM registrations WHERE team_name = ?',
@@ -247,24 +264,37 @@ async function registerTeam(data) {
 
   const pass_id = await generateUniquePassId();
 
-  await client.execute({
-    sql: `INSERT INTO registrations (
-      pass_id, team_name, team_size, leader_name, leader_email, leader_phone,
-      college_name, primary_track, portfolio_url, concept_brief, status
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'confirmed')`,
-    args: [
-      pass_id,
-      finalTeamName,
-      parseInt(team_size, 10) || 4,
-      leader_name.trim(),
-      leader_email.trim(),
-      leader_phone.trim(),
-      college_name.trim(),
-      primary_track?.trim() || 'Track 01 — The End (AI & Agents)',
-      portfolio_url?.trim() || '',
-      concept_brief?.trim() || ''
-    ]
-  });
+  try {
+    await client.execute({
+      sql: `INSERT INTO registrations (
+        pass_id, team_name, team_size, leader_name, leader_email, leader_phone,
+        college_name, primary_track, portfolio_url, concept_brief, status
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'confirmed')`,
+      args: [
+        pass_id,
+        finalTeamName,
+        parseInt(team_size, 10) || 4,
+        leader_name.trim(),
+        leader_email.trim(),
+        leader_phone.trim(),
+        college_name.trim(),
+        primary_track?.trim() || 'Track 01 — The End (AI & Agents)',
+        portfolio_url?.trim() || '',
+        concept_brief?.trim() || ''
+      ]
+    });
+  } catch (insertErr) {
+    // Catch SQLite UNIQUE constraint errors and give friendly messages
+    const errMsg = String(insertErr.message || '');
+    if (errMsg.includes('UNIQUE') && errMsg.includes('leader_email')) {
+      throw new Error('This email has already been registered. Please use a different email.');
+    } else if (errMsg.includes('UNIQUE') && errMsg.includes('team_name')) {
+      throw new Error('This team name is already taken. Please choose a different name.');
+    } else if (errMsg.includes('UNIQUE')) {
+      throw new Error('A registration with these details already exists. Please check your info and try again.');
+    }
+    throw insertErr;
+  }
 
   const getRecord = await client.execute({
     sql: 'SELECT * FROM registrations WHERE pass_id = ?',

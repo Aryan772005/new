@@ -176,11 +176,7 @@
     }
   });
 
-  autoFillChip.addEventListener('click', () => {
-    adminIdInput.value = 'admin';
-    adminPwdInput.value = 'CraftCon2026!Admin';
-    showToast('Credentials filled! Click Enter to sign in.', 'info');
-  });
+  // Auto-fill chip removed for security
 
   togglePwdBtn.addEventListener('click', () => {
     const isPassword = adminPwdInput.type === 'password';
