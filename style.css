@@ -430,6 +430,48 @@ a {
   width: 100%;
 }
 
+/* Middle Register Now Button in Desktop Navbar */
+.nav-item-center-reg {
+  display: flex;
+  align-items: center;
+}
+
+.nav-center-register-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+  color: #ffffff !important;
+  font-family: var(--font-display, sans-serif);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.55), 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease, filter 0.2s ease;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.nav-center-register-btn::after {
+  display: none !important;
+}
+
+.nav-center-register-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 0 28px rgba(219, 39, 119, 0.75), 0 4px 14px rgba(0, 0, 0, 0.5);
+  filter: brightness(1.15);
+}
+
+.nav-center-register-btn .reg-sparkle {
+  font-size: 0.95rem;
+  display: inline-block;
+  animation: pulse-glow 1.5s infinite ease-in-out;
+}
+
 /* ==========================================================================
    PC & LAPTOP EXPANSIVE NAVBAR (Screens >= 1025px & >= 1440px)
    Unlocks wide desktop space with generous margins, larger typography,
@@ -5055,10 +5097,49 @@ body, input, select, textarea, button {
     transform: none !important;
   }
 
-  /* Smooth native touch scrolling */
+  /* Smooth native touch scrolling & no overscroll stutter */
   html, body {
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
+    overscroll-behavior-y: none;
+  }
+
+  /* Natural flow for mobile showcase cards */
+  .hero-portal-showcase {
+    position: relative !important;
+    inset: auto !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    padding: 20px 16px 36px 16px !important;
+    display: block !important;
+  }
+
+  .tf-cards-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .tf-hero-card {
+    opacity: 1 !important;
+    transform: none !important;
+    width: 100% !important;
+  }
+
+  .tf-scroll-prompt {
+    display: none !important;
+  }
+
+  /* Pause heavy GPU infinite animations during mobile view */
+  .hero-portal-vortex-fx,
+  .cloud-bank,
+  .furnace-fire-overlay,
+  .smelt-flame {
+    animation: none !important;
+    opacity: 0.3 !important;
   }
 }
 
