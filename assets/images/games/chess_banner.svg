@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="chess-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14141d" />
+      <stop offset="50%" stop-color="#242436" />
+      <stop offset="100%" stop-color="#0c0c14" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#chess-grad)" />
+  <!-- Chess Board Perspective -->
+  <g transform="translate(400,180)">
+    <!-- Grid -->
+    <rect x="-120" y="-80" width="240" height="160" fill="#373737" stroke="#ffffff" stroke-width="3" rx="4"/>
+    <rect x="-120" y="-80" width="60" height="40" fill="#c6c6c6"/>
+    <rect x="0" y="-80" width="60" height="40" fill="#c6c6c6"/>
+    <rect x="-60" y="-40" width="60" height="40" fill="#c6c6c6"/>
+    <rect x="60" y="-40" width="60" height="40" fill="#c6c6c6"/>
+    <rect x="-120" y="0" width="60" height="40" fill="#c6c6c6"/>
+    <rect x="0" y="0" width="60" height="40" fill="#c6c6c6"/>
+    <rect x="-60" y="40" width="60" height="40" fill="#c6c6c6"/>
+    <rect x="60" y="40" width="60" height="40" fill="#c6c6c6"/>
+    <!-- Knight Piece Icon -->
+    <path d="M -20,20 C -20,-20 0,-40 30,-30 C 40,-20 30,-10 20,0 C 25,10 20,20 10,25 Z" fill="#9d4edd" stroke="#ffffff" stroke-width="2.5" transform="scale(1.4) translate(-5,-5)"/>
+  </g>
+  <!-- Title Badge -->
+  <rect x="220" y="325" width="360" height="65" fill="#141420" stroke="#9d4edd" stroke-width="3" rx="4"/>
+  <text x="400" y="365" font-family="'Space Grotesk', sans-serif" font-weight="800" font-size="28" fill="#ffffff" text-anchor="middle" letter-spacing="2">SPEED CHESS</text>
+  <text x="400" y="382" font-family="'Silkscreen', monospace" font-size="11" fill="#c77dff" text-anchor="middle">PHYSICAL BLITZ TOURNAMENT • SOLO PLAY</text>
+</svg>
