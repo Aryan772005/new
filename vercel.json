@@ -10,12 +10,29 @@
       "use": "@vercel/static"
     },
     {
+      "src": "*.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "main.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "gaming.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "register.js",
+      "use": "@vercel/static"
+    },
+    {
       "src": "assets/**",
       "use": "@vercel/static"
     }
   ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/server.js" },
+    { "source": "/register", "destination": "/register.html" },
     { "source": "/admin", "destination": "/admin.html" }
   ]
 }
