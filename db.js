@@ -14,7 +14,9 @@ const tursoUrl = (process.env.TURSO_DATABASE_URL || '').trim();
 const tursoToken = (process.env.TURSO_AUTH_TOKEN || '').trim() || undefined;
 
 // 1. Initialize Local SQLite (Always Ready, Instant, Zero Latency)
-const localDbPath = path.resolve(__dirname, 'craftcon_gaming.db');
+// In Vercel (or other read-only environments), fallback to /tmp
+const isVercel = process.env.VERCEL || process.env.AWS_REGION;
+const localDbPath = isVercel ? '/tmp/craftcon_gaming.db' : path.resolve(__dirname, 'craftcon_gaming.db');
 const localDb = createClient({
   url: `file:${localDbPath}`
 });
