@@ -147,8 +147,8 @@
     </a>
     <nav class="header-nav">
       <a href="/">Home</a>
-      <a href="/#prizes">Prizes</a>
-      <a href="/gaming" class="gaming-link">&#127918; Gaming Arena</a>
+      <a href="/#tracks">Tracks</a>
+      <a href="/gaming.html" class="gaming-link">&#127918; Gaming Arena</a>
     </nav>
   </header>
 
@@ -274,7 +274,108 @@
   </main>
 
   <script>
-    var CATALOGUE = {};
+    var DEFAULT_CATALOGUE = {
+      HACKATHON: {
+        id: 'HACKATHON',
+        name: "CRAFTCON '26 Flagship Hackathon",
+        category: 'HACKATHON',
+        registrationType: 'TEAM',
+        minParticipants: 2,
+        maxParticipants: 4,
+        feePerParticipant: 0,
+        fixedFee: 0,
+        paymentRequired: false,
+        active: true,
+        description: '24-hour flagship sandbox hackathon at Desh Bhagat University. Build AI, Web3, CyberSec & CleanTech breakthroughs.',
+        badge: 'TEAM (2–4 BUILDERS)'
+      },
+      BGMI: {
+        id: 'BGMI',
+        name: 'BGMI (Battlegrounds Mobile India)',
+        category: 'GAMING',
+        registrationType: 'SQUAD',
+        minParticipants: 4,
+        maxParticipants: 4,
+        feePerParticipant: 50,
+        fixedFee: 200,
+        paymentRequired: true,
+        active: true,
+        description: 'Tactic-driven Battle Royale squad showdown on Erangel. 4 players per squad.',
+        badge: 'SQUAD REGISTRATION (4 PLAYERS)'
+      },
+      FREE_FIRE: {
+        id: 'FREE_FIRE',
+        name: 'Free Fire MAX',
+        category: 'GAMING',
+        registrationType: 'SQUAD',
+        minParticipants: 4,
+        maxParticipants: 4,
+        feePerParticipant: 50,
+        fixedFee: 200,
+        paymentRequired: true,
+        active: true,
+        description: 'High-octane fast-paced 4v4 Clash Squad and Battle Royale arena combat.',
+        badge: 'SQUAD REGISTRATION (4 PLAYERS)'
+      },
+      MOBILE_LEGENDS: {
+        id: 'MOBILE_LEGENDS',
+        name: 'Mobile Legends: Bang Bang',
+        category: 'GAMING',
+        registrationType: 'SQUAD',
+        minParticipants: 5,
+        maxParticipants: 5,
+        feePerParticipant: 50,
+        fixedFee: 250,
+        paymentRequired: true,
+        active: true,
+        description: '5v5 MOBA strategic lane warfare, jungle objectives, and base destruction.',
+        badge: 'SQUAD REGISTRATION (5 PLAYERS)'
+      },
+      LUDO: {
+        id: 'LUDO',
+        name: 'Ludo King Championship',
+        category: 'GAMING',
+        registrationType: 'SOLO',
+        minParticipants: 1,
+        maxParticipants: 1,
+        feePerParticipant: 50,
+        fixedFee: 50,
+        paymentRequired: true,
+        active: true,
+        description: 'Physical board-to-table dice strategy combat with zero ping latency.',
+        badge: 'SOLO REGISTRATION (1 PLAYER)'
+      },
+      CHESS: {
+        id: 'CHESS',
+        name: 'Speed Chess Masters',
+        category: 'GAMING',
+        registrationType: 'SOLO',
+        minParticipants: 1,
+        maxParticipants: 1,
+        feePerParticipant: 50,
+        fixedFee: 50,
+        paymentRequired: true,
+        active: true,
+        description: '10-minute classical blitz & tactics tournament on physical chessboards.',
+        badge: 'SOLO REGISTRATION (1 PLAYER)'
+      },
+      CARROM: {
+        id: 'CARROM',
+        name: 'Carrom Strike Tournament',
+        category: 'GAMING',
+        registrationType: 'SOLO',
+        minParticipants: 1,
+        maxParticipants: 1,
+        feePerParticipant: 50,
+        fixedFee: 50,
+        paymentRequired: true,
+        active: true,
+        description: 'Precision striker control, pocket calculation, and queen cover battles.',
+        badge: 'SOLO REGISTRATION (1 PLAYER)'
+      }
+    };
+
+    var CATALOGUE = Object.assign({}, DEFAULT_CATALOGUE);
     var STATE = { selectedEventId:null, teamName:'', college:'', captain:{name:'',email:'',phone:''}, participants:[] };
     var EMETA = {
       HACKATHON:      { icon:'&#128187;', color:'#a78bfa', bg:'rgba(139,92,246,.12)', prize:'&#8377;1,50,000+' },
@@ -310,10 +411,17 @@
 
     async function fetchEvents(){
       try{
-        var res=await fetch('/api/events'),data=await res.json();
-        if(data.success&&data.events){CATALOGUE=data.events;renderEvents();}
-        else document.getElementById('events-grid').innerHTML='<p style="color:#ef4444;padding:20px">Failed to load events. Please refresh.</p>';
-      }catch(e){document.getElementById('events-grid').innerHTML='<p style="color:#ef4444;padding:20px">Cannot connect to server.</p>';}
+        var res=await fetch('/api/events');
+        if(res.ok){
+          var data=await res.json();
+          if(data && data.success && data.events){
+            CATALOGUE=data.events;
+            renderEvents();
+          }
+        }
+      }catch(e){
+        console.warn('API sync notice: using loaded catalogue events.', e.message);
+      }
     }
 
     function renderEvents(){
@@ -420,7 +528,7 @@
       if(fee===0){
         document.getElementById('payment-action-area').innerHTML='<div class="free-entry-badge"><div class="bigcheck">&#x1F193;</div><h3>Free Entry - No Payment Required!</h3><p>Click Confirm Registration below. A confirmation email will be sent to '+STATE.captain.email+'.</p></div>';
       } else {
-        document.getElementById('payment-action-area').innerHTML='<div class="upi-box"><h3>&#128179; Pay via UPI to Complete Registration</h3><img class="upi-qr" src="assets/images/upi_qr.png" alt="UPI QR Code" onerror="this.style.background=\'var(--surface2)\'"><div class="upi-id">craftcon@upi</div><p class="upi-note">Scan or transfer &#8377;'+fee+' via any UPI app (GPay, PhonePe, Paytm)</p></div><div class="form-card"><h3>&#128221; Enter Payment Proof</h3><div class="form-grid single"><div class="form-group"><label for="reg-utr">UTR / Transaction ID <span class="req">*</span></label><input type="text" id="reg-utr" placeholder="Enter 12-digit UTR number" maxlength="30"><span class="input-hint">Find this in your UPI payment receipt / bank notification</span></div></div></div>';
+        document.getElementById('payment-action-area').innerHTML='<div class="upi-box"><h3>&#128179; Pay via UPI to Complete Registration</h3><img class="upi-qr" src="assets/images/upi_qr.png" alt="UPI QR Code" onerror="this.style.background=\'var(--surface2)\'"><div class="upi-id">paytm.s2sp1kq@pty</div><p class="upi-note">Payee: PAYAL BHARTI • Scan or transfer &#8377;'+fee+' via PhonePe, GPay, Paytm</p></div><div class="form-card"><h3>&#128221; Enter Payment Proof</h3><div class="form-grid single"><div class="form-group"><label for="reg-utr">UTR / Transaction ID <span class="req">*</span></label><input type="text" id="reg-utr" placeholder="Enter 12-digit UTR number" maxlength="30"><span class="input-hint">Find this in your UPI payment receipt / bank notification</span></div></div></div>';
       }
     }
 

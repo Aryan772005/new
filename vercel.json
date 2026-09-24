@@ -33,6 +33,7 @@
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/server.js" },
     { "source": "/register", "destination": "/register.html" },
+    { "source": "/gaming", "destination": "/gaming.html" },
     { "source": "/admin", "destination": "/admin.html" }
   ]
 }

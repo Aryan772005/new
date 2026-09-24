@@ -574,14 +574,14 @@ function initHero3DCameraDive() {
   const isMobileScreen = window.innerWidth <= 768;
   const isTouchOrMobile = isMobileScreen || isTouch || isMobileUA;
 
-  // PINNED MULTI-STAGE CAMERA & CLOUD FLY-THROUGH (DESKTOP & MOBILE)
+  // PINNED MULTI-STAGE CAMERA & CLOUD FLY-THROUGH (DESKTOP PINNED, MOBILE LIGHTWEIGHT NATURAL SCROLL)
   const pinTimeline = gsap.timeline({
     scrollTrigger: {
       trigger: heroWrapper,
       start: 'top top',
-      end: 'bottom bottom',
-      scrub: isTouchOrMobile ? 0.5 : 0.8,
-      pin: heroStage,
+      end: isTouchOrMobile ? 'bottom top' : 'bottom bottom',
+      scrub: isTouchOrMobile ? 0.3 : 0.8,
+      pin: isTouchOrMobile ? false : heroStage,
       anticipatePin: 0,
       fastScrollEnd: true,
       invalidateOnRefresh: true
@@ -736,7 +736,6 @@ function initSectionBackdropParallax() {
     { id: '#about-bg-layer', trigger: '#about', yStart: -30, yEnd: 40, scale: 1.14 },
     { id: '#tracks-bg-layer', trigger: '#tracks', yStart: -40, yEnd: 50, scale: 1.12 },
     { id: '#timeline-bg-layer', trigger: '#timeline', yStart: -35, yEnd: 45, scale: 1.15 },
-    { id: '#prizes-bg-layer', trigger: '#prizes', yStart: -40, yEnd: 50, scale: 1.14 },
     { id: '#rules-bg-layer', trigger: '#rules', yStart: -30, yEnd: 40, scale: 1.12 },
     { id: '#sponsors-bg-layer', trigger: '#sponsors', yStart: -40, yEnd: 50, scale: 1.15 },
     { id: '#faq-bg-layer', trigger: '#faq', yStart: -30, yEnd: 40, scale: 1.12 }

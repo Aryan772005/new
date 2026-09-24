@@ -5006,4 +5006,61 @@ body, input, select, textarea, button {
   }
 }
 
+/* ==========================================================================
+   MOBILE PERFORMANCE OVERDRIVE (SILKY 60-120FPS ON ALL PHONES)
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Eliminate GPU-killing backdrop filters on mobile devices */
+  *, *::before, *::after {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .site-header {
+    background: rgba(10, 10, 16, 0.98) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .hero-inner,
+  .tf-hero-card,
+  .track-card,
+  .node-content,
+  .faq-item,
+  .tilt-3d-card,
+  .gaming-arena-showcase-module,
+  .special-bounties-wrap,
+  .rules-tabs-container,
+  .mobile-drawer {
+    background: rgba(16, 16, 26, 0.96) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+
+  /* Prevent scroll locking / stutter on mobile */
+  .hero-pinned-wrapper {
+    height: auto !important;
+    min-height: 100vh;
+  }
+
+  .hero-sticky-stage {
+    height: auto !important;
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+
+  /* Eliminate heavy 3D transform layers on scroll */
+  .section-backdrop {
+    will-change: auto !important;
+    transform: none !important;
+  }
+
+  /* Smooth native touch scrolling */
+  html, body {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+}
+
+
 
