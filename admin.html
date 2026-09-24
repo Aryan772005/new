@@ -3,400 +3,586 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CRAFTCON '26 — Organizer Admin Console</title>
-  <meta name="description" content="Official Organizer Admin Panel & Database Dashboard for CRAFTCON '26 Hackathon.">
+  <title>CRAFTCON '26 GAMING ARENA — Admin Dashboard</title>
   
-  <!-- Favicon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%2312121a'/><rect x='4' y='4' width='24' height='24' fill='%233f8f2f'/><rect x='8' y='8' width='16' height='16' fill='%238b2fd1'/><rect x='12' y='12' width='8' height='8' fill='%23f5a623'/></svg>">
-
-  <!-- Google Fonts: Space Grotesk, Inter, Silkscreen -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="gaming.css">
+
+  <style>
+    .admin-container {
+      max-width: 1350px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+    
+    .admin-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+
+    .admin-stat-card {
+      padding: 24px;
+      background: var(--bg-surface-elevated);
+      border: 1.5px solid var(--gaming-border);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-card-title {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .stat-card-val {
+      font-family: 'Silkscreen', monospace;
+      font-size: 2.2rem;
+      color: var(--color-green-bright);
+      font-weight: 700;
+    }
+
+    .controls-bar {
+      padding: 20px;
+      background: var(--bg-surface);
+      border: 1.5px solid var(--mc-stone-dark);
+      border-radius: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .search-input-wrap {
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .filters-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .select-custom {
+      padding: 10px 16px;
+      background: var(--bg-deep);
+      border: 1px solid var(--gaming-border);
+      border-radius: 6px;
+      color: var(--text-white);
+      font-family: 'Space Grotesk', sans-serif;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .admin-table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      background: var(--bg-surface-elevated);
+      border: 1.5px solid var(--mc-stone-dark);
+      border-radius: 12px;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.92rem;
+    }
+
+    .admin-table th {
+      padding: 16px 20px;
+      background: var(--bg-deep);
+      color: var(--text-dim);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1.5px solid var(--gaming-border);
+    }
+
+    .admin-table td {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      color: var(--text-primary);
+    }
+
+    .admin-table tr:hover td {
+      background: rgba(255,255,255,0.02);
+    }
+
+    .badge-status-paid {
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(112, 224, 0, 0.15);
+      color: var(--color-green-bright);
+      border: 1px solid var(--mc-xp-green);
+      border-radius: 20px;
+      font-family: 'Silkscreen', monospace;
+      font-size: 0.7rem;
+    }
+
+    .badge-status-pending {
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(245, 166, 35, 0.15);
+      color: var(--color-amber-bright);
+      border: 1px solid var(--color-amber);
+      border-radius: 20px;
+      font-family: 'Silkscreen', monospace;
+      font-size: 0.7rem;
+    }
+
+    .btn-action-sm {
+      padding: 6px 12px;
+      background: rgba(157, 78, 221, 0.2);
+      border: 1px solid var(--color-purple-bright);
+      color: var(--color-purple-bright);
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action-sm:hover {
+      background: var(--color-purple);
+      color: #ffffff;
+    }
+  </style>
 </head>
-<body class="admin-body">
+<body style="background: var(--bg-deep);">
 
-  <!-- Ambient glowing voxel background overlay -->
-  <div class="ambient-glow glow-1"></div>
-  <div class="ambient-glow glow-2"></div>
-  <div class="grid-overlay"></div>
+  <!-- Navigation -->
+  <header class="site-header" style="position:relative;">
+    <div class="header-container">
+      <a href="gaming.html" class="brand-wordmark">
+        <span class="nav-dbu-badge">
+          <img src="assets/images/dbu_logo_cropped.png" alt="DBU Logo" class="nav-dbu-img" width="30" height="30">
+        </span>
+        <span class="brand-text">CRAFTCON<span class="brand-year">'26</span></span>
+        <span class="brand-tag" style="background:var(--color-purple);">ADMIN</span>
+      </a>
 
-  <!-- Toast Notification Container -->
-  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+      <div class="header-actions">
+        <a href="gaming.html" class="btn-gaming-secondary" style="padding:8px 16px; font-size:0.85rem;">
+          <span>🎮 ARENA PORTAL</span>
+        </a>
+        <button id="btn-sync-sheets" class="pill-cta-btn" style="background:var(--gaming-cyan); border-color:var(--gaming-cyan); color:#000; font-weight:700;">
+          <span>🔄 SYNC GOOGLE SHEETS</span>
+        </button>
+        <button id="btn-export-csv" class="pill-cta-btn" style="background:var(--color-amber); border-color:var(--color-amber-bright);">
+          <span>📥 EXPORT CSV</span>
+        </button>
+      </div>
+    </div>
+  </header>
 
-  <!-- ================= 1. LOGIN SCREEN ================= -->
-  <main id="login-section" class="auth-wrapper">
-    <div class="auth-card">
-      <div class="auth-header">
-        <div class="brand-row">
-          <span class="auth-cube"></span>
-          <h1 class="brand-title">CRAFTCON<span class="brand-year">'26</span></h1>
-        </div>
-        <div class="portal-badge">
-          <span class="pulse-dot"></span>
-          <span>ORGANIZER CONSOLE</span>
-        </div>
-        <p class="auth-subtitle">Sign in to manage hacker squads, monitor database records, and issue approvals.</p>
+  <main class="admin-container">
+    <div style="margin-bottom:30px;">
+      <h1 class="gaming-main-title" style="font-size:2.4rem; margin-bottom:8px;">REGISTRATIONS CONTROL CENTER</h1>
+      <p style="color:var(--text-muted);">Real-time SQLite database records, payment verifications, and player squad rosters.</p>
+    </div>
+
+    <!-- Summary Metrics -->
+    <div class="admin-stats-grid">
+      <div class="admin-stat-card">
+        <span class="stat-card-title">TOTAL REGISTRATIONS</span>
+        <span class="stat-card-val" id="stat-total-reg" style="color:var(--color-amber-bright);">0</span>
+      </div>
+      <div class="admin-stat-card">
+        <span class="stat-card-title">PAID & CONFIRMED</span>
+        <span class="stat-card-val" id="stat-paid-reg" style="color:var(--color-green-bright);">0</span>
+      </div>
+      <div class="admin-stat-card">
+        <span class="stat-card-title">TOTAL REVENUE COLLECTED</span>
+        <span class="stat-card-val" id="stat-revenue" style="color:var(--gaming-cyan);">₹0</span>
+      </div>
+      <div class="admin-stat-card">
+        <span class="stat-card-title">TOTAL PLAYERS REGISTERED</span>
+        <span class="stat-card-val" id="stat-players" style="color:var(--color-purple-bright);">0</span>
+      </div>
+    </div>
+
+    <!-- Controls & Filters Bar -->
+    <div class="controls-bar">
+      <div class="search-input-wrap">
+        <input type="text" id="admin-search-input" class="input-field-custom" placeholder="🔍 Search Team, Captain, Reg ID, Email...">
       </div>
 
-      <form id="admin-login-form" class="auth-form" autocomplete="off">
-        <div class="form-group">
-          <label for="admin-id">ORGANIZER ID</label>
-          <div class="input-with-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            <input type="text" id="admin-id" placeholder="Enter admin ID" required autofocus>
-          </div>
-        </div>
+      <div class="filters-group">
+        <select id="filter-game" class="select-custom">
+          <option value="">ALL EVENTS & GAMES</option>
+          <option value="HACKATHON">🏛️ CRAFTCON Hackathon</option>
+          <option value="BGMI">BGMI (Battlegrounds Mobile India)</option>
+          <option value="FREE_FIRE">Free Fire MAX</option>
+          <option value="MOBILE_LEGENDS">Mobile Legends</option>
+          <option value="LUDO">Ludo King</option>
+          <option value="CHESS">Speed Chess</option>
+          <option value="CARROM">Carrom Strike</option>
+        </select>
 
-        <div class="form-group">
-          <label for="admin-password">PASSWORD</label>
-          <div class="input-with-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-            <input type="password" id="admin-password" placeholder="Enter master password" required>
-            <button type="button" id="toggle-pwd-btn" class="toggle-pwd-btn" aria-label="Show password">👁</button>
-          </div>
-        </div>
+        <select id="filter-category" class="select-custom">
+          <option value="">ALL CATEGORIES</option>
+          <option value="HACKATHON">Flagship Hackathon</option>
+          <option value="GAMING">Gaming Arena</option>
+          <option value="online">Online Gaming (Squads)</option>
+          <option value="offline">Offline Gaming (Solo)</option>
+        </select>
 
-        <div id="login-error-box" class="error-banner" style="display: none;"></div>
+        <select id="filter-payment" class="select-custom">
+          <option value="">ALL PAYMENT STATES</option>
+          <option value="VERIFIED">VERIFIED / CONFIRMED</option>
+          <option value="PAID">PAID</option>
+          <option value="SUBMITTED">SUBMITTED (UNDER REVIEW)</option>
+          <option value="PENDING">PENDING</option>
+          <option value="REJECTED">REJECTED</option>
+        </select>
+      </div>
+    </div>
 
-        <button type="submit" class="admin-btn primary-btn full-btn" id="login-submit-btn">
-          <span>ENTER ORGANIZER TERMINAL</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
-
-
-
-        <div class="auth-footer-nav">
-          <a href="/" class="back-link">← Return to Public Website</a>
-        </div>
-      </form>
+    <!-- Table -->
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>REGISTRATION ID</th>
+            <th>GAME & TYPE</th>
+            <th>TEAM / NAME</th>
+            <th>UTR / PROOF</th>
+            <th>CAPTAIN & CONTACT</th>
+            <th>PLAYERS</th>
+            <th>AMOUNT</th>
+            <th>PAYMENT STATUS</th>
+            <th>ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody id="admin-table-body">
+          <!-- Rows dynamically injected -->
+        </tbody>
+      </table>
     </div>
   </main>
 
-  <!-- ================= 2. ORGANIZER DASHBOARD ================= -->
-  <div id="dashboard-section" class="dashboard-wrapper" style="display: none;">
-    <!-- Top Navigation Bar -->
-    <header class="dash-navbar">
-      <div class="dash-nav-left">
-        <a href="/" class="brand-link" title="Open Public Website">
-          <span class="auth-cube sm"></span>
-          <span class="brand-title-sm">CRAFTCON<span class="year-sm">'26</span></span>
-        </a>
-        <div class="nav-divider"></div>
-        <span class="system-status-pill">
-          <span class="live-dot-green"></span>
-          <span>SQLITE DATABASE ACTIVE</span>
-        </span>
+  <!-- PLAYER SQUAD MODAL -->
+  <div class="gaming-modal-overlay" id="squad-details-modal">
+    <div class="gaming-modal-container" style="max-width:600px;">
+      <div class="wizard-header">
+        <h3 class="wizard-title" id="squad-modal-title">SQUAD ROSTER DETAILS</h3>
+        <button class="modal-close-btn" id="close-squad-modal-btn">&times;</button>
       </div>
-
-      <div class="dash-nav-right">
-        <a href="/" target="_blank" class="nav-action-link" title="View Public Landing Page in New Tab">
-          <span>Public Website</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-        </a>
-
-        <button id="refresh-data-btn" class="nav-icon-btn" title="Refresh Database Records">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
-        </button>
-
-        <div class="user-badge" id="current-user-badge">
-          <span class="user-role-dot"></span>
-          <span id="current-username-display">admin</span>
+      <div class="wizard-body">
+        <div id="squad-modal-list">
+          <!-- Players list -->
         </div>
-
-        <button id="logout-btn" class="logout-btn" title="Sign Out">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-          <span>Sign Out</span>
-        </button>
       </div>
-    </header>
+    </div>
+  </div>
 
-    <div class="dash-content-container">
-      <!-- Section 1: KPI Stats Cards -->
-      <section class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-header">
-            <span class="stat-title">REGISTERED SQUADS</span>
-            <span class="stat-icon-wrap green">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-            </span>
-          </div>
-          <div class="stat-value" id="stat-total-teams">0</div>
-          <div class="stat-meta">Across all 6 hackathon biomes</div>
+  <!-- PAYMENT PROOF & VERIFICATION MODAL -->
+  <div class="gaming-modal-overlay" id="proof-details-modal">
+    <div class="gaming-modal-container" style="max-width:580px;">
+      <div class="wizard-header">
+        <h3 class="wizard-title" id="proof-modal-title">PAYMENT PROOF VERIFICATION</h3>
+        <button class="modal-close-btn" id="close-proof-modal-btn">&times;</button>
+      </div>
+      <div class="wizard-body">
+        <div id="proof-modal-content">
+          <!-- Proof content -->
         </div>
+      </div>
+    </div>
+  </div>
 
-        <div class="stat-card">
-          <div class="stat-header">
-            <span class="stat-title">TOTAL CRAFTERS</span>
-            <span class="stat-icon-wrap purple">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+  <script>
+    let allRegistrations = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchAdminRegistrations();
+
+      document.getElementById('admin-search-input').addEventListener('input', applyFilters);
+      document.getElementById('filter-game').addEventListener('change', applyFilters);
+      document.getElementById('filter-category').addEventListener('change', applyFilters);
+      document.getElementById('filter-payment').addEventListener('change', applyFilters);
+      document.getElementById('btn-export-csv').addEventListener('click', exportToCSV);
+      document.getElementById('btn-sync-sheets').addEventListener('click', handleSyncGoogleSheets);
+
+      document.getElementById('close-squad-modal-btn').addEventListener('click', () => {
+        document.getElementById('squad-details-modal').classList.remove('active');
+      });
+
+      document.getElementById('close-proof-modal-btn').addEventListener('click', () => {
+        document.getElementById('proof-details-modal').classList.remove('active');
+      });
+    });
+
+    async function handleSyncGoogleSheets() {
+      const btn = document.getElementById('btn-sync-sheets');
+      try {
+        if (btn) btn.innerHTML = '<span>⏳ SYNCING SHEETS...</span>';
+        const res = await fetch('/api/admin/sync-sheets', { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          alert(`Google Sheets Sync Completed! Synced ${data.total || 0} registration(s).`);
+          fetchAdminRegistrations();
+        } else {
+          alert(`Sync Notice: ${data.error || 'Check server environment variables (GOOGLE_SHEETS_SPREADSHEET_ID).'}`);
+        }
+      } catch (e) {
+        alert('Network error while triggering Google Sheets sync.');
+      } finally {
+        if (btn) btn.innerHTML = '<span>🔄 SYNC GOOGLE SHEETS</span>';
+      }
+    }
+
+    async function fetchAdminRegistrations() {
+      try {
+        const res = await fetch('/api/admin/registrations');
+        const data = await res.json();
+        if (data.success) {
+          allRegistrations = data.registrations || [];
+          renderAdminStats(allRegistrations);
+          renderAdminTable(allRegistrations);
+        }
+      } catch (err) {
+        console.error('Failed to load admin registrations:', err);
+      }
+    }
+
+    function renderAdminStats(rows) {
+      let paidCount = 0;
+      let totalRev = 0;
+      let totalPlayers = 0;
+
+      rows.forEach(r => {
+        if (r.payment_status === 'PAID') {
+          paidCount++;
+          totalRev += (r.total_amount || 0);
+        }
+        totalPlayers += (r.player_count || 1);
+      });
+
+      document.getElementById('stat-total-reg').textContent = rows.length;
+      document.getElementById('stat-paid-reg').textContent = paidCount;
+      document.getElementById('stat-revenue').textContent = `₹${totalRev}`;
+      document.getElementById('stat-players').textContent = totalPlayers;
+    }
+
+    function applyFilters() {
+      const search = document.getElementById('admin-search-input').value.toLowerCase().trim();
+      const game = document.getElementById('filter-game').value;
+      const category = document.getElementById('filter-category').value;
+      const payment = document.getElementById('filter-payment').value;
+
+      const filtered = allRegistrations.filter(r => {
+        const matchSearch = !search || 
+          r.registration_id.toLowerCase().includes(search) ||
+          (r.team_name && r.team_name.toLowerCase().includes(search)) ||
+          r.captain_name.toLowerCase().includes(search) ||
+          r.captain_email.toLowerCase().includes(search) ||
+          (r.utr_transaction_id && r.utr_transaction_id.toLowerCase().includes(search)) ||
+          r.college.toLowerCase().includes(search);
+
+        const matchGame = !game || r.game === game;
+        const matchCategory = !category || r.category === category;
+        const matchPayment = !payment || r.payment_status === payment;
+
+        return matchSearch && matchGame && matchCategory && matchPayment;
+      });
+
+      renderAdminTable(filtered);
+    }
+
+    function renderAdminTable(rows) {
+      const tbody = document.getElementById('admin-table-body');
+      tbody.innerHTML = '';
+
+      if (rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:30px; color:var(--text-muted);">No registration records found.</td></tr>`;
+        return;
+      }
+
+      rows.forEach(r => {
+        const tr = document.createElement('tr');
+        const hasProof = Boolean(r.payment_screenshot_url || r.utr_transaction_id);
+        const isPaid = r.payment_status === 'PAID';
+
+        tr.innerHTML = `
+          <td style="font-family:'Silkscreen', monospace; font-size:0.82rem; color:var(--color-amber);">${r.registration_id}</td>
+          <td><strong style="color:var(--text-white);">${r.game}</strong><br><span style="font-size:0.75rem; color:var(--text-dim); text-transform:uppercase;">${r.category} • ${r.registration_type}</span></td>
+          <td style="font-weight:600; color:var(--text-white);">${r.team_name || r.captain_name}</td>
+          <td>
+            ${r.utr_transaction_id ? `<span style="font-family:monospace; font-size:0.8rem; color:var(--color-amber-bright); font-weight:700;">${r.utr_transaction_id}</span>` : '<span style="color:var(--text-dim); font-size:0.78rem;">NO UTR</span>'}
+            ${hasProof ? `<br><button class="btn-action-sm" style="margin-top:4px; padding:2px 8px; font-size:0.72rem; background:rgba(245,166,35,0.15); border-color:var(--color-amber); color:var(--color-amber-bright);" onclick="viewPaymentProof('${r.registration_id}')">🔍 PROOF</button>` : ''}
+          </td>
+          <td>
+            <div style="font-weight:600;">${r.captain_name}</div>
+            <div style="font-size:0.78rem; color:var(--text-dim);">${r.captain_email} | ${r.captain_phone}</div>
+          </td>
+          <td style="font-family:'Silkscreen', monospace; color:var(--color-green-bright);">${r.player_count} Player(s)</td>
+          <td style="font-family:'Silkscreen', monospace; font-weight:700; color:var(--color-green-bright);">₹${r.total_amount}</td>
+          <td>
+            <span class="${isPaid ? 'badge-status-paid' : 'badge-status-pending'}">
+              ${r.payment_status}
             </span>
-          </div>
-          <div class="stat-value" id="stat-total-builders">0</div>
-          <div class="stat-meta">Developers, designers & founders</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-header">
-            <span class="stat-title">VERIFIED / CHECKED-IN</span>
-            <span class="stat-icon-wrap amber">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            </span>
-          </div>
-          <div class="stat-value" id="stat-checked-in">0</div>
-          <div class="stat-meta"><span id="stat-approved-count">0</span> approved pending arrival</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-header">
-            <span class="stat-title">COLLEGES & INSTITUTIONS</span>
-            <span class="stat-icon-wrap blue">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            </span>
-          </div>
-          <div class="stat-value" id="stat-unique-colleges">0</div>
-          <div class="stat-meta">Desh Bhagat University & regional</div>
-        </div>
-      </section>
-
-      <!-- Section 2: Toolbar & Filters -->
-      <section class="toolbar-section">
-        <div class="search-filter-box">
-          <div class="search-input-wrap">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" id="search-input" placeholder="Search team, leader, email, phone, college, pass ID..." autocomplete="off">
-            <button id="clear-search-btn" class="clear-btn" style="display: none;">&times;</button>
-          </div>
-
-          <div class="filter-dropdowns">
-            <div class="select-wrap">
-              <select id="filter-track">
-                <option value="all">All Tracks / Biomes</option>
-                <option value="The End">Track 01 — The End (AI & Agents)</option>
-                <option value="The Overworld">Track 02 — The Overworld (ClimateTech)</option>
-                <option value="Redstone Lab">Track 03 — Redstone Lab (IoT & Hardware)</option>
-                <option value="The Deep Dark">Track 04 — The Deep Dark (Security & Web3)</option>
-                <option value="The Nether">Track 05 — The Nether (FinTech & Scale)</option>
-                <option value="Open Sandbox">Track 06 — Open Sandbox (Wildcard)</option>
-              </select>
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button class="btn-action-sm" onclick="viewSquadRoster('${r.registration_id}')">ROSTER</button>
+              ${!isPaid ? `
+                <button class="btn-action-sm" style="background:rgba(112,224,0,0.2); border-color:var(--mc-xp-green); color:var(--color-green-bright);" onclick="handleVerifyPayment('${r.registration_id}', 'VERIFY')">VERIFY</button>
+                <button class="btn-action-sm" style="background:rgba(255,0,84,0.2); border-color:var(--color-purple-bright); color:#ff4d6d;" onclick="handleVerifyPayment('${r.registration_id}', 'REJECT')">REJECT</button>
+              ` : ''}
             </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
 
-            <div class="select-wrap">
-              <select id="filter-status">
-                <option value="all">All Statuses</option>
-                <option value="confirmed">Confirmed</option>
-                <option value="approved">Approved</option>
-                <option value="checked_in">Checked In</option>
-                <option value="waitlist">Waitlist</option>
-                <option value="rejected">Rejected</option>
-              </select>
+    function viewPaymentProof(regId) {
+      const reg = allRegistrations.find(r => r.registration_id === regId);
+      if (!reg) return;
+
+      const title = document.getElementById('proof-modal-title');
+      const content = document.getElementById('proof-modal-content');
+      title.textContent = `PROOF: ${reg.registration_id}`;
+
+      content.innerHTML = `
+        <div style="margin-bottom:14px; padding:12px; background:var(--bg-deep); border-radius:6px; font-size:0.9rem;">
+          <div style="margin-bottom:6px;"><strong style="color:var(--color-amber);">Team / Captain:</strong> ${reg.team_name} (${reg.captain_name})</div>
+          <div style="margin-bottom:6px;"><strong style="color:var(--color-amber);">UTR / Trans ID:</strong> <span style="font-family:monospace; font-weight:700; color:var(--color-green-bright);">${reg.utr_transaction_id || 'N/A'}</span></div>
+          <div style="margin-bottom:6px;"><strong style="color:var(--color-amber);">Amount Payable:</strong> ₹${reg.total_amount}</div>
+          <div><strong style="color:var(--color-amber);">Submitted At:</strong> ${reg.submitted_at || reg.created_at}</div>
+        </div>
+
+        ${reg.payment_screenshot_url ? `
+          <div style="text-align:center; margin-bottom:16px;">
+            <div style="font-size:0.75rem; color:var(--text-dim); margin-bottom:6px; text-transform:uppercase;">UPLOADED SCREENSHOT</div>
+            <img src="${reg.payment_screenshot_url}" alt="Payment Proof Screenshot" style="max-width:100%; max-height:320px; border-radius:8px; border:1px solid var(--gaming-border); object-fit:contain;">
+          </div>
+        ` : '<div style="color:var(--text-muted); text-align:center; padding:20px;">No screenshot image uploaded.</div>'}
+
+        <div style="display:flex; gap:12px; margin-top:16px;">
+          <button class="btn-action-sm" style="flex:1; padding:10px; font-weight:700; background:var(--color-green); border-color:var(--mc-xp-green); color:#fff;" onclick="handleVerifyPayment('${reg.registration_id}', 'VERIFY')">✓ VERIFY PAYMENT</button>
+          <button class="btn-action-sm" style="flex:1; padding:10px; font-weight:700; background:#ff0054; border-color:#ff4d6d; color:#fff;" onclick="handleVerifyPayment('${reg.registration_id}', 'REJECT')">✕ REJECT PAYMENT</button>
+        </div>
+      `;
+
+      document.getElementById('proof-details-modal').classList.add('active');
+    }
+
+    async function handleVerifyPayment(regId, action) {
+      const confirmMsg = action === 'VERIFY' 
+        ? `Confirm payment for ${regId}? This will update status to PAID, generate pass, send confirmation email, and sync to Google Sheets.`
+        : `Reject payment for ${regId}?`;
+
+      if (!confirm(confirmMsg)) return;
+
+      try {
+        const res = await fetch('/api/admin/verify-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            registrationId: regId,
+            action: action,
+            verifiedBy: 'Admin Portal'
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert(`Registration ${regId} payment ${action === 'VERIFY' ? 'VERIFIED & CONFIRMED' : 'REJECTED'} successfully!`);
+          const proofModal = document.getElementById('proof-details-modal');
+          if (proofModal) proofModal.classList.remove('active');
+          fetchAdminRegistrations();
+        } else {
+          alert(`Action failed: ${data.error || 'Server error'}`);
+        }
+      } catch (err) {
+        alert('Network error while processing verification action.');
+      }
+    }
+
+    async function viewSquadRoster(regId) {
+      try {
+        const res = await fetch(`/api/registrations/${regId}`);
+        const data = await res.json();
+        if (data.success) {
+          const title = document.getElementById('squad-modal-title');
+          const list = document.getElementById('squad-modal-list');
+          title.textContent = `ROSTER: ${data.registration.registration_id}`;
+
+          list.innerHTML = `
+            <div style="margin-bottom:16px; padding:12px; background:var(--bg-deep); border-radius:6px;">
+              <strong style="color:var(--color-amber);">Team / Participant:</strong> ${data.registration.team_name}<br>
+              <strong style="color:var(--color-amber);">College:</strong> ${data.registration.college}
             </div>
-          </div>
-        </div>
+          `;
 
-        <div class="actions-group">
-          <button id="export-csv-btn" class="admin-btn outline-btn" title="Download Full Registrations as CSV">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            <span>Export CSV</span>
-          </button>
+          const players = data.players || [];
+          players.forEach((p, idx) => {
+            const div = document.createElement('div');
+            div.style.cssText = 'padding:12px; background:var(--bg-surface); border-radius:6px; margin-bottom:10px; border:1px solid var(--gaming-border);';
+            div.innerHTML = `
+              <div style="font-weight:700; color:var(--text-white);">${idx === 0 ? '👑 CAPTAIN' : 'PLAYER ' + (idx + 1)}: ${p.name}</div>
+              <div style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">
+                IGN: <strong style="color:var(--color-green-bright);">${p.in_game_name || 'N/A'}</strong> | UID: ${p.game_uid || 'N/A'}<br>
+                Contact: ${p.email || 'N/A'} | ${p.phone || 'N/A'}
+              </div>
+            `;
+            list.appendChild(div);
+          });
 
-          <button id="copy-emails-btn" class="admin-btn outline-btn" title="Copy all leader emails to clipboard for announcement emails">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            <span>Copy Emails</span>
-          </button>
+          document.getElementById('squad-details-modal').classList.add('active');
+        }
+      } catch (err) {
+        alert('Failed to fetch player roster.');
+      }
+    }
 
-          <button id="open-add-modal-btn" class="admin-btn primary-btn" title="Manually register an on-site team">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            <span>+ Add Squad</span>
-          </button>
-        </div>
-      </section>
+    function exportToCSV() {
+      if (allRegistrations.length === 0) {
+        alert('No registration data available to export.');
+        return;
+      }
 
-      <!-- Section 3: Data Table -->
-      <section class="table-section">
-        <div class="table-meta-bar">
-          <div class="meta-left">
-            <span>Showing <strong id="visible-count">0</strong> registrations</span>
-          </div>
-          <div class="meta-right">
-            <span class="table-tip">💡 Click on any status pill to quickly change team status</span>
-          </div>
-        </div>
+      const headers = ['Registration ID', 'Game', 'Category', 'Type', 'Team Name', 'College', 'Captain Name', 'Captain Email', 'Captain Phone', 'Players Count', 'Total Amount (INR)', 'Payment Status', 'Created At'];
+      const rows = allRegistrations.map(r => [
+        `"${r.registration_id}"`,
+        `"${r.game}"`,
+        `"${r.category}"`,
+        `"${r.registration_type}"`,
+        `"${r.team_name}"`,
+        `"${r.college}"`,
+        `"${r.captain_name}"`,
+        `"${r.captain_email}"`,
+        `"${r.captain_phone}"`,
+        r.player_count,
+        r.total_amount,
+        `"${r.payment_status}"`,
+        `"${r.created_at}"`
+      ]);
 
-        <div class="table-container">
-          <table class="data-table" id="registrations-table">
-            <thead>
-              <tr>
-                <th>PASS ID</th>
-                <th>SQUAD NAME</th>
-                <th>LEADER & CONTACT</th>
-                <th>COLLEGE / UNIVERSITY</th>
-                <th>PRIMARY BIOME / TRACK</th>
-                <th>SIZE</th>
-                <th>STATUS</th>
-                <th class="text-right">ACTIONS</th>
-              </tr>
-            </thead>
-            <tbody id="table-body">
-              <!-- Dynamically populated rows -->
-            </tbody>
-          </table>
-
-          <!-- Empty State -->
-          <div id="table-empty-state" class="empty-state" style="display: none;">
-            <div class="empty-icon">⛏️</div>
-            <h3>No registrations match your filter</h3>
-            <p>Try adjusting your search query, biome filter, or clear filters.</p>
-            <button id="reset-filters-btn" class="admin-btn outline-btn sm">Reset Filters</button>
-          </div>
-        </div>
-      </section>
-    </div>
-  </div>
-
-  <!-- ================= 3. SQUAD DOSSIER MODAL ================= -->
-  <div id="dossier-modal" class="modal-backdrop" aria-hidden="true" style="display: none;">
-    <div class="modal-card">
-      <div class="modal-header">
-        <div class="modal-badge-row">
-          <span class="dossier-pass-id" id="modal-pass-id">CFT-0000-DBU</span>
-          <span class="status-pill" id="modal-status-badge">Confirmed</span>
-        </div>
-        <button class="close-modal-btn" id="close-dossier-btn">&times;</button>
-      </div>
-
-      <div class="modal-body">
-        <div class="dossier-title-block">
-          <h2 id="modal-team-name">Netherite Architects</h2>
-          <span class="dossier-track" id="modal-track-name">Track 01 — The End (AI & Agents)</span>
-        </div>
-
-        <div class="dossier-grid">
-          <div class="dossier-item">
-            <span class="d-label">TEAM LEADER</span>
-            <span class="d-val" id="modal-leader-name">Aryan Singh Tariani</span>
-          </div>
-          <div class="dossier-item">
-            <span class="d-label">SQUAD SIZE</span>
-            <span class="d-val" id="modal-team-size">4 Crafters</span>
-          </div>
-          <div class="dossier-item">
-            <span class="d-label">LEADER EMAIL</span>
-            <a href="mailto:" class="d-val link" id="modal-leader-email">leader@example.com</a>
-          </div>
-          <div class="dossier-item">
-            <span class="d-label">WHATSAPP / PHONE</span>
-            <a href="tel:" class="d-val link" id="modal-leader-phone">+91 00000 00000</a>
-          </div>
-          <div class="dossier-item full">
-            <span class="d-label">COLLEGE / INSTITUTION</span>
-            <span class="d-val" id="modal-college-name">Desh Bhagat University</span>
-          </div>
-          <div class="dossier-item full" id="dossier-portfolio-row">
-            <span class="d-label">PORTFOLIO / GITHUB</span>
-            <a href="#" target="_blank" rel="noopener noreferrer" class="d-val link" id="modal-portfolio-url">https://github.com</a>
-          </div>
-          <div class="dossier-item full">
-            <span class="d-label">CONCEPT / IDEA BRIEF</span>
-            <p class="d-val text-block" id="modal-concept-brief">No idea brief submitted.</p>
-          </div>
-          <div class="dossier-item full">
-            <span class="d-label">SUBMITTED ON</span>
-            <span class="d-val text-muted" id="modal-created-at">—</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <div class="modal-actions-left">
-          <button id="modal-quick-checkin-btn" class="admin-btn sm green-btn">
-            ✓ Check-In Team
-          </button>
-          <button id="modal-quick-approve-btn" class="admin-btn sm purple-btn">
-            ★ Approve
-          </button>
-        </div>
-        <button class="admin-btn outline-btn sm" id="modal-close-action-btn">Close Dossier</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= 4. ADD SQUAD MANUALLY MODAL ================= -->
-  <div id="add-squad-modal" class="modal-backdrop" aria-hidden="true" style="display: none;">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3>+ Register Squad On-Site</h3>
-        <button class="close-modal-btn" id="close-add-modal-btn">&times;</button>
-      </div>
-
-      <form id="admin-add-squad-form" class="modal-form">
-        <div class="form-row two-col">
-          <div class="form-group">
-            <label for="add-team-name">Team Name <span class="req">*</span></label>
-            <input type="text" id="add-team-name" required placeholder="e.g. Ender Wardens">
-          </div>
-          <div class="form-group">
-            <label for="add-team-size">Team Size <span class="req">*</span></label>
-            <select id="add-team-size" required>
-              <option value="1">1 Builder (Solo)</option>
-              <option value="2">2 Builders</option>
-              <option value="3">3 Builders</option>
-              <option value="4" selected>4 Builders (Full Squad)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row two-col">
-          <div class="form-group">
-            <label for="add-leader-name">Leader Name <span class="req">*</span></label>
-            <input type="text" id="add-leader-name" required placeholder="Full Name">
-          </div>
-          <div class="form-group">
-            <label for="add-leader-email">Leader Email <span class="req">*</span></label>
-            <input type="email" id="add-leader-email" required placeholder="email@college.edu">
-          </div>
-        </div>
-
-        <div class="form-row two-col">
-          <div class="form-group">
-            <label for="add-leader-phone">WhatsApp / Phone <span class="req">*</span></label>
-            <input type="tel" id="add-leader-phone" required placeholder="+91 98765 43210">
-          </div>
-          <div class="form-group">
-            <label for="add-college-name">College Name <span class="req">*</span></label>
-            <input type="text" id="add-college-name" required placeholder="Desh Bhagat University">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="add-primary-track">Primary Biome / Track <span class="req">*</span></label>
-          <select id="add-primary-track" required>
-            <option value="Track 01 — The End (AI & Agents)">Track 01 — The End (AI & Agents)</option>
-            <option value="Track 02 — The Overworld (ClimateTech)">Track 02 — The Overworld (ClimateTech)</option>
-            <option value="Track 03 — Redstone Lab (IoT & Hardware)">Track 03 — Redstone Lab (IoT & Hardware)</option>
-            <option value="Track 04 — The Deep Dark (Security & Web3)">Track 04 — The Deep Dark (Security & Web3)</option>
-            <option value="Track 05 — The Nether (FinTech & Scale)">Track 05 — The Nether (FinTech & Scale)</option>
-            <option value="Track 06 — Open Sandbox (Wildcard)">Track 06 — Open Sandbox (Wildcard)</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="add-concept-brief">Idea Brief / Note</label>
-          <textarea id="add-concept-brief" rows="2" placeholder="Brief project summary..."></textarea>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="admin-btn outline-btn sm" id="cancel-add-btn">Cancel</button>
-          <button type="submit" class="admin-btn primary-btn sm" id="submit-add-btn">
-            <span>Save & Issue Pass</span>
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <script src="admin.js"></script>
+      const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `CRAFTCON_2K26_Registrations_${Date.now()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
 </body>
 </html>

@@ -1,0 +1,1927 @@
+/* ==========================================================================
+   CRAFTCON '26 — GAMING ARENA STYLESHEET
+   Extends Hackathon Design Language with Esports Tournament & Portal UIs
+   ========================================================================== */
+
+@import url('style.css');
+
+/* --- 1. GAMING ARENA SPECIFIC TOKENS --- */
+:root {
+  --gaming-gold: #ffbe0b;
+  --gaming-redstone: #ff0054;
+  --gaming-redstone-glow: rgba(255, 0, 84, 0.5);
+  --gaming-cyan: #00f2fe;
+  --gaming-cyan-glow: rgba(0, 242, 254, 0.4);
+  --gaming-emerald: #00e676;
+  --gaming-card-bg: rgba(18, 18, 28, 0.9);
+  --gaming-border: rgba(255, 255, 255, 0.12);
+}
+
+/* --- GLOBAL FULL-PAGE CONTINUOUS MINECRAFT BACKGROUND LAYER --- */
+html {
+  background-color: var(--bg-deep) !important;
+}
+
+body.smooth-scroll-body {
+  position: relative;
+  min-height: 100vh;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.global-page-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-tall-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.global-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, 
+    rgba(8, 8, 13, 0.45) 0%, 
+    rgba(8, 8, 13, 0.2) 15%, 
+    rgba(8, 8, 13, 0.25) 50%, 
+    rgba(8, 8, 13, 0.2) 80%, 
+    rgba(8, 8, 13, 0.6) 100%);
+  z-index: 2;
+}
+
+/* Elevate WebGL 3D moving voxel canvas right above wallpaper background layer */
+.webgl-canvas, .ambient-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2 !important;
+  opacity: 0.95 !important;
+  pointer-events: none !important;
+}
+
+/* Elevate all interactive page sections above background layer */
+.site-header,
+.gaming-hero,
+.game-showcase-section,
+#tournament,
+#faq,
+footer {
+  position: relative;
+  z-index: 10;
+}
+
+/* --- 2. HERO & ARENA HIGHLIGHTS --- */
+.gaming-hero {
+  position: relative;
+  min-height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 95px 6% 40px;
+  background: transparent !important;
+  overflow: hidden;
+}
+
+.gaming-hero-content {
+  position: relative;
+  z-index: 5;
+  max-width: 480px;
+  text-align: left;
+  background: rgba(12, 12, 20, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  padding: 24px 26px;
+  border-radius: 14px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 0 0 35px rgba(157, 78, 221, 0.25);
+  margin-left: 0;
+  margin-top: -15px;
+}
+
+.gaming-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px;
+  background: rgba(245, 166, 35, 0.12);
+  border: 1.5px solid var(--color-amber);
+  border-radius: 50px;
+  color: var(--color-amber-bright);
+  font-family: 'Silkscreen', monospace;
+  font-size: 0.78rem;
+  margin-bottom: 12px;
+  box-shadow: 0 0 20px var(--color-amber-glow);
+}
+
+.gaming-main-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.8rem, 3.8vw, 3.1rem);
+  line-height: 1.05;
+  color: var(--text-white);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  letter-spacing: -1px;
+}
+
+.gaming-main-title span.esports-text {
+  background: linear-gradient(135deg, #ff0054, #ffb703, #00f2fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  filter: drop-shadow(0 0 15px rgba(255, 0, 84, 0.4));
+}
+
+.gaming-hero-tagline {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  line-height: 1.45;
+}
+
+/* Event Details & Fee Block inside Hero Card */
+.hero-event-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px 14px;
+  background: rgba(8, 8, 13, 0.6);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 14px;
+  font-size: 0.85rem;
+}
+
+.detail-line {
+  color: var(--text-primary);
+}
+
+.detail-line strong {
+  color: var(--color-amber);
+}
+
+.hero-fee-block {
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(112, 224, 0, 0.12), rgba(0, 242, 254, 0.08));
+  border: 2px solid var(--mc-xp-green);
+  border-radius: 10px;
+  margin-bottom: 16px;
+  text-align: left;
+  box-shadow: inset 0 0 20px rgba(112, 224, 0, 0.15);
+}
+
+.fee-label {
+  font-family: 'Silkscreen', monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.fee-value {
+  font-family: 'Silkscreen', monospace;
+  font-size: 1.75rem;
+  color: var(--color-green-bright);
+  font-weight: 700;
+  margin: 2px 0;
+  text-shadow: 0 0 15px rgba(112, 224, 0, 0.5);
+}
+
+.fee-sub {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.gaming-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-gaming-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--color-green), #2a9d8f);
+  color: #ffffff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border-radius: 6px;
+  border: 2px solid var(--mc-xp-green);
+  box-shadow: 0 0 25px rgba(112, 224, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+}
+
+.btn-gaming-primary:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 10px 35px rgba(112, 224, 0, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+}
+
+.btn-gaming-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: rgba(20, 20, 34, 0.8);
+  color: var(--text-primary);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  border-radius: 6px;
+  border: 1.5px solid var(--gaming-border);
+  transition: all 0.2s ease;
+}
+
+.btn-gaming-secondary:hover {
+  background: rgba(30, 30, 48, 0.9);
+  border-color: var(--color-purple-bright);
+  color: var(--text-white);
+  transform: translateY(-2px);
+}
+
+/* --- 3. TOURNAMENT METRICS BANNER --- */
+.tournament-stats-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 30px;
+  background: var(--bg-surface);
+  border: 2px solid var(--mc-stone-dark);
+  border-radius: 12px;
+  margin-top: 50px;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+}
+
+.stat-box {
+  text-align: center;
+  padding: 12px;
+  border-right: 1px stroke var(--gaming-border);
+}
+
+.stat-box:last-child {
+  border-right: none;
+}
+
+.stat-val {
+  font-family: 'Silkscreen', monospace;
+  font-size: 2rem;
+  color: var(--color-amber);
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+/* --- 4. GAME SHOWCASE & FILTER TABS --- */
+.game-showcase-section {
+  padding: 100px 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.section-header-centered {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.gaming-filter-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 12px 24px;
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  border: 1.5px solid var(--gaming-border);
+  border-radius: 30px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn.active, .filter-btn:hover {
+  background: var(--color-purple);
+  color: #ffffff;
+  border-color: var(--color-purple-bright);
+  box-shadow: 0 0 20px var(--color-purple-glow);
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+.game-card {
+  background: var(--bg-surface-elevated);
+  border: 2px solid var(--mc-stone-dark);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.game-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--color-amber);
+  box-shadow: 0 15px 35px rgba(245, 166, 35, 0.2);
+}
+
+.game-card-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: #000;
+}
+
+.game-card-img-wrap img, .game-card-img-wrap svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.game-card:hover .game-card-img-wrap img,
+.game-card:hover .game-card-img-wrap svg {
+  transform: scale(1.06);
+}
+
+.game-card-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 6px 12px;
+  background: rgba(8, 8, 13, 0.85);
+  border: 1px solid var(--color-amber);
+  border-radius: 20px;
+  color: var(--color-amber);
+  font-family: 'Silkscreen', monospace;
+  font-size: 0.72rem;
+  backdrop-filter: blur(4px);
+}
+
+.game-card-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.game-card-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-white);
+  margin-bottom: 8px;
+}
+
+.game-card-desc {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.game-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--bg-deep);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px stroke var(--gaming-border);
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.meta-label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.meta-val {
+  font-family: 'Silkscreen', monospace;
+  font-size: 0.9rem;
+  color: var(--color-green-bright);
+}
+
+.game-card-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 12px;
+}
+
+.btn-card-details {
+  padding: 10px;
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--gaming-border);
+  border-radius: 6px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.btn-card-details:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: var(--text-muted);
+}
+
+.btn-card-register {
+  padding: 10px;
+  background: var(--color-green);
+  color: #ffffff;
+  border: 1px solid var(--mc-xp-green);
+  border-radius: 6px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.btn-card-register:hover {
+  background: var(--color-green-bright);
+  box-shadow: 0 0 15px var(--color-green-glow);
+}
+
+/* --- 5. CENTRALIZED REGISTRATION WIZARD MODAL --- */
+.gaming-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(5, 5, 10, 0.88);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.gaming-modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.gaming-modal-container {
+  width: 100%;
+  max-width: 760px;
+  max-height: 90vh;
+  background: var(--bg-surface);
+  border: 2px solid var(--color-purple);
+  border-radius: 14px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px var(--color-purple-glow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  transform: scale(0.95);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.gaming-modal-overlay.active .gaming-modal-container {
+  transform: scale(1);
+}
+
+.wizard-header {
+  padding: 20px 24px;
+  background: var(--bg-deep);
+  border-bottom: 2px solid var(--mc-stone-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wizard-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wizard-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-white);
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  line-height: 1;
+}
+
+.modal-close-btn:hover {
+  color: var(--color-red);
+}
+
+.wizard-progress-bar-wrap {
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  width: 100%;
+}
+
+.wizard-progress-fill {
+  height: 100%;
+  width: 20%;
+  background: linear-gradient(90deg, var(--color-purple-bright), var(--color-green-bright));
+  transition: width 0.3s ease;
+}
+
+.wizard-body {
+  padding: 28px 24px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+/* Wizard Steps Screens */
+.wizard-step-pane {
+  display: none;
+}
+
+.wizard-step-pane.active {
+  display: block;
+  animation: fadeInStep 0.3s ease;
+}
+
+@keyframes fadeInStep {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.step-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+/* Step 1: Category Cards */
+.category-select-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.category-option-card {
+  padding: 28px 20px;
+  background: var(--bg-surface-elevated);
+  border: 2px solid var(--gaming-border);
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.category-option-card:hover, .category-option-card.selected {
+  border-color: var(--color-amber);
+  background: rgba(245, 166, 35, 0.08);
+  box-shadow: 0 0 25px rgba(245, 166, 35, 0.25);
+  transform: translateY(-4px);
+}
+
+.cat-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.cat-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--text-white);
+  margin-bottom: 8px;
+}
+
+.cat-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(112, 224, 0, 0.15);
+  color: var(--color-green-bright);
+  font-family: 'Silkscreen', monospace;
+  font-size: 0.72rem;
+  border-radius: 20px;
+}
+
+/* Step 2: Game Selection Grid */
+.game-select-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.game-option-tile {
+  padding: 16px;
+  background: var(--bg-surface-elevated);
+  border: 2px solid var(--gaming-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.game-option-tile:hover, .game-option-tile.selected {
+  border-color: var(--color-green-bright);
+  background: rgba(112, 224, 0, 0.08);
+}
+
+.tile-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: var(--bg-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.tile-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-white);
+}
+
+.tile-sub {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Form inputs & Player Accordions */
+.form-group-wrap {
+  margin-bottom: 20px;
+}
+
+.form-label-custom {
+  display: block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.input-field-custom {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg-deep);
+  border: 1.5px solid var(--gaming-border);
+  border-radius: 8px;
+  color: var(--text-white);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.input-field-custom:focus {
+  border-color: var(--color-purple-bright);
+  box-shadow: 0 0 10px var(--color-purple-glow);
+}
+
+/* Dynamic Price Box */
+.price-summary-box {
+  padding: 16px 20px;
+  background: rgba(112, 224, 0, 0.08);
+  border: 1.5px solid var(--mc-xp-green);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.price-breakdown-text {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.price-total-val {
+  font-family: 'Silkscreen', monospace;
+  font-size: 1.4rem;
+  color: var(--color-green-bright);
+  font-weight: 700;
+}
+
+/* Wizard Footer Controls */
+.wizard-footer {
+  padding: 18px 24px;
+  background: var(--bg-deep);
+  border-top: 1.5px solid var(--mc-stone-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-wizard-back {
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid var(--gaming-border);
+  color: var(--text-muted);
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+}
+
+.btn-wizard-next {
+  padding: 12px 28px;
+  background: var(--color-purple);
+  border: 1px solid var(--color-purple-bright);
+  color: #ffffff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  box-shadow: 0 0 15px var(--color-purple-glow);
+}
+
+.btn-wizard-next:hover {
+  background: var(--color-purple-bright);
+}
+
+/* Success Voucher Card */
+.voucher-card {
+  padding: 24px;
+  background: var(--bg-deep);
+  border: 2px dashed var(--color-amber);
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.voucher-reg-id {
+  font-family: 'Silkscreen', monospace;
+  font-size: 1.6rem;
+  color: var(--color-amber-bright);
+  letter-spacing: 2px;
+  margin: 12px 0;
+}
+
+/* --- 6. RESPONSIVE BREAKPOINTS --- */
+@media (max-width: 992px) {
+  .gaming-hero {
+    justify-content: center;
+    padding: 110px 20px 70px;
+    background-position: 70% top;
+  }
+  .gaming-hero-content {
+    max-width: 100%;
+    margin-left: 0;
+    text-align: center;
+    padding: 30px 20px;
+  }
+  .gaming-hero-actions {
+    justify-content: center;
+  }
+  .hero-fee-block {
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .category-select-grid {
+    grid-template-columns: 1fr;
+  }
+  .gaming-main-title {
+    font-size: 2.1rem;
+  }
+  .game-card-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- 7. ANIMATIONS, TRANSITIONS & SCROLL REVEAL STYLES --- */
+@keyframes minecraftFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes redstonePulse {
+  0%, 100% { 
+    box-shadow: 0 0 15px rgba(255, 0, 84, 0.4), inset 0 0 10px rgba(255, 0, 84, 0.2); 
+    border-color: var(--gaming-redstone); 
+  }
+  50% { 
+    box-shadow: 0 0 35px rgba(255, 0, 84, 0.8), inset 0 0 20px rgba(255, 0, 84, 0.5); 
+    border-color: var(--color-amber-bright); 
+  }
+}
+
+@keyframes titleGlowPulse {
+  0%, 100% { filter: drop-shadow(0 0 15px rgba(255, 0, 84, 0.4)); }
+  50% { filter: drop-shadow(0 0 30px rgba(0, 242, 254, 0.7)); }
+}
+
+/* Scroll Reveal Initial States */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(50px) scale(0.95);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+/* ==========================================================================
+   5. PROFESSIONAL TRANSITION & MOTION SYSTEM
+   ========================================================================== */
+:root {
+  --motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-dur-fast: 250ms;
+  --motion-dur-normal: 450ms;
+  --motion-dur-slow: 750ms;
+}
+
+/* --- SCROLL PROGRESS INDICATOR --- */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, #ff0054 0%, #ffbe0b 50%, #00f2fe 100%);
+  box-shadow: 0 0 10px rgba(255, 0, 84, 0.7);
+  z-index: 9999;
+  pointer-events: none;
+  transition: width 0.1s linear;
+}
+
+/* --- PAGE INITIAL ENTRANCE SEQUENCE --- */
+.page-load-ready .global-page-bg {
+  animation: pageLoadBg 0.9s var(--motion-ease-out) forwards;
+}
+
+.page-load-ready .site-header {
+  animation: pageLoadHeader 0.7s var(--motion-ease-out) 0.2s both;
+}
+
+.page-load-ready .gaming-badge-pill {
+  animation: pageLoadFadeDown 0.6s var(--motion-ease-out) 0.35s both, minecraftFloat 3.5s ease-in-out infinite 1s;
+}
+
+.page-load-ready .gaming-main-title {
+  animation: pageLoadHeroTitle 0.85s var(--motion-ease-out) 0.35s both;
+}
+
+.page-load-ready .gaming-hero-tagline,
+.page-load-ready .hero-event-details {
+  animation: pageLoadFadeUp 0.8s var(--motion-ease-out) 0.5s both;
+}
+
+.page-load-ready .hero-fee-block {
+  animation: pageLoadFeeBlock 0.8s var(--motion-ease-out) 0.65s both, redstonePulse 3s ease-in-out infinite 1.5s;
+}
+
+.page-load-ready .gaming-hero-actions {
+  animation: pageLoadFadeUp 0.8s var(--motion-ease-out) 0.75s both;
+}
+
+@keyframes pageLoadBg {
+  0% { opacity: 0.3; transform: scale(1.03); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pageLoadHeader {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pageLoadHeroTitle {
+  0% { opacity: 0; transform: translateY(35px) scale(0.96); filter: blur(6px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+@keyframes pageLoadFadeUp {
+  0% { opacity: 0; transform: translateY(25px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pageLoadFadeDown {
+  0% { opacity: 0; transform: translateY(-15px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pageLoadFeeBlock {
+  0% { opacity: 0; transform: scale(0.92) translateY(20px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* --- SECTION SCROLL REVEALS & MINECRAFT CLIP-PATH MASK --- */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(30px) scale(0.98);
+  filter: blur(4px);
+  transition: opacity 0.75s var(--motion-ease-out),
+              transform 0.75s var(--motion-ease-out),
+              filter 0.75s var(--motion-ease-out),
+              clip-path 0.85s var(--motion-ease-out);
+  will-change: opacity, transform, filter;
+}
+
+.pixel-mask-reveal {
+  opacity: 1;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  transition: opacity 0.75s var(--motion-ease-out), transform 0.75s var(--motion-ease-out);
+}
+
+.reveal-on-scroll.is-visible,
+.pixel-mask-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+/* Stagger Delays for Cards & Items */
+.delay-0 { transition-delay: 0ms; }
+.delay-1 { transition-delay: 90ms; }
+.delay-2 { transition-delay: 180ms; }
+.delay-3 { transition-delay: 270ms; }
+.delay-4 { transition-delay: 360ms; }
+.delay-5 { transition-delay: 450ms; }
+
+/* --- NAVIGATION LINK ANIMATED UNDERLINE & ACTIVE ITEM --- */
+.desktop-nav .nav-link {
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.desktop-nav .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: var(--color-amber);
+  box-shadow: 0 0 8px var(--color-amber-glow);
+  transition: width 0.3s var(--motion-ease-out);
+}
+
+.desktop-nav .nav-link:hover::after,
+.desktop-nav .nav-link.active::after {
+  width: 100%;
+}
+
+.desktop-nav .nav-link.active {
+  color: var(--color-amber-bright) !important;
+}
+
+/* --- BUTTON MICRO-INTERACTIONS --- */
+.btn-gaming-primary,
+.btn-gaming-secondary,
+.pill-cta-btn,
+.btn-card-register,
+.btn-card-details,
+.btn-wizard-next,
+.btn-wizard-back {
+  transition: transform 0.25s var(--motion-ease-out),
+              box-shadow 0.25s var(--motion-ease-out),
+              background-color 0.25s ease,
+              border-color 0.25s ease,
+              filter 0.25s ease !important;
+  will-change: transform;
+}
+
+.btn-gaming-primary:hover,
+.btn-gaming-secondary:hover,
+.pill-cta-btn:hover,
+.btn-card-register:hover,
+.btn-wizard-next:hover {
+  transform: translateY(-2.5px) scale(1.02);
+  filter: brightness(1.1);
+}
+
+.btn-gaming-primary:active,
+.btn-gaming-secondary:active,
+.pill-cta-btn:active,
+.btn-card-register:active,
+.btn-card-details:active,
+.btn-wizard-next:active,
+.btn-wizard-back:active {
+  transform: scale(0.97) translateY(0);
+}
+
+/* --- GAME CARD HOVER RESTRAINT & POLISH --- */
+.game-card {
+  transition: transform 0.38s var(--motion-ease-out),
+              box-shadow 0.38s var(--motion-ease-out),
+              border-color 0.38s var(--motion-ease-out);
+}
+
+.game-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: var(--color-amber-bright) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(245, 166, 35, 0.3) !important;
+}
+
+.game-card-img-wrap img {
+  transition: transform 0.45s var(--motion-ease-out);
+}
+
+.game-card:hover .game-card-img-wrap img {
+  transform: scale(1.06);
+}
+
+.game-card:hover .game-card-title {
+  color: var(--color-amber-bright);
+  transform: translateX(2px);
+  transition: transform 0.3s var(--motion-ease-out), color 0.3s ease;
+}
+
+/* --- REGISTRATION WIZARD STEP DIRECTIONAL SLIDE TRANSITIONS --- */
+.wizard-step-pane {
+  transition: opacity 0.35s var(--motion-ease-out),
+              transform 0.35s var(--motion-ease-out);
+  will-change: opacity, transform;
+}
+
+.wizard-step-pane.slide-out-left {
+  opacity: 0;
+  transform: translateX(-25px);
+  pointer-events: none;
+}
+
+.wizard-step-pane.slide-out-right {
+  opacity: 0;
+  transform: translateX(25px);
+  pointer-events: none;
+}
+
+.wizard-step-pane.slide-in-right {
+  animation: slideInRight 0.35s var(--motion-ease-out) forwards;
+}
+
+.wizard-step-pane.slide-in-left {
+  animation: slideInLeft 0.35s var(--motion-ease-out) forwards;
+}
+
+@keyframes slideInRight {
+  0% { opacity: 0; transform: translateX(25px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInLeft {
+  0% { opacity: 0; transform: translateX(-25px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* --- PAYMENT LOADING STATE OVERLAY --- */
+.payment-loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(12, 12, 20, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  border-radius: 10px;
+  animation: fadeInStep 0.3s ease;
+}
+
+.payment-loading-spinner {
+  width: 44px;
+  height: 44px;
+  border: 4px solid rgba(255, 190, 11, 0.2);
+  border-top-color: var(--color-amber);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* --- FAQ ACCORDION SMOOTH TRANSITION --- */
+#faq details {
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s var(--motion-ease-out);
+}
+
+#faq summary {
+  position: relative;
+  user-select: none;
+  padding-right: 24px;
+}
+
+#faq summary::-webkit-details-marker {
+  display: none;
+}
+
+#faq summary::after {
+  content: '▼';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%) rotate(0deg);
+  font-size: 0.75rem;
+  color: var(--color-amber);
+  transition: transform 0.3s var(--motion-ease-out);
+}
+
+#faq details[open] summary::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+#faq details p {
+  animation: faqContentFade 0.35s var(--motion-ease-out) forwards;
+}
+
+@keyframes faqContentFade {
+  0% { opacity: 0; transform: translateY(-6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* --- ACCESSIBILITY & MOBILE TOUCH OVERRIDES --- */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    clip-path: none !important;
+  }
+  .pixel-mask-reveal {
+    clip-path: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .reveal-on-scroll {
+    filter: none !important;
+    clip-path: none !important;
+  }
+  .game-card:hover {
+    transform: translateY(-3px) scale(1.01);
+  }
+}
+
+/* ==========================================================================
+   6. COMPREHENSIVE MOBILE & TABLET RESPONSIVE SYSTEM
+   ========================================================================== */
+
+/* Mobile Hamburger Menu Toggle Button Base Styles */
+.mobile-menu-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 22px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1005;
+}
+
+.mobile-menu-btn span {
+  width: 100%;
+  height: 3px;
+  background-color: var(--text-white);
+  border-radius: 2px;
+  transition: all 0.3s var(--motion-ease-out);
+}
+
+.mobile-menu-btn.active span:nth-child(1) {
+  transform: translateY(9.5px) rotate(45deg);
+  background-color: var(--color-amber-bright);
+}
+
+.mobile-menu-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-btn.active span:nth-child(3) {
+  transform: translateY(-9.5px) rotate(-45deg);
+  background-color: var(--color-amber-bright);
+}
+
+/* Mobile Navigation Drawer Base Styles */
+.mobile-nav-drawer {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: rgba(12, 12, 22, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1.5px solid var(--gaming-border);
+  padding: 20px 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: opacity 0.3s var(--motion-ease-out), transform 0.3s var(--motion-ease-out);
+  z-index: 1000;
+}
+
+.mobile-nav-drawer.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.mobile-nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mobile-nav-link {
+  color: var(--text-white);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-decoration: none;
+  display: block;
+  padding: 8px 0;
+  transition: color 0.2s ease;
+}
+
+.mobile-nav-link:hover {
+  color: var(--color-amber-bright);
+}
+
+.mobile-nav-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--gaming-border);
+}
+
+/* --- RESPONSIVE BREAKPOINT: TABLETS & DESKTOPS (<= 1024px) --- */
+@media (max-width: 1024px) {
+  .site-header {
+    padding: 12px 4%;
+  }
+
+  .gaming-hero {
+    min-height: auto;
+    padding: 85px 4% 40px;
+  }
+
+  .gaming-hero-content {
+    max-width: 100%;
+    margin-top: 0;
+  }
+
+  .games-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+/* --- RESPONSIVE BREAKPOINT: MOBILE & SMALL TABLETS (<= 768px) --- */
+@media (max-width: 768px) {
+  /* Navigation & Header */
+  .desktop-nav {
+    display: none !important;
+  }
+
+  .header-actions .btn-gaming-secondary {
+    display: none !important;
+  }
+
+  .header-actions .pill-cta-btn {
+    display: none !important;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .mobile-nav-drawer {
+    display: block;
+  }
+
+  /* Hero Section Mobile Polish */
+  .gaming-hero {
+    padding: 75px 16px 36px;
+  }
+
+  .gaming-hero-content {
+    padding: 20px 18px;
+    border-radius: 12px;
+  }
+
+  .gaming-main-title {
+    font-size: clamp(1.7rem, 7vw, 2.6rem) !important;
+    line-height: 1.12;
+    letter-spacing: -0.5px;
+  }
+
+  .gaming-hero-tagline {
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  .hero-event-details {
+    font-size: 0.84rem;
+  }
+
+  .hero-fee-block {
+    padding: 14px;
+    margin: 16px 0;
+  }
+
+  .fee-value {
+    font-size: clamp(1.3rem, 5.5vw, 1.7rem) !important;
+  }
+
+  .gaming-hero-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .gaming-hero-actions .btn-gaming-primary,
+  .gaming-hero-actions .btn-gaming-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Games Showcase Section Mobile Polish */
+  .game-showcase-section {
+    padding: 60px 16px;
+  }
+
+  .gaming-filter-tabs {
+    display: flex;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    padding-bottom: 8px;
+    margin-bottom: 24px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .gaming-filter-tabs .filter-btn {
+    flex: 0 0 auto;
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+
+  .games-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px;
+    padding: 0;
+  }
+
+  .game-card-body {
+    padding: 18px 16px;
+  }
+
+  .game-card-title {
+    font-size: 1.35rem;
+  }
+
+  .game-card-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .game-card-actions button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Tournament & Rules Mobile Polish */
+  #tournament {
+    padding: 60px 16px !important;
+  }
+
+  #tournament > div > div:nth-child(2) {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+  }
+
+  /* FAQ Mobile Polish */
+  #faq {
+    padding: 60px 16px !important;
+  }
+
+  #faq details {
+    padding: 14px 16px !important;
+  }
+
+  #faq summary {
+    font-size: 1rem !important;
+  }
+
+  /* Footer Mobile Polish */
+  .site-footer {
+    padding-top: 40px;
+  }
+
+  .footer-top-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px;
+  }
+
+  .footer-bottom-bar {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+
+  /* Centralized Registration Wizard Modal Mobile Polish */
+  .gaming-modal-overlay {
+    padding: 8px !important;
+  }
+
+  .gaming-modal-container {
+    max-width: 96% !important;
+    max-height: 92vh !important;
+    margin: 0 auto !important;
+    border-radius: 12px !important;
+  }
+
+  .wizard-header {
+    padding: 12px 16px !important;
+  }
+
+  .wizard-title {
+    font-size: 1.1rem !important;
+  }
+
+  .wizard-body {
+    padding: 16px 14px !important;
+    max-height: calc(88vh - 120px) !important;
+  }
+
+  .category-select-grid,
+  .game-select-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* Set inputs to 16px to prevent iOS Safari auto-zooming on focus */
+  .input-field-custom {
+    font-size: 16px !important;
+    padding: 12px 14px !important;
+  }
+
+  .form-group-wrap {
+    margin-bottom: 14px !important;
+  }
+
+  #step-pane-3 form > div[style*="grid-template-columns:1fr 1fr"],
+  #step-pane-3 form > div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .price-summary-box {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 14px;
+  }
+
+  .wizard-footer {
+    padding: 12px 16px !important;
+  }
+
+  .btn-wizard-back,
+  .btn-wizard-next {
+    padding: 10px 16px !important;
+    font-size: 0.85rem !important;
+  }
+
+  /* Game Details Modal Mobile Polish */
+  #game-details-modal .gaming-modal-container {
+    max-width: 96% !important;
+  }
+}
+
+/* --- RESPONSIVE BREAKPOINT: ULTRA-SMALL PHONES (<= 480px) --- */
+@media (max-width: 480px) {
+  .site-header {
+    padding: 10px 12px;
+  }
+
+  .brand-text {
+    font-size: 1.05rem;
+  }
+
+  .brand-year {
+    display: none;
+  }
+
+  .gaming-hero {
+    padding: 68px 12px 28px;
+  }
+
+  .gaming-hero-content {
+    padding: 16px 14px;
+  }
+
+  .gaming-badge-pill {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+  }
+
+  .detail-line {
+    font-size: 0.8rem;
+  }
+
+  .fee-label {
+    font-size: 0.72rem;
+  }
+
+  .fee-sub {
+    font-size: 0.7rem;
+  }
+
+  .voucher-card {
+    padding: 16px 12px !important;
+  }
+
+  .voucher-card > div[style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+}
+
+/* ==========================================================================
+   REALISTIC LICKING BOUNDARY FLAME ANIMATION (ACROSS ALL CARDS & DIVS)
+   ========================================================================== */
+
+/* 1. Container Positioning & Clipping Overrides */
+.gaming-hero-content,
+.game-card,
+.battle-plan-card,
+.faq-accordion-card,
+.gaming-modal-container,
+.category-option-card,
+.price-summary-box,
+.modal-step-card,
+.voucher-card {
+  position: relative !important;
+  overflow: visible !important;
+  z-index: 1;
+}
+
+/* Preserve top corner rounding for inner card image wrappers */
+.game-card-img-wrap {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  overflow: hidden;
+}
+
+/* 2. Licking Flame Border Pseudo-Element */
+.gaming-hero-content::before,
+.game-card::before,
+.battle-plan-card::before,
+.faq-accordion-card::before,
+.gaming-modal-container::before,
+.category-option-card::before,
+.price-summary-box::before,
+.modal-step-card::before,
+.voucher-card::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    /* Top border tall leaping flame tongues */
+    radial-gradient(ellipse 18px 22px at 14% -4px, var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 45%, var(--flame-outer, #ff2200) 70%, transparent 95%),
+    radial-gradient(ellipse 24px 28px at 36% -8px, var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 40%, var(--flame-outer, #cc1100) 72%, transparent 98%),
+    radial-gradient(ellipse 20px 24px at 60% -5px, var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 45%, var(--flame-outer, #ff2200) 70%, transparent 95%),
+    radial-gradient(ellipse 22px 26px at 84% -7px, var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 40%, var(--flame-outer, #cc1100) 72%, transparent 98%),
+    /* Bottom border roaring flames */
+    radial-gradient(ellipse 20px 18px at 22% calc(100% + 4px), var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 45%, var(--flame-outer, #ff2200) 70%, transparent 95%),
+    radial-gradient(ellipse 26px 20px at 54% calc(100% + 6px), var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 40%, var(--flame-outer, #cc1100) 72%, transparent 98%),
+    radial-gradient(ellipse 20px 18px at 80% calc(100% + 4px), var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 45%, var(--flame-outer, #ff2200) 70%, transparent 95%),
+    /* Left border licking flame tongues */
+    radial-gradient(ellipse 18px 22px at -4px 28%, var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 45%, var(--flame-outer, #ff2200) 70%, transparent 95%),
+    radial-gradient(ellipse 20px 24px at -6px 72%, var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 40%, var(--flame-outer, #cc1100) 72%, transparent 98%),
+    /* Right border licking flame tongues */
+    radial-gradient(ellipse 18px 22px at calc(100% + 4px) 32%, var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 45%, var(--flame-outer, #ff2200) 70%, transparent 95%),
+    radial-gradient(ellipse 20px 24px at calc(100% + 6px) 76%, var(--flame-core, #fff) 0%, var(--flame-mid, #ff7700) 40%, var(--flame-outer, #cc1100) 72%, transparent 98%);
+  filter: blur(2.5px) brightness(1.3) contrast(1.35);
+  opacity: 0.92;
+  animation: realisticFireFlicker 1.8s infinite ease-in-out alternate;
+}
+
+/* 3. Hover Expansion Effect */
+.gaming-hero-content:hover::before,
+.game-card:hover::before,
+.battle-plan-card:hover::before,
+.faq-accordion-card:hover::before,
+.gaming-modal-container:hover::before,
+.category-option-card:hover::before,
+.price-summary-box:hover::before,
+.modal-step-card:hover::before,
+.voucher-card:hover::before {
+  inset: -12px;
+  filter: blur(2.8px) brightness(1.6) contrast(1.45);
+  opacity: 1;
+}
+
+/* 4. VISUAL COLOR MATCHING PRESETS */
+/* Hero Main Banner: Crimson Redstone Flame */
+.gaming-hero-content {
+  --flame-core: #fff5f5;
+  --flame-mid: #ff0054;
+  --flame-outer: #990011;
+}
+
+/* BGMI Card: Deep Red Fire */
+.game-card[data-game="BGMI"] {
+  --flame-core: #fff5f5;
+  --flame-mid: #ff2238;
+  --flame-outer: #990011;
+}
+
+/* Free Fire MAX Card: Orange Blaze Flame */
+.game-card[data-game="FREE_FIRE"] {
+  --flame-core: #fffbe6;
+  --flame-mid: #ff6600;
+  --flame-outer: #cc1100;
+}
+
+/* Mobile Legends Card: Ender Purple Flame */
+.game-card[data-game="MOBILE_LEGENDS"] {
+  --flame-core: #faf5ff;
+  --flame-mid: #c77dff;
+  --flame-outer: #6a0dad;
+}
+
+/* Ludo King Card: Emerald Green Flame */
+.game-card[data-game="LUDO"] {
+  --flame-core: #f0fff4;
+  --flame-mid: #00e676;
+  --flame-outer: #007722;
+}
+
+/* Speed Chess Card: Solar Amber Flame */
+.game-card[data-game="CHESS"] {
+  --flame-core: #fffbe6;
+  --flame-mid: #ffb703;
+  --flame-outer: #d48800;
+}
+
+/* Carrom Strike Card: Cyan Blue Flame */
+.game-card[data-game="CARROM"] {
+  --flame-core: #f0faff;
+  --flame-mid: #00d4ff;
+  --flame-outer: #0055ff;
+}
+
+/* Tournament Details Cards: Amber/Red Flame */
+.battle-plan-card {
+  --flame-core: #fffbe6;
+  --flame-mid: #ff7700;
+  --flame-outer: #cc1100;
+}
+
+/* FAQ Accordion Cards: Redstone Flame */
+.faq-accordion-card {
+  --flame-core: #fff5f5;
+  --flame-mid: #ff0054;
+  --flame-outer: #990011;
+}
+
+/* Wizard Modal Popup: Crimson Red Flame */
+.gaming-modal-container {
+  --flame-core: #fff5f5;
+  --flame-mid: #ff0054;
+  --flame-outer: #990011;
+}
+
+/* Category Option Cards in Modal */
+.category-option-card[data-cat="online"] {
+  --flame-core: #fff5f5;
+  --flame-mid: #ff0054;
+  --flame-outer: #990011;
+}
+
+.category-option-card[data-cat="offline"] {
+  --flame-core: #f0fff4;
+  --flame-mid: #00e676;
+  --flame-outer: #007722;
+}
+
+/* Price Summary, Step Cards & Voucher Cards */
+.price-summary-box,
+.voucher-card,
+.modal-step-card {
+  --flame-core: #fffbe6;
+  --flame-mid: #ff6600;
+  --flame-outer: #cc1100;
+}
+
+/* ==========================================================================
+   FAST RENDERING & ULTRA-RESPONSIVE COMPREHENSIVE POLISH
+   ========================================================================== */
+
+/* 1. Hardware acceleration & rendering containment for speed */
+button, a, input, select, textarea, .filter-btn, .game-card, .pill-cta-btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#webgl-canvas,
+.gaming-hero-content,
+.game-card,
+.battle-plan-card,
+.faq-accordion-card,
+.gaming-modal-container {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+#scroll-progress-bar,
+.mobile-nav-drawer,
+.gaming-modal-overlay {
+  will-change: transform, opacity;
+}
+
+.game-showcase-section,
+#tournament,
+#faq,
+.site-footer {
+  content-visibility: auto;
+  contain-intrinsic-size: 800px;
+}
+
+/* 2. Modal Flexbox Mechanics for perfect responsiveness across device heights */
+.gaming-modal-container {
+  display: flex !important;
+  flex-direction: column !important;
+  max-height: 90vh !important;
+  box-sizing: border-box !important;
+}
+
+.wizard-header {
+  flex-shrink: 0 !important;
+}
+
+.wizard-progress-bar-wrap {
+  flex-shrink: 0 !important;
+}
+
+.wizard-body {
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+}
+
+.wizard-footer {
+  flex-shrink: 0 !important;
+  position: sticky !important;
+  bottom: 0 !important;
+  background: var(--bg-surface-elevated) !important;
+  z-index: 10 !important;
+  border-top: 1px solid var(--gaming-border) !important;
+}
+
+/* 3. Input accessibility & iOS zoom prevention */
+.input-field-custom,
+select.input-field-custom {
+  font-size: 16px !important;
+  border-radius: 8px !important;
+  box-sizing: border-box !important;
+}
+
+/* 4. Ultra-responsive Breakpoint adjustments */
+@media (max-width: 768px) {
+  .site-header .header-container {
+    padding: 0 12px !important;
+  }
+
+  .brand-wordmark {
+    gap: 6px !important;
+  }
+
+  .brand-text {
+    font-size: 1.15rem !important;
+  }
+
+  .games-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-tag {
+    display: none !important;
+  }
+
+  .header-actions {
+    gap: 8px !important;
+  }
+
+  .header-actions .btn-gaming-secondary span {
+    font-size: 0.75rem !important;
+  }
+
+  .pill-cta-btn span {
+    font-size: 0.75rem !important;
+  }
+
+  .gaming-hero-content {
+    max-width: 100% !important;
+    padding: 18px 16px !important;
+  }
+
+  .gaming-main-title {
+    font-size: 1.85rem !important;
+  }
+
+  .fee-value {
+    font-size: 1.45rem !important;
+  }
+
+  .games-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .wizard-title {
+    font-size: 1.05rem !important;
+  }
+
+  .btn-wizard-prev,
+  .btn-wizard-next {
+    width: 48% !important;
+    padding: 10px 8px !important;
+  }
+}
+
+
+
+
