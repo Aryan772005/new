@@ -5097,11 +5097,20 @@ body, input, select, textarea, button {
     transform: none !important;
   }
 
-  /* Smooth native touch scrolling & no overscroll stutter */
-  html, body {
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-    overscroll-behavior-y: none;
+  /* ===== MOBILE SCROLL GUARANTEE ===== */
+  /* Force native scroll to always work — never let JS/GSAP block body scroll on touch */
+  html {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;  /* CRITICAL: must be auto/scroll, NOT hidden */
+    -webkit-overflow-scrolling: touch !important;
+  }
+  body, body.smooth-scroll-body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;  /* CRITICAL: must be auto/scroll, NOT hidden */
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-y: auto !important;
+    touch-action: pan-y !important; /* Allow vertical finger scroll always */
+    height: auto !important;
   }
 
   /* Natural flow for mobile showcase cards */

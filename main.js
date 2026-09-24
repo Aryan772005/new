@@ -209,7 +209,8 @@ let lenis = null;
 function initLenisSmoothScroll() {
   if (typeof Lenis === 'undefined') return;
 
-  const isTouchMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.innerWidth <= 768);
+  // Detect ANY touch-capable device — width check alone misses landscape phones & desktop-mode
+  const isTouchMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.matchMedia('(pointer: coarse)').matches || /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
   if (isTouchMobile) {
     // On mobile devices, native touch momentum scrolling is hardware-accelerated 120Hz.
