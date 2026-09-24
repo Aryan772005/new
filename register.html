@@ -448,6 +448,16 @@
           document.querySelectorAll('.event-card').forEach(function(c){c.classList.remove('selected');});
           card.classList.add('selected'); STATE.selectedEventId=eid;
           document.getElementById('btn-next-1').disabled=false;
+          // Auto-advance to details step after a brief visual confirmation delay
+          card.style.transition='transform 0.15s ease, box-shadow 0.15s ease';
+          card.style.transform='scale(1.03)';
+          setTimeout(function(){
+            card.style.transform='';
+            var ev=CATALOGUE[STATE.selectedEventId],tg=document.getElementById('team-name-group');
+            if(ev.registrationType==='SOLO'){tg.style.display='none';document.getElementById('reg-team-name').value='SOLO_ENTRY';}
+            else{tg.style.display='';document.getElementById('reg-team-name').value='';}
+            goToStep(2);
+          }, 420);
         });
         grid.appendChild(card);
       });
