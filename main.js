@@ -19,6 +19,39 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // ── MOBILE / LOW-RAM FAST PATH ──────────────────────────────────────────
+  // On any touch device (phone / tablet), skip ALL heavy 3D, WebGL, GSAP,
+  // and audio initialisation. Only run the bare essentials so low-RAM users
+  // get an instant, smooth registration experience.
+  const _isMobileTouch = ('ontouchstart' in window)
+    || (navigator.maxTouchPoints > 0)
+    || window.matchMedia('(pointer: coarse)').matches
+    || /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+  if (_isMobileTouch) {
+    // Hide WebGL canvases immediately so they don't reserve GPU memory
+    const wc = document.getElementById('webgl-canvas');
+    const ac = document.getElementById('ambient-canvas');
+    if (wc) wc.style.display = 'none';
+    if (ac) ac.style.display = 'none';
+    // Disable HUD (XP bar / hearts) on mobile — not needed for registration
+    const hud = document.getElementById('hud-scroll-tracker');
+    if (hud) hud.style.display = 'none';
+    const docks = document.querySelectorAll('.tf-dock-left, .tf-dock-right');
+    docks.forEach(d => d.style.display = 'none');
+
+    // Run ONLY what is needed for a working, navigable registration flow
+    initCountdown();
+    initLenisSmoothScroll(); // already returns early on touch — just sets native scroll
+    initNavScrollspy();
+    initMobileDrawer();
+    initTimelineFilter();
+    initCodexTabs();
+    initRegistrationModal();
+    initBrochureAction();
+    return; // ← EXIT — no 3D, no GSAP, no audio, no canvas, no tilt physics
+  }
+  // ── DESKTOP FULL EXPERIENCE ─────────────────────────────────────────────
   initCountdown();
   initLenisSmoothScroll();
   initThreeJSScene();
