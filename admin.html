@@ -308,7 +308,24 @@
   <script>
     let allRegistrations = [];
 
+    let adminKey = localStorage.getItem('craftcon_admin_key');
+    if (!adminKey) {
+      adminKey = prompt('Enter Super Admin Password:');
+      if (adminKey) {
+        localStorage.setItem('craftcon_admin_key', adminKey);
+      }
+    }
+
+    const adminHeaders = {
+      'x-admin-key': adminKey,
+      'Content-Type': 'application/json'
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
+      if (!adminKey) {
+        document.body.innerHTML = '<h2 style="text-align:center; margin-top:50px; color:#ef4444;">Access Denied.</h2>';
+        return;
+      }
       fetchAdminRegistrations();
 
       document.getElementById('admin-search-input').addEventListener('input', applyFilters);
@@ -331,13 +348,19 @@
       const btn = document.getElementById('btn-sync-sheets');
       try {
         if (btn) btn.innerHTML = '<span>⏳ SYNCING SHEETS...</span>';
-        const res = await fetch('/api/admin/sync-sheets', { method: 'POST' });
+        const res = await fetch('/api/admin/sync-sheets', { method: 'POST', headers: adminHeaders });
         const data = await res.json();
         if (data.success) {
           alert(`Google Sheets Sync Completed! Synced ${data.total || 0} registration(s).`);
           fetchAdminRegistrations();
         } else {
-          alert(`Sync Notice: ${data.error || 'Check server environment variables (GOOGLE_SHEETS_SPREADSHEET_ID).'}`);
+          if (res.status === 401) {
+             localStorage.removeItem('craftcon_admin_key');
+             alert('Unauthorized! Incorrect admin password.');
+             window.location.reload();
+          } else {
+             alert(`Sync Notice: ${data.error || 'Check server environment variables (GOOGLE_SHEETS_SPREADSHEET_ID).'}`);
+          }
         }
       } catch (e) {
         alert('Network error while triggering Google Sheets sync.');
@@ -348,12 +371,15 @@
 
     async function fetchAdminRegistrations() {
       try {
-        const res = await fetch('/api/admin/registrations');
+        const res = await fetch('/api/admin/registrations', { headers: adminHeaders });
         const data = await res.json();
         if (data.success) {
           allRegistrations = data.registrations || [];
           renderAdminStats(allRegistrations);
           renderAdminTable(allRegistrations);
+        } else if (res.status === 401) {
+          localStorage.removeItem('craftcon_admin_key');
+          document.body.innerHTML = '<h2 style="text-align:center; margin-top:50px; color:#ef4444;">Unauthorized. Incorrect admin password. Please refresh.</h2>';
         }
       } catch (err) {
         console.error('Failed to load admin registrations:', err);
@@ -493,7 +519,7 @@
       try {
         const res = await fetch('/api/admin/verify-payment', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: adminHeaders,
           body: JSON.stringify({
             registrationId: regId,
             action: action,

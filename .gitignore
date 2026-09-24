@@ -5,3 +5,6 @@ data/*.db
 data/*.db-wal
 data/*.db-shm
 .DS_Store
+service_account.json
+*.db
+test-*.js

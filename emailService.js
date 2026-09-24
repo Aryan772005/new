@@ -9,6 +9,16 @@ const { db } = require('./db');
 async function getTransporter() {
   const provider = (process.env.EMAIL_PROVIDER || 'console').toLowerCase();
 
+  if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+    return nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+  }
+
   if (provider === 'smtp' && process.env.SMTP_HOST) {
     return nodemailer.createTransport({
       host: process.env.SMTP_HOST,
@@ -111,10 +121,10 @@ function buildHtmlEmail(reg, players) {
             <td style="padding:8px 0; color:#94a3b8;">Total Amount Paid:</td>
             <td style="padding:8px 0; color:#70e000; font-weight:bold; font-size:16px; text-align:right;">₹${reg.total_amount || reg.amount} INR</td>
           </tr>
-          ${reg.payment_id || reg.razorpay_payment_id ? `
+          ${reg.payment_id || reg.razorpay_payment_id || reg.utr_transaction_id ? `
           <tr>
-            <td style="padding:8px 0; color:#94a3b8;">Payment Reference ID:</td>
-            <td style="padding:8px 0; color:#00f2fe; font-family:monospace; text-align:right;">${reg.payment_id || reg.razorpay_payment_id}</td>
+            <td style="padding:8px 0; color:#94a3b8;">Payment Reference ID / UTR:</td>
+            <td style="padding:8px 0; color:#00f2fe; font-family:monospace; text-align:right;">${reg.payment_id || reg.razorpay_payment_id || reg.utr_transaction_id}</td>
           </tr>
           ` : ''}
         </table>
@@ -141,7 +151,7 @@ function buildHtmlEmail(reg, players) {
         <div style="background-color:#181826; border-left:4px solid #00f2fe; padding:15px; border-radius:4px; margin-top:25px;">
           <h4 style="margin:0 0 10px; color:#00f2fe;">📍 TOURNAMENT EVENT DETAILS</h4>
           <p style="margin:4px 0; font-size:13px; color:#cbd5e1;"><strong>Event:</strong> CRAFTCON 2K26 Gaming Arena</p>
-          <p style="margin:4px 0; font-size:13px; color:#cbd5e1;"><strong>Date:</strong> 26–27 October 2026</p>
+          <p style="margin:4px 0; font-size:13px; color:#cbd5e1;"><strong>Date:</strong> 22–23 October 2026</p>
           <p style="margin:4px 0; font-size:13px; color:#cbd5e1;"><strong>Time:</strong> 10:00 AM Onwards</p>
           <p style="margin:4px 0; font-size:13px; color:#cbd5e1;"><strong>Venue:</strong> Desh Bhagat University Campus</p>
           <p style="margin:4px 0; font-size:13px; color:#cbd5e1;"><strong>Organized By:</strong> Faculty of Engineering, Technology & Computing</p>
@@ -189,7 +199,7 @@ College:         ${reg.college}
 Players:         ${reg.player_count}
 Amount Paid:     ₹${reg.total_amount || reg.amount} INR
 Payment Status:  PAID
-Payment Ref:     ${reg.payment_id || reg.razorpay_payment_id || 'N/A'}
+Payment Ref:     ${reg.payment_id || reg.razorpay_payment_id || reg.utr_transaction_id || 'N/A'}
 
 ROSTER PARTICIPANTS
 --------------------------------------------------
@@ -198,7 +208,7 @@ ${rosterText || 'Solo Participant'}
 EVENT INFORMATION
 --------------------------------------------------
 Event:        CRAFTCON 2K26 Gaming Arena
-Date:         26–27 October 2026
+Date:         22–23 October 2026
 Time:         10:00 AM onwards
 Venue:        Desh Bhagat University
 Organized By: Faculty of Engineering, Technology and Computing

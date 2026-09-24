@@ -35,14 +35,7 @@ app.use(express.static(path.resolve(__dirname)));
 app.use('/assets', express.static(path.resolve(__dirname, 'assets')));
 
 // Middleware to ensure DB Schema is initialized on API requests
-app.use(async (req, res, next) => {
-  if (req.path.startsWith('/api/')) {
-    try {
-      await initDb();
-    } catch (e) {
-      console.warn('Database auto-init notice:', e.message);
-    }
-  }
+app.use((req, res, next) => {
   next();
 });
 
@@ -236,6 +229,7 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
         phone: body.leader_phone || body.leaderPhone || ''
       };
     }
+    const players = body.players || [];
 
     // Resolve target event ID
     const targetEventId = (eventId || gameId || (Array.isArray(eventIds) && eventIds[0]) || 'HACKATHON').toUpperCase();
@@ -381,7 +375,6 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
         paymentStatus: 'VERIFIED',
         message: 'Hackathon Registration Confirmed! Your official pass has been generated.'
       });
-
     } else {
       // PAID GAMING REGISTRATION -> INITIAL DB RECORD WITH PENDING PAYMENT
       await db.batch([
@@ -390,8 +383,8 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
             registration_id, category, game, registration_type, team_name,
             college, captain_name, captain_email, captain_phone, player_count,
             total_amount, amount, fee_per_person, currency, payment_method, payment_status, registration_status,
-            created_at, updated_at
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'INR', ?, 'PENDING', 'PENDING_PAYMENT', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+            utr_transaction_id, created_at, updated_at, confirmed_at
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'INR', 'UPI', 'VERIFIED', 'CONFIRMED', ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
           args: [
             registrationId,
             eventConfig.category || 'GAMING',
@@ -406,7 +399,7 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
             totalAmount,
             totalAmount,
             feePerPerson,
-            paymentProvider.toUpperCase()
+            req.body.utr || null
           ]
         }
       ]);
@@ -430,11 +423,20 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
 
       await db.batch(playerStatements);
 
-      console.log(`📝 [Gaming Registration Created in Turso] Reg ID: ${registrationId} (${eventConfig.name}) Total: ₹${totalAmount}`);
+      console.log(`📝 [Gaming Registration Created in Turso] Reg ID: ${registrationId} (${eventConfig.name}) Total: ₹${totalAmount} - AUTO CONFIRMED`);
+
+      // Trigger Confirmation Email asynchronously
+      setImmediate(async () => {
+        try {
+          await emailService.sendRegistrationConfirmation(registrationId);
+        } catch (emErr) {
+          console.warn('⚠️ [Email Notice] Failed to send gaming confirmation email:', emErr.message);
+        }
+      });
 
       return res.json({
         success: true,
-        status: 'PENDING_PAYMENT',
+        status: 'CONFIRMED',
         registrationId,
         game: eventConfig.name,
         gameId: eventConfig.id,
@@ -450,7 +452,7 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
         amount: totalAmount,
         currency: 'INR',
         paymentRequired: true,
-        paymentProvider
+        paymentProvider: 'UPI'
       });
     }
 
@@ -1287,7 +1289,7 @@ app.get('/admin.html', (req, res) => {
 
 // Start Express Server (only listen when run directly)
 if (require.main === module) {
-  app.listen(PORT, async () => {
+  app.listen(PORT, async () => { // Reloaded again
     try {
       await initDb();
     } catch (e) {

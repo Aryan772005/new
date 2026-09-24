@@ -54,6 +54,24 @@ const PLAYERS_HEADERS = [
  * Get authenticated Google Sheets API client
  */
 function getGoogleAuthClient() {
+  const fs = require('fs');
+  const path = require('path');
+
+  // 1. First check if service_account.json exists in root
+  const keyFilePath = path.join(__dirname, 'service_account.json');
+  if (fs.existsSync(keyFilePath)) {
+    try {
+      const auth = new google.auth.GoogleAuth({
+        keyFile: keyFilePath,
+        scopes: SCOPES
+      });
+      return auth;
+    } catch (err) {
+      console.warn('⚠️ [GoogleSheets] Notice loading service_account.json:', err.message);
+    }
+  }
+
+  // 2. Fall back to environment variables
   const clientEmail = (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '').trim();
   let privateKey = process.env.GOOGLE_PRIVATE_KEY || '';
 
@@ -111,13 +129,13 @@ async function ensureWorksheetsAndHeaders(sheets, spreadsheetId) {
     // Verify and add header rows if missing
     const regHeaderRes = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: 'Registrations!A1:S1'
+      range: 'Registrations!A1:W1'
     });
 
     if (!regHeaderRes.data.values || regHeaderRes.data.values.length === 0) {
       await sheets.spreadsheets.values.update({
         spreadsheetId,
-        range: 'Registrations!A1:S1',
+        range: 'Registrations!A1:W1',
         valueInputOption: 'USER_ENTERED',
         requestBody: { values: [REGISTRATIONS_HEADERS] }
       });
@@ -352,32 +370,37 @@ async function syncAllPendingRegistrations() {
  * Harmless Diagnostic Test Endpoint Function for Google Sheets Integration
  */
 async function testGoogleSheetsConnection() {
+  const fs = require('fs');
+  const path = require('path');
+  const keyFilePath = path.join(__dirname, 'service_account.json');
+  const hasKeyFile = fs.existsSync(keyFilePath);
+
   const clientEmail = (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '').trim();
   const rawPrivateKey = process.env.GOOGLE_PRIVATE_KEY || '';
   const spreadsheetId = getSpreadsheetId();
 
-  const hasEmail = Boolean(clientEmail);
-  const hasKey = Boolean(rawPrivateKey);
+  const hasEmail = Boolean(clientEmail) || hasKeyFile;
+  const hasKey = Boolean(rawPrivateKey) || hasKeyFile;
   const hasSheetId = Boolean(spreadsheetId);
 
   console.log('🔍 [GoogleSheets Diagnostic Test]');
-  console.log(`- GOOGLE_SERVICE_ACCOUNT_EMAIL present: ${hasEmail} (${hasEmail ? clientEmail : 'MISSING'})`);
-  console.log(`- GOOGLE_PRIVATE_KEY present: ${hasKey} (Length: ${rawPrivateKey.length})`);
+  console.log(`- service_account.json present: ${hasKeyFile}`);
+  console.log(`- GOOGLE_SERVICE_ACCOUNT_EMAIL present: ${Boolean(clientEmail)} (${clientEmail || 'from service_account.json'})`);
   console.log(`- GOOGLE_SHEETS_SPREADSHEET_ID present: ${hasSheetId} (${hasSheetId ? spreadsheetId : 'MISSING'})`);
 
-  if (!hasEmail || !hasKey || !hasSheetId) {
+  if ((!hasKeyFile && (!clientEmail || !rawPrivateKey)) || !hasSheetId) {
     const missing = [];
-    if (!hasEmail) missing.push('GOOGLE_SERVICE_ACCOUNT_EMAIL');
-    if (!hasKey) missing.push('GOOGLE_PRIVATE_KEY');
+    if (!hasKeyFile && !clientEmail) missing.push('GOOGLE_SERVICE_ACCOUNT_EMAIL or service_account.json');
+    if (!hasKeyFile && !rawPrivateKey) missing.push('GOOGLE_PRIVATE_KEY or service_account.json');
     if (!hasSheetId) missing.push('GOOGLE_SHEETS_SPREADSHEET_ID');
 
     return {
       success: false,
-      error: `Missing environment variable(s): ${missing.join(', ')}`,
+      error: `Missing configuration: ${missing.join(', ')}`,
       diagnostics: {
+        hasKeyFile,
         hasEmail,
         hasKey,
-        hasSheetId
       }
     };
   }
