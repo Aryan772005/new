@@ -336,12 +336,13 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
       await db.batch([
         {
           sql: `INSERT INTO registrations (
-            registration_id, pass_id, category, game, registration_type, team_name,
-            college, captain_name, captain_email, captain_phone, player_count,
+            registration_id, pass_id, category, game, registration_type, team_name, team_size,
+            college, college_name, captain_name, captain_email, captain_phone,
+            leader_name, leader_email, leader_phone, player_count,
             total_amount, amount, fee_per_person, currency, payment_method, payment_status, registration_status,
             primary_track, portfolio_url, concept_brief,
             confirmed_at, created_at, updated_at
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 'INR', 'FREE', 'VERIFIED', 'CONFIRMED', ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 'INR', 'FREE', 'VERIFIED', 'CONFIRMED', ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
           args: [
             registrationId,
             registrationId, // Satisfy NOT NULL constraint
@@ -349,12 +350,17 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
             eventConfig.id,
             regType,
             cleanTeamName,
+            providedPlayers.length, // team_size
             cleanCollege,
+            cleanCollege, // college_name
             cleanCaptain.name,
             cleanCaptain.email,
             cleanCaptain.phone,
+            cleanCaptain.name, // leader_name
+            cleanCaptain.email, // leader_email
+            cleanCaptain.phone, // leader_phone
             providedPlayers.length,
-            body.primary_track || body.primaryTrack || null,
+            body.primary_track || body.primaryTrack || 'N/A',
             body.portfolio_url || body.portfolioUrl || null,
             body.concept_brief || body.conceptBrief || null
           ]
@@ -418,22 +424,28 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
       await db.batch([
         {
           sql: `INSERT INTO registrations (
-            registration_id, pass_id, category, game, registration_type, team_name,
-            college, captain_name, captain_email, captain_phone, player_count,
+            registration_id, pass_id, category, game, registration_type, team_name, team_size,
+            college, college_name, captain_name, captain_email, captain_phone,
+            leader_name, leader_email, leader_phone, player_count,
             total_amount, amount, fee_per_person, currency, payment_method, payment_status, registration_status,
-            utr_transaction_id, created_at, updated_at, confirmed_at
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'INR', 'UPI', 'VERIFIED', 'CONFIRMED', ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+            primary_track, utr_transaction_id, created_at, updated_at, confirmed_at
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'INR', 'UPI', 'VERIFIED', 'CONFIRMED', 'N/A', ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
           args: [
             registrationId,
-            registrationId, // pass_id equals registration_id to satisfy NOT NULL constraint
+            registrationId, // Satisfy NOT NULL pass_id
             eventConfig.category || 'GAMING',
             eventConfig.id,
             regType,
             cleanTeamName,
+            providedPlayers.length, // Satisfy NOT NULL team_size
             cleanCollege,
+            cleanCollege, // Satisfy NOT NULL college_name
             cleanCaptain.name,
             cleanCaptain.email,
             cleanCaptain.phone,
+            cleanCaptain.name, // Satisfy NOT NULL leader_name
+            cleanCaptain.email, // Satisfy NOT NULL leader_email
+            cleanCaptain.phone, // Satisfy NOT NULL leader_phone
             providedPlayers.length,
             totalAmount,
             totalAmount,
