@@ -1,471 +1,343 @@
-const { google } = require('googleapis');
+﻿const { google } = require('googleapis');
 const { db } = require('./db');
 require('dotenv').config();
-
-/**
- * CRAFTCON '26 GAMING ARENA — GOOGLE SHEETS EXPORT SERVICE
- * Primary Source of Truth: Turso DB.
- * Google Sheets: Admin / Reporting Copy.
- * Strictly Server-Side Integration via Google Service Account API.
- */
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 
 const REGISTRATIONS_HEADERS = [
-  'Registration ID',
-  'Registration Date',
-  'Category',
-  'Game',
-  'Registration Type',
-  'Team Name',
-  'College',
-  'Captain Name',
-  'Captain Email',
-  'Captain Phone',
-  'Player Count',
-  'Amount',
-  'Currency',
-  'Payment Method',
-  'Payment Status',
-  'UTR / Transaction ID',
-  'Payment Screenshot',
-  'Submitted At',
-  'Verified At',
-  'Verified By',
-  'Registration Status',
-  'Created At',
-  'Confirmed At'
+  'Registration ID', 'Registration Date', 'Category', 'Game', 'Registration Type',
+  'Team Name', 'College', 'Captain Name', 'Captain Email', 'Captain Phone',
+  'Player Count', 'Amount Paid (Rs)', 'Currency', 'Payment Method', 'Payment Status',
+  'UTR / Transaction ID', 'Payment Screenshot', 'Submitted At', 'Verified At',
+  'Verified By', 'Registration Status', 'Created At', 'Confirmed At'
+];
+
+const GAMING_HEADERS = [
+  'Registration ID', 'Registration Date', 'Game', 'Team Name', 'College',
+  'Captain Name', 'Captain Email', 'Captain Phone',
+  'Player 1 Name', 'Player 1 IGN', 'Player 1 UID',
+  'Player 2 Name', 'Player 2 IGN', 'Player 2 UID',
+  'Player 3 Name', 'Player 3 IGN', 'Player 3 UID',
+  'Player 4 Name', 'Player 4 IGN', 'Player 4 UID',
+  'Player 5 Name', 'Player 5 IGN', 'Player 5 UID',
+  'Total Players', 'Amount Paid (Rs)', 'Payment Method', 'Payment Status',
+  'UTR / Transaction ID', 'Registration Status', 'Confirmed At'
+];
+
+const HACKATHON_HEADERS = [
+  'Registration ID', 'Registration Date', 'Team Name', 'College', 'Primary Track',
+  'Team Leader Name', 'Team Leader Email', 'Team Leader Phone',
+  'Member 2 Name', 'Member 2 Email', 'Member 2 Phone',
+  'Member 3 Name', 'Member 3 Email', 'Member 3 Phone',
+  'Member 4 Name', 'Member 4 Email', 'Member 4 Phone',
+  'Total Members', 'Amount Paid (Rs)', 'Payment Status',
+  'Concept Brief', 'Portfolio URL', 'Registration Status', 'Confirmed At'
 ];
 
 const PLAYERS_HEADERS = [
-  'Registration ID',
-  'Player ID',
-  'Player Name',
-  'In-Game Name',
-  'Game UID',
-  'Email',
-  'Phone',
-  'Role',
-  'Game',
-  'Created At'
+  'Registration ID', 'Player ID', 'Player Name', 'In-Game Name', 'Game UID',
+  'Email', 'Phone', 'Role', 'Game', 'Created At'
 ];
 
-/**
- * Get authenticated Google Sheets API client
- */
 function getGoogleAuthClient() {
   const fs = require('fs');
   const path = require('path');
-
-  // 1. First check if service_account.json exists in root
   const keyFilePath = path.join(__dirname, 'service_account.json');
   if (fs.existsSync(keyFilePath)) {
     try {
-      const auth = new google.auth.GoogleAuth({
-        keyFile: keyFilePath,
-        scopes: SCOPES
-      });
-      return auth;
+      return new google.auth.GoogleAuth({ keyFile: keyFilePath, scopes: SCOPES });
     } catch (err) {
-      console.warn('⚠️ [GoogleSheets] Notice loading service_account.json:', err.message);
+      console.warn('Warning loading service_account.json:', err.message);
     }
   }
-
-  // 2. Fall back to environment variables
   const clientEmail = (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '').trim();
   let privateKey = process.env.GOOGLE_PRIVATE_KEY || '';
-
-  if (!clientEmail || !privateKey) {
-    return null;
-  }
-
-  // Support environment variable newline formats (\n in Vercel string vs real multiline)
+  if (!clientEmail || !privateKey) return null;
   privateKey = privateKey.replace(/\\n/g, '\n');
-
   try {
-    const auth = new google.auth.JWT({
-      email: clientEmail,
-      key: privateKey,
-      scopes: SCOPES
-    });
-    return auth;
+    return new google.auth.JWT({ email: clientEmail, key: privateKey, scopes: SCOPES });
   } catch (err) {
-    console.error('❌ [GoogleSheets] Authentication client initialization error:', err.message);
+    console.error('Auth init error:', err.message);
     return null;
   }
 }
 
-/**
- * Gets Spreadsheet ID from environment
- */
 function getSpreadsheetId() {
   return (process.env.GOOGLE_SHEETS_SPREADSHEET_ID || '').trim();
 }
 
-/**
- * Ensure worksheets and headers exist in Google Spreadsheet
- */
 async function ensureWorksheetsAndHeaders(sheets, spreadsheetId) {
   try {
     const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId });
     const existingSheets = (spreadsheet.data.sheets || []).map(s => s.properties.title);
-
-    const requests = [];
-    if (!existingSheets.includes('Registrations')) {
-      requests.push({ addSheet: { properties: { title: 'Registrations' } } });
-    }
-    if (!existingSheets.includes('Players')) {
-      requests.push({ addSheet: { properties: { title: 'Players' } } });
-    }
+    const neededSheets = ['Registrations', 'Players', 'Gaming Registrations', 'Hackathon Registrations'];
+    const requests = neededSheets
+      .filter(name => !existingSheets.includes(name))
+      .map(name => ({ addSheet: { properties: { title: name } } }));
 
     if (requests.length > 0) {
-      await sheets.spreadsheets.batchUpdate({
-        spreadsheetId,
-        requestBody: { requests }
-      });
-      console.log('📄 [GoogleSheets] Created missing worksheets ("Registrations", "Players").');
+      await sheets.spreadsheets.batchUpdate({ spreadsheetId, requestBody: { requests } });
+      console.log('[GoogleSheets] Created missing worksheets.');
     }
 
-    // Verify and add header rows if missing
-    const regHeaderRes = await sheets.spreadsheets.values.get({
-      spreadsheetId,
-      range: 'Registrations!A1:W1'
-    });
+    const headerConfigs = [
+      { sheet: 'Registrations', headers: REGISTRATIONS_HEADERS },
+      { sheet: 'Players', headers: PLAYERS_HEADERS },
+      { sheet: 'Gaming Registrations', headers: GAMING_HEADERS },
+      { sheet: 'Hackathon Registrations', headers: HACKATHON_HEADERS }
+    ];
 
-    if (!regHeaderRes.data.values || regHeaderRes.data.values.length === 0) {
-      await sheets.spreadsheets.values.update({
-        spreadsheetId,
-        range: 'Registrations!A1:W1',
-        valueInputOption: 'USER_ENTERED',
-        requestBody: { values: [REGISTRATIONS_HEADERS] }
-      });
-    }
-
-    const playerHeaderRes = await sheets.spreadsheets.values.get({
-      spreadsheetId,
-      range: 'Players!A1:J1'
-    });
-
-    if (!playerHeaderRes.data.values || playerHeaderRes.data.values.length === 0) {
-      await sheets.spreadsheets.values.update({
-        spreadsheetId,
-        range: 'Players!A1:J1',
-        valueInputOption: 'USER_ENTERED',
-        requestBody: { values: [PLAYERS_HEADERS] }
-      });
-    }
-  } catch (err) {
-    console.warn('⚠️ [GoogleSheets] Worksheet header verification notice:', err.message);
-  }
-}
-
-/**
- * Check if a Registration ID already exists in Google Sheets (Idempotency)
- */
-async function findRegistrationRow(sheets, spreadsheetId, registrationId) {
-  try {
-    const res = await sheets.spreadsheets.values.get({
-      spreadsheetId,
-      range: 'Registrations!A:A'
-    });
-
-    const rows = res.data.values || [];
-    for (let i = 0; i < rows.length; i++) {
-      if (rows[i][0] === registrationId) {
-        return i + 1; // 1-based row index
+    for (const { sheet, headers } of headerConfigs) {
+      try {
+        const checkRange = sheet + '!A1:A1';
+        const res = await sheets.spreadsheets.values.get({ spreadsheetId, range: checkRange });
+        if (!res.data.values || res.data.values.length === 0) {
+          await sheets.spreadsheets.values.update({
+            spreadsheetId,
+            range: sheet + '!A1',
+            valueInputOption: 'USER_ENTERED',
+            requestBody: { values: [headers] }
+          });
+          console.log('[GoogleSheets] Headers set for: ' + sheet);
+        }
+      } catch (e) {
+        console.warn('[GoogleSheets] Header check for ' + sheet + ':', e.message);
       }
     }
+  } catch (err) {
+    console.warn('[GoogleSheets] Worksheet setup notice:', err.message);
+  }
+}
+
+async function findRowInSheet(sheets, spreadsheetId, sheetName, registrationId) {
+  try {
+    const res = await sheets.spreadsheets.values.get({ spreadsheetId, range: sheetName + '!A:A' });
+    const rows = res.data.values || [];
+    for (let i = 0; i < rows.length; i++) {
+      if (rows[i][0] === registrationId) return i + 1;
+    }
     return -1;
   } catch (err) {
-    console.warn('⚠️ [GoogleSheets] findRegistrationRow notice:', err.message);
     return -1;
   }
 }
 
-/**
- * Sync a single confirmed registration from Turso to Google Sheets
- */
-async function syncConfirmedRegistration(registrationId) {
-  if (!registrationId) {
-    return { success: false, error: 'Registration ID required.' };
+function getDateStr(reg) {
+  return reg.confirmed_at
+    ? String(reg.confirmed_at).split('T')[0]
+    : (reg.created_at ? String(reg.created_at).split('T')[0] : new Date().toISOString().split('T')[0]);
+}
+
+function buildGamingRow(reg, players) {
+  const playerCols = [];
+  for (let i = 0; i < 5; i++) {
+    const p = players[i];
+    if (p) {
+      playerCols.push(p.full_name || p.name || '', p.in_game_name || 'N/A', p.game_uid || 'N/A');
+    } else {
+      playerCols.push('', '', '');
+    }
   }
+  return [
+    reg.registration_id, getDateStr(reg), reg.game || 'BGMI',
+    reg.team_name || '', reg.college || '',
+    reg.captain_name || '', reg.captain_email || '', reg.captain_phone || '',
+    ...playerCols,
+    reg.player_count || players.length || 0,
+    reg.total_amount || reg.amount || 0,
+    reg.payment_method || 'UPI',
+    reg.payment_status || 'VERIFIED',
+    reg.utr_transaction_id || reg.razorpay_payment_id || 'N/A',
+    reg.registration_status || 'CONFIRMED',
+    String(reg.confirmed_at || reg.created_at || new Date().toISOString())
+  ];
+}
+
+function buildHackathonRow(reg, players) {
+  const memberCols = [];
+  for (let i = 1; i < 4; i++) {
+    const p = players[i];
+    if (p) {
+      memberCols.push(p.full_name || p.name || '', p.email || '', p.phone || '');
+    } else {
+      memberCols.push('', '', '');
+    }
+  }
+  return [
+    reg.registration_id, getDateStr(reg),
+    reg.team_name || '', reg.college || '',
+    reg.primary_track || 'Open Innovation',
+    reg.captain_name || '', reg.captain_email || '', reg.captain_phone || '',
+    ...memberCols,
+    reg.player_count || players.length || 0,
+    reg.total_amount || reg.amount || 0,
+    reg.payment_status || 'FREE',
+    reg.concept_brief || '', reg.portfolio_url || '',
+    reg.registration_status || 'CONFIRMED',
+    String(reg.confirmed_at || reg.created_at || new Date().toISOString())
+  ];
+}
+
+function buildLegacyRow(reg) {
+  return [
+    reg.registration_id, getDateStr(reg),
+    reg.category || (reg.game === 'HACKATHON' ? 'HACKATHON' : 'GAMING'),
+    reg.game || 'BGMI', reg.registration_type || 'Squad',
+    reg.team_name || '', reg.college || '',
+    reg.captain_name || '', reg.captain_email || '', reg.captain_phone || '',
+    reg.player_count || 0, reg.total_amount || reg.amount || 0,
+    reg.currency || 'INR', reg.payment_method || 'UPI',
+    reg.payment_status || 'VERIFIED',
+    reg.utr_transaction_id || reg.razorpay_payment_id || 'N/A',
+    reg.payment_screenshot_url ? 'Screenshot Uploaded' : 'N/A',
+    String(reg.submitted_at || ''), String(reg.verified_at || ''),
+    reg.verified_by || 'Admin', reg.registration_status || 'CONFIRMED',
+    String(reg.created_at || new Date().toISOString()),
+    String(reg.confirmed_at || new Date().toISOString())
+  ];
+}
+
+async function upsertRow(sheets, spreadsheetId, sheetName, registrationId, row) {
+  const rowIdx = await findRowInSheet(sheets, spreadsheetId, sheetName, registrationId);
+  if (rowIdx > 0) {
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range: sheetName + '!A' + rowIdx,
+      valueInputOption: 'USER_ENTERED',
+      requestBody: { values: [row] }
+    });
+    console.log('[GoogleSheets] Updated row in ' + sheetName + ' at ' + rowIdx);
+  } else {
+    await sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range: sheetName + '!A:AE',
+      valueInputOption: 'USER_ENTERED',
+      insertDataOption: 'INSERT_ROWS',
+      requestBody: { values: [row] }
+    });
+    console.log('[GoogleSheets] Appended row to ' + sheetName);
+  }
+  return rowIdx;
+}
+
+async function syncConfirmedRegistration(registrationId) {
+  if (!registrationId) return { success: false, error: 'Registration ID required.' };
 
   try {
-    // 1. Fetch confirmed registration from Turso DB
-    const regRes = await db.execute({
-      sql: 'SELECT * FROM registrations WHERE registration_id = ?',
-      args: [registrationId]
-    });
-
-    if (!regRes.rows || regRes.rows.length === 0) {
-      console.warn(`⚠️ [GoogleSheets] Registration ${registrationId} not found in Turso.`);
-      return { success: false, error: 'Registration not found in database.' };
-    }
+    const regRes = await db.execute({ sql: 'SELECT * FROM registrations WHERE registration_id = ?', args: [registrationId] });
+    if (!regRes.rows || regRes.rows.length === 0) return { success: false, error: 'Registration not found.' };
 
     const reg = regRes.rows[0];
+    if (reg.registration_status === 'CANCELLED') return { success: false, error: 'Registration is cancelled.' };
 
-    // Allow exporting all active registrations (PENDING_PAYMENT, PAYMENT_SUBMITTED, SUBMITTED, PAID, CONFIRMED)
-    if (reg.registration_status === 'CANCELLED') {
-      console.log(`ℹ️ [GoogleSheets] Skipping sync for cancelled registration ${registrationId}`);
-      return { success: false, error: 'Registration is cancelled.' };
-    }
-
-    // Fetch players roster from Turso
-    const playersRes = await db.execute({
-      sql: 'SELECT * FROM players WHERE registration_id = ? ORDER BY player_index ASC',
-      args: [registrationId]
-    });
+    const playersRes = await db.execute({ sql: 'SELECT * FROM players WHERE registration_id = ? ORDER BY player_index ASC', args: [registrationId] });
     const players = playersRes.rows || [];
 
-    // 2. Check Google Credentials
     const auth = getGoogleAuthClient();
     const spreadsheetId = getSpreadsheetId();
 
     if (!auth || !spreadsheetId) {
-      const missingReason = !spreadsheetId ? 'Missing GOOGLE_SHEETS_SPREADSHEET_ID' : 'Missing GOOGLE_SERVICE_ACCOUNT_EMAIL or GOOGLE_PRIVATE_KEY';
-      console.warn(`⚠️ [GoogleSheets] Cannot sync ${registrationId}: ${missingReason}. Registration remains CONFIRMED in Turso.`);
-      
-      await db.execute({
-        sql: 'UPDATE registrations SET google_sheets_sync_status = ?, google_sheets_sync_error = ?, updated_at = CURRENT_TIMESTAMP WHERE registration_id = ?',
-        args: ['PENDING', missingReason, registrationId]
-      });
-
-      return { success: false, error: missingReason, status: 'PENDING' };
+      const reason = !spreadsheetId ? 'Missing GOOGLE_SHEETS_SPREADSHEET_ID' : 'Missing credentials';
+      await db.execute({ sql: 'UPDATE registrations SET google_sheets_sync_status = ?, google_sheets_sync_error = ?, updated_at = CURRENT_TIMESTAMP WHERE registration_id = ?', args: ['PENDING', reason, registrationId] });
+      return { success: false, error: reason, status: 'PENDING' };
     }
 
     const sheets = google.sheets({ version: 'v4', auth });
-
-    // 3. Ensure Worksheets & Headers exist
     await ensureWorksheetsAndHeaders(sheets, spreadsheetId);
 
-    // 4. Idempotency Check: Check if registration already exists in Sheets
-    const existingRowIndex = await findRegistrationRow(sheets, spreadsheetId, registrationId);
+    const isHackathon = (reg.category === 'HACKATHON') || (reg.game === 'HACKATHON') || (!reg.category && reg.total_amount === 0);
 
-    const regDate = reg.confirmed_at 
-      ? String(reg.confirmed_at).split('T')[0] 
-      : (reg.created_at ? String(reg.created_at).split('T')[0] : new Date().toISOString().split('T')[0]);
+    // 1. Legacy Registrations sheet
+    const legacyRowIdx = await upsertRow(sheets, spreadsheetId, 'Registrations', registrationId, buildLegacyRow(reg));
 
-    const registrationRow = [
-      reg.registration_id,
-      regDate,
-      reg.category || 'Online',
-      reg.game || 'BGMI',
-      reg.registration_type || 'Squad',
-      reg.team_name || '',
-      reg.college || '',
-      reg.captain_name || '',
-      reg.captain_email || '',
-      reg.captain_phone || '',
-      reg.player_count || 4,
-      reg.total_amount || reg.amount || 200,
-      reg.currency || 'INR',
-      reg.payment_method || 'UPI',
-      reg.payment_status || 'VERIFIED',
-      reg.utr_transaction_id || reg.razorpay_payment_id || 'N/A',
-      reg.payment_screenshot_url ? 'Screenshot Uploaded' : 'N/A',
-      String(reg.submitted_at || ''),
-      String(reg.verified_at || ''),
-      reg.verified_by || 'Admin',
-      reg.registration_status || 'CONFIRMED',
-      String(reg.created_at || new Date().toISOString()),
-      String(reg.confirmed_at || new Date().toISOString())
-    ];
-
-    if (existingRowIndex > 0) {
-      console.log(`ℹ️ [GoogleSheets] Registration ${registrationId} already exists in Sheets at row ${existingRowIndex}. Updating row...`);
-      await sheets.spreadsheets.values.update({
-        spreadsheetId,
-        range: `Registrations!A${existingRowIndex}:W${existingRowIndex}`,
-        valueInputOption: 'USER_ENTERED',
-        requestBody: { values: [registrationRow] }
-      });
+    // 2. Category-specific sheet
+    if (isHackathon) {
+      await upsertRow(sheets, spreadsheetId, 'Hackathon Registrations', registrationId, buildHackathonRow(reg, players));
     } else {
-      console.log(`➕ [GoogleSheets] Appending new registration ${registrationId} to Registrations sheet...`);
-      await sheets.spreadsheets.values.append({
-        spreadsheetId,
-        range: 'Registrations!A:W',
-        valueInputOption: 'USER_ENTERED',
-        insertDataOption: 'INSERT_ROWS',
-        requestBody: { values: [registrationRow] }
-      });
-
-      // Append Players Roster if new registration
-      if (players.length > 0) {
-        const playerRows = players.map((p, idx) => [
-          registrationId,
-          `P${p.player_index || idx + 1}`,
-          p.full_name || p.name || '',
-          p.in_game_name || 'N/A',
-          p.game_uid || 'N/A',
-          p.email || reg.captain_email || '',
-          p.phone || reg.captain_phone || '',
-          p.role || (idx === 0 ? 'Captain' : 'Player'),
-          reg.game || 'BGMI',
-          String(p.created_at || new Date().toISOString())
-        ]);
-
-        await sheets.spreadsheets.values.append({
-          spreadsheetId,
-          range: 'Players!A:J',
-          valueInputOption: 'USER_ENTERED',
-          insertDataOption: 'INSERT_ROWS',
-          requestBody: { values: playerRows }
-        });
-      }
+      await upsertRow(sheets, spreadsheetId, 'Gaming Registrations', registrationId, buildGamingRow(reg, players));
     }
 
-    // 5. Update Turso DB status to SYNCED
-    await db.execute({
-      sql: 'UPDATE registrations SET google_sheets_sync_status = ?, google_sheets_synced_at = CURRENT_TIMESTAMP, google_sheets_sync_error = NULL, updated_at = CURRENT_TIMESTAMP WHERE registration_id = ?',
-      args: ['SYNCED', registrationId]
-    });
+    // 3. Players sheet (only on first sync)
+    if (players.length > 0 && legacyRowIdx <= 0) {
+      const playerRows = players.map((p, idx) => [
+        registrationId, 'P' + (p.player_index || idx + 1),
+        p.full_name || p.name || '', p.in_game_name || 'N/A', p.game_uid || 'N/A',
+        p.email || reg.captain_email || '', p.phone || reg.captain_phone || '',
+        p.role || (idx === 0 ? 'Captain' : 'Player'), reg.game || 'HACKATHON',
+        String(p.created_at || new Date().toISOString())
+      ]);
+      await sheets.spreadsheets.values.append({
+        spreadsheetId, range: 'Players!A:J',
+        valueInputOption: 'USER_ENTERED', insertDataOption: 'INSERT_ROWS',
+        requestBody: { values: playerRows }
+      });
+    }
 
-    console.log(`✅ [GoogleSheets] Registration ${registrationId} successfully synced to Google Sheets.`);
+    await db.execute({ sql: 'UPDATE registrations SET google_sheets_sync_status = ?, google_sheets_synced_at = CURRENT_TIMESTAMP, google_sheets_sync_error = NULL, updated_at = CURRENT_TIMESTAMP WHERE registration_id = ?', args: ['SYNCED', registrationId] });
+    console.log('[GoogleSheets] Synced: ' + registrationId);
     return { success: true, registrationId, status: 'SYNCED' };
 
   } catch (err) {
-    console.error(`❌ [GoogleSheets Error] Failed to sync registration ${registrationId}:`, err.message);
-
-    // Record failure in Turso DB without throwing (database remains confirmed)
+    console.error('[GoogleSheets Error]:', err.message);
     try {
-      await db.execute({
-        sql: 'UPDATE registrations SET google_sheets_sync_status = ?, google_sheets_sync_error = ?, updated_at = CURRENT_TIMESTAMP WHERE registration_id = ?',
-        args: ['FAILED', err.message, registrationId]
-      });
-    } catch (dbErr) {
-      console.warn('DB update sync error notice:', dbErr.message);
-    }
-
+      await db.execute({ sql: 'UPDATE registrations SET google_sheets_sync_status = ?, google_sheets_sync_error = ?, updated_at = CURRENT_TIMESTAMP WHERE registration_id = ?', args: ['FAILED', err.message, registrationId] });
+    } catch (e) {}
     return { success: false, error: err.message, status: 'FAILED' };
   }
 }
 
-/**
- * Retry syncing all pending or failed registrations from Turso DB to Google Sheets
- */
 async function syncAllPendingRegistrations() {
   try {
-    const pendingRes = await db.execute(`
-      SELECT registration_id FROM registrations 
-      WHERE (google_sheets_sync_status = 'PENDING' OR google_sheets_sync_status = 'FAILED' OR google_sheets_sync_status IS NULL)
-    `);
-
-    const rows = pendingRes.rows || [];
-    console.log(`🔄 [GoogleSheets Sync Retry] Found ${rows.length} registrations to sync...`);
-
+    const res = await db.execute("SELECT registration_id FROM registrations WHERE (google_sheets_sync_status = 'PENDING' OR google_sheets_sync_status = 'FAILED' OR google_sheets_sync_status IS NULL)");
+    const rows = res.rows || [];
+    console.log('[GoogleSheets] Syncing ' + rows.length + ' pending registrations...');
     const results = [];
     for (const row of rows) {
-      const res = await syncConfirmedRegistration(row.registration_id);
-      results.push({ registrationId: row.registration_id, result: res });
+      results.push({ registrationId: row.registration_id, result: await syncConfirmedRegistration(row.registration_id) });
     }
-
     return { success: true, total: rows.length, results };
   } catch (err) {
-    console.error('❌ [GoogleSheets Retry Error]:', err.message);
     return { success: false, error: err.message };
   }
 }
 
-/**
- * Harmless Diagnostic Test Endpoint Function for Google Sheets Integration
- */
 async function testGoogleSheetsConnection() {
-  const fs = require('fs');
-  const path = require('path');
-  const keyFilePath = path.join(__dirname, 'service_account.json');
-  const hasKeyFile = fs.existsSync(keyFilePath);
-
+  const fs = require('fs'), path = require('path');
+  const hasKeyFile = fs.existsSync(path.join(__dirname, 'service_account.json'));
   const clientEmail = (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '').trim();
   const rawPrivateKey = process.env.GOOGLE_PRIVATE_KEY || '';
   const spreadsheetId = getSpreadsheetId();
-
   const hasEmail = Boolean(clientEmail) || hasKeyFile;
   const hasKey = Boolean(rawPrivateKey) || hasKeyFile;
   const hasSheetId = Boolean(spreadsheetId);
 
-  console.log('🔍 [GoogleSheets Diagnostic Test]');
-  console.log(`- service_account.json present: ${hasKeyFile}`);
-  console.log(`- GOOGLE_SERVICE_ACCOUNT_EMAIL present: ${Boolean(clientEmail)} (${clientEmail || 'from service_account.json'})`);
-  console.log(`- GOOGLE_SHEETS_SPREADSHEET_ID present: ${hasSheetId} (${hasSheetId ? spreadsheetId : 'MISSING'})`);
-
   if ((!hasKeyFile && (!clientEmail || !rawPrivateKey)) || !hasSheetId) {
     const missing = [];
-    if (!hasKeyFile && !clientEmail) missing.push('GOOGLE_SERVICE_ACCOUNT_EMAIL or service_account.json');
-    if (!hasKeyFile && !rawPrivateKey) missing.push('GOOGLE_PRIVATE_KEY or service_account.json');
+    if (!hasKeyFile && !clientEmail) missing.push('GOOGLE_SERVICE_ACCOUNT_EMAIL');
+    if (!hasKeyFile && !rawPrivateKey) missing.push('GOOGLE_PRIVATE_KEY');
     if (!hasSheetId) missing.push('GOOGLE_SHEETS_SPREADSHEET_ID');
-
-    return {
-      success: false,
-      error: `Missing configuration: ${missing.join(', ')}`,
-      diagnostics: {
-        hasKeyFile,
-        hasEmail,
-        hasKey,
-      }
-    };
+    return { success: false, error: 'Missing: ' + missing.join(', '), diagnostics: { hasKeyFile, hasEmail, hasKey } };
   }
 
   const auth = getGoogleAuthClient();
-  if (!auth) {
-    return {
-      success: false,
-      error: 'Failed to instantiate Google Service Account JWT Auth client.',
-      diagnostics: { hasEmail, hasKey, hasSheetId }
-    };
-  }
+  if (!auth) return { success: false, error: 'Failed to create auth client.', diagnostics: { hasEmail, hasKey, hasSheetId } };
 
   try {
     const sheets = google.sheets({ version: 'v4', auth });
-
-    // Harmless metadata fetch (read-only)
     const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId });
     const sheetTitles = (spreadsheet.data.sheets || []).map(s => s.properties.title);
-    const spreadsheetTitle = spreadsheet.data.properties ? spreadsheet.data.properties.title : 'Untitled';
-
-    console.log(`✅ [GoogleSheets Diagnostic Success] Spreadsheet "${spreadsheetTitle}" accessible! Worksheets:`, sheetTitles);
-
-    const hasRegistrations = sheetTitles.includes('Registrations');
-    const hasPlayers = sheetTitles.includes('Players');
-
-    // Also auto-ensure headers exist without adding fake data
+    const title = spreadsheet.data.properties ? spreadsheet.data.properties.title : 'Untitled';
     await ensureWorksheetsAndHeaders(sheets, spreadsheetId);
-
     return {
-      success: true,
-      googleSheets: 'connected',
-      spreadsheet: 'accessible',
-      spreadsheetTitle,
-      worksheet: hasRegistrations ? 'Registrations' : 'missing',
-      worksheets: sheetTitles,
-      hasRegistrations,
-      hasPlayers
+      success: true, googleSheets: 'connected', spreadsheetTitle: title, worksheets: sheetTitles,
+      hasRegistrations: sheetTitles.includes('Registrations'),
+      hasPlayers: sheetTitles.includes('Players'),
+      hasGamingSheet: sheetTitles.includes('Gaming Registrations'),
+      hasHackathonSheet: sheetTitles.includes('Hackathon Registrations')
     };
   } catch (err) {
-    console.error('❌ [GoogleSheets Diagnostic Error]:', err.message);
-
-    let cleanMessage = err.message || 'Google API connection error';
-    if (err.response && err.response.data && err.response.data.error) {
-      const gErr = err.response.data.error;
-      cleanMessage = gErr.message || cleanMessage;
-    }
-
-    return {
-      success: false,
-      error: `Google Sheets Connection Error: ${cleanMessage}`,
-      diagnostics: {
-        hasEmail,
-        hasKey,
-        hasSheetId
-      }
-    };
+    return { success: false, error: 'Google Sheets Error: ' + err.message, diagnostics: { hasEmail, hasKey, hasSheetId } };
   }
 }
 
-module.exports = {
-  getGoogleAuthClient,
-  getSpreadsheetId,
-  syncConfirmedRegistration,
-  syncAllPendingRegistrations,
-  testGoogleSheetsConnection
-};
-
+module.exports = { getGoogleAuthClient, getSpreadsheetId, syncConfirmedRegistration, syncAllPendingRegistrations, testGoogleSheetsConnection };

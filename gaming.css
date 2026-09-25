@@ -17,7 +17,10 @@
   --gaming-border: rgba(255, 255, 255, 0.12);
 }
 
-/* --- GLOBAL FULL-PAGE CONTINUOUS MINECRAFT BACKGROUND LAYER --- */
+/* --- GLOBAL FULL-PAGE CONTINUOUS MINECRAFT BACKGROUND LAYER ---
+   GPU-composited via position:fixed + transform:translateZ(0)
+   Zero scroll repaints, zero lag on any device
+   ------------------------------------------------------------ */
 html {
   background-color: var(--bg-deep) !important;
 }
@@ -29,16 +32,20 @@ body.smooth-scroll-body {
   background-color: transparent !important;
 }
 
+/* Fixed-position background = GPU layer, never repaints on scroll */
 .global-page-bg {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  max-width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 0;
   pointer-events: none;
   overflow: hidden;
+  /* GPU compositing hint */
+  transform: translateZ(0);
+  will-change: auto; /* Avoid over-compositing */
+  backface-visibility: hidden;
 }
 
 .bg-tall-img {
@@ -47,6 +54,10 @@ body.smooth-scroll-body {
   object-fit: cover;
   object-position: center top;
   display: block;
+  /* GPU decode hint */
+  image-rendering: auto;
+  transform: translateZ(0);
+  will-change: auto;
 }
 
 .global-bg-overlay {
@@ -58,7 +69,7 @@ body.smooth-scroll-body {
     rgba(8, 8, 13, 0.25) 50%, 
     rgba(8, 8, 13, 0.2) 80%, 
     rgba(8, 8, 13, 0.6) 100%);
-  z-index: 2;
+  z-index: 1;
 }
 
 /* Elevate WebGL 3D moving voxel canvas right above wallpaper background layer */
@@ -70,6 +81,7 @@ body.smooth-scroll-body {
   z-index: 2 !important;
   opacity: 0.95 !important;
   pointer-events: none !important;
+  transform: translateZ(0);
 }
 
 /* Elevate all interactive page sections above background layer */
@@ -77,10 +89,13 @@ body.smooth-scroll-body {
 .gaming-hero,
 .game-showcase-section,
 #tournament,
+#rules,
 #faq,
 footer {
   position: relative;
   z-index: 10;
+  /* Isolate stacking context to avoid GPU overdraw */
+  isolation: isolate;
 }
 
 /* --- 2. HERO & ARENA HIGHLIGHTS --- */

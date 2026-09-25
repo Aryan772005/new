@@ -425,8 +425,13 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
 
       console.log(`📝 [Gaming Registration Created in Turso] Reg ID: ${registrationId} (${eventConfig.name}) Total: ₹${totalAmount} - AUTO CONFIRMED`);
 
-      // Trigger Confirmation Email asynchronously
+      // Trigger Google Sheets Sync & Confirmation Email asynchronously
       setImmediate(async () => {
+        try {
+          await googleSheetsService.syncConfirmedRegistration(registrationId);
+        } catch (gsErr) {
+          console.warn('⚠️ [Google Sheets Sync Notice]:', gsErr.message);
+        }
         try {
           await emailService.sendRegistrationConfirmation(registrationId);
         } catch (emErr) {

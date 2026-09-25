@@ -686,17 +686,21 @@ function initHero3DCameraDive() {
   }
 
   // Stage 3: Background Portal Zooms in Smoothly (0.00 -> 0.70)
+  // On mobile: transform-only (GPU layer stays intact, zero lag)
+  // On desktop: allow subtle filter for cinematic depth
   pinTimeline
     .to(heroBgLayer, {
-      scale: isTouchOrMobile ? 1.3 : 1.65,
-      y: isTouchOrMobile ? 10 : 20,
-      filter: 'brightness(1.15) contrast(1.08)',
-      ease: 'none'
+      scale: isTouchOrMobile ? 1.2 : 1.55,
+      y: isTouchOrMobile ? 8 : 18,
+      ...(isTouchOrMobile ? {} : { filter: 'brightness(1.1) contrast(1.05)' }),
+      ease: 'none',
+      force3D: true
     }, 0)
     .to(heroGlow, {
-      scale: 2.2,
+      scale: 2.0,
       opacity: 1,
-      ease: 'none'
+      ease: 'none',
+      force3D: true
     }, 0);
 
   if (heroVortex) {

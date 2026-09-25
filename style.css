@@ -923,22 +923,25 @@ a {
   inset: 0;
   width: 100%;
   height: 100%;
-  background-image: url('assets/images/hero_dribbble_portal.jpg');
-  background-size: cover;
-  background-position: 55% 82%;
-  background-repeat: no-repeat;
-  transform-origin: 62% 65%; /* Centers directly on Steve, the wolf, and the Obsidian Portal */
-  will-change: transform, filter;
-  transform: scale(1);
+  /* GPU composited layer: background served by <img> tag below */
+  background: #0d0d15;
+  transform-origin: 62% 65%;
+  /* Force GPU compositing for smooth GSAP parallax */
+  transform: translateZ(0) scale(1);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .hero-bg-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 55% 82%; /* Anchors to the bottom so Steve, wolf, and portal are fully visible! */
+  object-position: 55% 82%;
   filter: brightness(1.05) contrast(1.06);
   display: block;
+  /* GPU compositing to match parent layer */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .hero-portal-glow-layer {
