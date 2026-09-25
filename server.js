@@ -513,6 +513,9 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
 
   } catch (error) {
     console.error('Server error in /api/registrations/create:', error);
+    if (error.message && error.message.includes('UNIQUE constraint failed')) {
+      return res.status(400).json({ success: false, error: 'This Team Name or Captain Email is already registered. Please use a different one.' });
+    }
     res.status(500).json({ success: false, error: 'Internal server error while creating registration.' });
   }
 });

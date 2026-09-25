@@ -12,7 +12,7 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{--bg:#080b14;--surface:#0e1220;--surface2:#141826;--border:rgba(255,255,255,0.08);--purple:#8b5cf6;--purple-dark:#6d28d9;--cyan:#06b6d4;--green:#10b981;--gold:#f59e0b;--red:#ef4444;--text:#f1f5f9;--text-muted:#94a3b8;--text-dim:#64748b;--radius:14px;--radius-sm:8px}
     html{scroll-behavior:smooth}
-    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+    body{font-family:'Space Grotesk',sans-serif;font-weight:500;background:linear-gradient(rgba(8,11,20,0.2), rgba(8,11,20,0.2)), url('assets/images/minecraft_background.jpg') center/cover fixed, var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;text-shadow:0 1px 3px rgba(0,0,0,0.9)}
     body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(139,92,246,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
     .header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,11,20,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
     .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
@@ -25,7 +25,7 @@
     .header-nav .gaming-link{color:var(--gold)}
     .main{position:relative;z-index:1;padding-top:80px;min-height:100vh}
     .page-hero{text-align:center;padding:40px 20px 30px}
-    .page-hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,5vw,2.8rem);font-weight:800;background:linear-gradient(135deg,#c4b5fd 0%,#06b6d4 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px}
+    .page-hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,5vw,2.8rem);font-weight:800;background:linear-gradient(135deg,#fde047 0%,#f59e0b 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:10px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.6))}
     .page-hero p{color:var(--text-muted);font-size:1rem;max-width:500px;margin:0 auto}
     .progress-wrap{padding:0 20px 30px;max-width:600px;margin:0 auto}
     .progress-steps{display:flex;align-items:center}
@@ -50,8 +50,8 @@
     .event-card.selected{border-color:var(--green);background:rgba(16,185,129,.08);box-shadow:0 0 0 1px var(--green),0 12px 30px rgba(16,185,129,.2)}
     .event-card.selected .check-icon{display:flex}
     .check-icon{position:absolute;top:12px;right:12px;width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;font-size:.7rem;display:none;align-items:center;justify-content:center}
-    .card-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
-    .card-icon{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+    .card-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
+    .card-icon{width:110px;height:110px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;box-shadow:0 6px 16px rgba(0,0,0,0.4)}
     .card-name{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:var(--text);line-height:1.3}
     .card-desc{font-size:.8rem;color:var(--text-muted);margin-top:4px;line-height:1.4}
     .card-prize{margin:14px 0;padding:10px 14px;border-radius:8px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);display:flex;align-items:center;justify-content:space-between}
@@ -378,13 +378,13 @@
     var CATALOGUE = Object.assign({}, DEFAULT_CATALOGUE);
     var STATE = { selectedEventId:null, teamName:'', college:'', captain:{name:'',email:'',phone:''}, participants:[] };
     var EMETA = {
-      HACKATHON:      { icon:'&#128187;', color:'#a78bfa', bg:'rgba(139,92,246,.12)', prize:'&#8377;1,50,000+' },
-      BGMI:           { icon:'&#128299;', color:'#f97316', bg:'rgba(249,115,22,.12)',  prize:'&#8377;50,000' },
-      FREE_FIRE:      { icon:'&#128293;', color:'#ef4444', bg:'rgba(239,68,68,.12)',   prize:'&#8377;30,000' },
-      MOBILE_LEGENDS: { icon:'&#9876;',  color:'#06b6d4', bg:'rgba(6,182,212,.12)',   prize:'&#8377;25,000' },
-      LUDO:           { icon:'&#127922;', color:'#8b5cf6', bg:'rgba(139,92,246,.12)', prize:'&#8377;10,000' },
-      CHESS:          { icon:'&#9823;',  color:'#94a3b8', bg:'rgba(100,116,139,.12)', prize:'&#8377;10,000' },
-      CARROM:         { icon:'&#127919;', color:'#f59e0b', bg:'rgba(245,158,11,.12)', prize:'&#8377;10,000' }
+      HACKATHON:      { icon:'<img src="assets/images/hero_dribbble_portal.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:10px">', color:'#a78bfa', bg:'rgba(139,92,246,.12)', prize:'&#8377;1,50,000+' },
+      BGMI:           { icon:'<img src="assets/images/games/bgmi_banner.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:10px">', color:'#f97316', bg:'rgba(249,115,22,.12)',  prize:'&#8377;50,000' },
+      FREE_FIRE:      { icon:'<img src="assets/images/games/freefire_banner.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:10px">', color:'#ef4444', bg:'rgba(239,68,68,.12)',   prize:'&#8377;30,000' },
+      MOBILE_LEGENDS: { icon:'<img src="assets/images/games/mlbb_banner.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:10px">',  color:'#06b6d4', bg:'rgba(6,182,212,.12)',   prize:'&#8377;25,000' },
+      LUDO:           { icon:'<img src="assets/images/games/ludo_banner.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:10px">', color:'#8b5cf6', bg:'rgba(139,92,246,.12)', prize:'&#8377;10,000' },
+      CHESS:          { icon:'<img src="assets/images/games/chess_banner.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:10px">',  color:'#94a3b8', bg:'rgba(100,116,139,.12)', prize:'&#8377;10,000' },
+      CARROM:         { icon:'<img src="assets/images/games/carrom_banner.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:10px">', color:'#f59e0b', bg:'rgba(245,158,11,.12)', prize:'&#8377;10,000' }
     };
 
     function goToStep(n) {
