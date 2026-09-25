@@ -336,14 +336,15 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
       await db.batch([
         {
           sql: `INSERT INTO registrations (
-            registration_id, category, game, registration_type, team_name,
+            registration_id, pass_id, category, game, registration_type, team_name,
             college, captain_name, captain_email, captain_phone, player_count,
             total_amount, amount, fee_per_person, currency, payment_method, payment_status, registration_status,
             primary_track, portfolio_url, concept_brief,
             confirmed_at, created_at, updated_at
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 'INR', 'FREE', 'VERIFIED', 'CONFIRMED', ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 'INR', 'FREE', 'VERIFIED', 'CONFIRMED', ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
           args: [
             registrationId,
+            registrationId, // Satisfy NOT NULL constraint
             eventConfig.category || 'HACKATHON',
             eventConfig.id,
             regType,
@@ -417,13 +418,14 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
       await db.batch([
         {
           sql: `INSERT INTO registrations (
-            registration_id, category, game, registration_type, team_name,
+            registration_id, pass_id, category, game, registration_type, team_name,
             college, captain_name, captain_email, captain_phone, player_count,
             total_amount, amount, fee_per_person, currency, payment_method, payment_status, registration_status,
             utr_transaction_id, created_at, updated_at, confirmed_at
           ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'INR', 'UPI', 'VERIFIED', 'CONFIRMED', ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
           args: [
             registrationId,
+            registrationId, // pass_id equals registration_id to satisfy NOT NULL constraint
             eventConfig.category || 'GAMING',
             eventConfig.id,
             regType,
