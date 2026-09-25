@@ -347,25 +347,17 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
 
       console.log(`✅ [Flagship Hackathon Registration Created] Reg ID: ${registrationId} (${eventConfig.name}) - CONFIRMED`);
 
-      // Synchronously await Google Sheets Sync (resilient for Vercel serverless)
+      // Run Google Sheets Sync & Email concurrently (resilient for Vercel serverless)
       try {
         await Promise.race([
-          googleSheetsService.syncConfirmedRegistration(registrationId),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('Google Sheets sync timed out after 5s')), 5000))
+          Promise.allSettled([
+            googleSheetsService.syncConfirmedRegistration(registrationId),
+            emailService.sendRegistrationConfirmation(registrationId)
+          ]),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Background tasks timed out after 7s')), 7000))
         ]);
-        console.log(`✅ [Google Sheets Sync Completed] for Hackathon Reg ID: ${registrationId}`);
-      } catch (gsErr) {
-        console.warn('⚠️ [Google Sheets Sync Notice]:', gsErr.message);
-      }
-
-      // Send confirmation email
-      try {
-        await Promise.race([
-          emailService.sendRegistrationConfirmation(registrationId),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('Email send timed out after 4s')), 4000))
-        ]);
-      } catch (emErr) {
-        console.warn('⚠️ [Email Notice] Failed to send hackathon confirmation email:', emErr.message);
+      } catch (err) {
+        console.warn('⚠️ [Background Tasks Notice]:', err.message);
       }
 
       return res.json({
@@ -436,25 +428,17 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
 
       console.log(`📝 [Gaming Registration Created in Turso] Reg ID: ${registrationId} (${eventConfig.name}) Total: ₹${totalAmount} - AUTO CONFIRMED`);
 
-      // Synchronously await Google Sheets Sync (resilient for Vercel serverless)
+      // Run Google Sheets Sync & Email concurrently (resilient for Vercel serverless)
       try {
         await Promise.race([
-          googleSheetsService.syncConfirmedRegistration(registrationId),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('Google Sheets sync timed out after 5s')), 5000))
+          Promise.allSettled([
+            googleSheetsService.syncConfirmedRegistration(registrationId),
+            emailService.sendRegistrationConfirmation(registrationId)
+          ]),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Background tasks timed out after 7s')), 7000))
         ]);
-        console.log(`✅ [Google Sheets Sync Completed] for Gaming Reg ID: ${registrationId}`);
-      } catch (gsErr) {
-        console.warn('⚠️ [Google Sheets Sync Notice]:', gsErr.message);
-      }
-
-      // Send confirmation email
-      try {
-        await Promise.race([
-          emailService.sendRegistrationConfirmation(registrationId),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('Email send timed out after 4s')), 4000))
-        ]);
-      } catch (emErr) {
-        console.warn('⚠️ [Email Notice] Failed to send gaming confirmation email:', emErr.message);
+      } catch (err) {
+        console.warn('⚠️ [Background Tasks Notice]:', err.message);
       }
 
       return res.json({
@@ -791,15 +775,18 @@ app.post(['/api/payments/verify', '/api/payment/verify'], async (req, res) => {
 
     console.log(`✅ Registration CONFIRMED & Inserted into Turso DB [${finalRegistrationId}] Payment ID: ${finalPaymentId}`);
 
-    // Trigger Google Sheets Sync & Confirmation Email asynchronously
-    setImmediate(async () => {
-      try {
-        await googleSheetsService.syncConfirmedRegistration(finalRegistrationId);
-      } catch (gsErr) {
-        console.warn('⚠️ [GoogleSheets Sync Trigger Notice]:', gsErr.message);
-      }
-      emailService.sendRegistrationConfirmation(finalRegistrationId);
-    });
+    // Synchronously await Google Sheets Sync & Confirmation Email concurrently
+    try {
+      await Promise.race([
+        Promise.allSettled([
+          googleSheetsService.syncConfirmedRegistration(finalRegistrationId),
+          emailService.sendRegistrationConfirmation(finalRegistrationId)
+        ]),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Background tasks timed out after 7s')), 7000))
+      ]);
+    } catch (err) {
+      console.warn('⚠️ [Background Tasks Notice]:', err.message);
+    }
 
     res.json({
       success: true,
@@ -915,19 +902,18 @@ app.post('/api/payments/submit-proof', async (req, res) => {
 
     console.log(`📥 [UPI Payment Proof Submitted] Reg ID: ${registrationId}, UTR: ${cleanUtr}`);
 
-    // Send immediate email to user and sync row to Google Sheets in background
-    setImmediate(async () => {
-      try {
-        await googleSheetsService.syncConfirmedRegistration(registrationId);
-      } catch (gsErr) {
-        console.warn('⚠️ [Google Sheets Sync Notice]:', gsErr.message);
-      }
-      try {
-        await emailService.sendPaymentProofSubmittedEmail(registrationId);
-      } catch (emErr) {
-        console.warn('⚠️ [Email Notice] Failed to send payment submitted email:', emErr.message);
-      }
-    });
+    // Synchronously await Google Sheets Sync & Confirmation Email concurrently
+    try {
+      await Promise.race([
+        Promise.allSettled([
+          googleSheetsService.syncConfirmedRegistration(registrationId),
+          emailService.sendPaymentProofSubmittedEmail(registrationId)
+        ]),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Background tasks timed out after 7s')), 7000))
+      ]);
+    } catch (err) {
+      console.warn('⚠️ [Background Tasks Notice]:', err.message);
+    }
 
     return res.json({
       success: true,
@@ -1003,19 +989,18 @@ app.post('/api/admin/verify-payment', async (req, res) => {
 
       console.log(`✅ [ADMIN VERIFIED PAYMENT] Registration ${registrationId} verified by ${verifier}.`);
 
-      // 2. Trigger Google Sheets Sync & Confirmation Email asynchronously
-      setImmediate(async () => {
-        try {
-          await googleSheetsService.syncConfirmedRegistration(registrationId);
-        } catch (gsErr) {
-          console.warn('⚠️ [GoogleSheets Sync Trigger Notice]:', gsErr.message);
-        }
-        try {
-          await emailService.sendRegistrationConfirmation(registrationId);
-        } catch (emErr) {
-          console.warn('⚠️ [Email Send Notice]:', emErr.message);
-        }
-      });
+      // Synchronously await Google Sheets Sync & Confirmation Email concurrently
+      try {
+        await Promise.race([
+          Promise.allSettled([
+            googleSheetsService.syncConfirmedRegistration(registrationId),
+            emailService.sendRegistrationConfirmation(registrationId)
+          ]),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Background tasks timed out after 7s')), 7000))
+        ]);
+      } catch (err) {
+        console.warn('⚠️ [Background Tasks Notice]:', err.message);
+      }
 
       return res.json({
         success: true,
@@ -1139,9 +1124,17 @@ app.post('/api/webhooks/razorpay', async (req, res) => {
 
           console.log(`✅ Webhook: Confirmed Registration ${reg.registration_id}`);
 
-          setImmediate(() => {
-            emailService.sendRegistrationConfirmation(reg.registration_id);
-          });
+          try {
+            await Promise.race([
+              Promise.allSettled([
+                googleSheetsService.syncConfirmedRegistration(reg.registration_id),
+                emailService.sendRegistrationConfirmation(reg.registration_id)
+              ]),
+              new Promise((_, reject) => setTimeout(() => reject(new Error('Background tasks timed out after 7s')), 7000))
+            ]);
+          } catch (err) {
+            console.warn('⚠️ [Background Tasks Notice]:', err.message);
+          }
         }
       }
     }
