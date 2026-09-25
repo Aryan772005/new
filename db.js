@@ -71,14 +71,13 @@ setInterval(probeRemoteTurso, 120000).unref();
  */
 const db = {
   async execute(stmt) {
-    if (isVercel && remoteDb) {
+    if (isVercel) {
+      if (!remoteDb) throw new Error("CRITICAL VERCEL CONFIG ERROR: TURSO_DATABASE_URL or TURSO_AUTH_TOKEN is missing in Vercel Environment Variables. Cannot save data.");
       try {
-        const remoteResult = await remoteDb.execute(stmt);
-        localDb.execute(stmt).catch(() => {});
-        return remoteResult;
+        return await remoteDb.execute(stmt);
       } catch (err) {
-        console.warn('⚠️ [Turso Vercel Execute Fallback to local]:', err.message);
-        return await localDb.execute(stmt);
+        console.error('⚠️ [Turso Vercel Execute FAILED - Will NOT fallback to /tmp]:', err.message);
+        throw err;
       }
     }
 
@@ -95,14 +94,13 @@ const db = {
   },
 
   async batch(stmts, mode = 'deferred') {
-    if (isVercel && remoteDb) {
+    if (isVercel) {
+      if (!remoteDb) throw new Error("CRITICAL VERCEL CONFIG ERROR: TURSO_DATABASE_URL or TURSO_AUTH_TOKEN is missing in Vercel Environment Variables. Cannot save data.");
       try {
-        const remoteResult = await remoteDb.batch(stmts, mode);
-        localDb.batch(stmts, mode).catch(() => {});
-        return remoteResult;
+        return await remoteDb.batch(stmts, mode);
       } catch (err) {
-        console.warn('⚠️ [Turso Vercel Batch Fallback to local]:', err.message);
-        return await localDb.batch(stmts, mode);
+        console.error('⚠️ [Turso Vercel Batch FAILED - Will NOT fallback to /tmp]:', err.message);
+        throw err;
       }
     }
 
@@ -119,11 +117,13 @@ const db = {
   },
 
   async transaction(mode = 'write') {
-    if (isVercel && remoteDb) {
+    if (isVercel) {
+      if (!remoteDb) throw new Error("CRITICAL VERCEL CONFIG ERROR: TURSO_DATABASE_URL or TURSO_AUTH_TOKEN is missing in Vercel Environment Variables. Cannot save data.");
       try {
         return await remoteDb.transaction(mode);
       } catch (err) {
-        console.warn('⚠️ [Turso Transaction Fallback]:', err.message);
+        console.error('⚠️ [Turso Vercel Transaction FAILED]:', err.message);
+        throw err;
       }
     }
     return await localDb.transaction(mode);
