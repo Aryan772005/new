@@ -1712,7 +1712,7 @@ function initRegistrationModal() {
       }
 
       const abortController = new AbortController();
-      const timeoutId = setTimeout(() => abortController.abort(), 12000);
+      const timeoutId = setTimeout(() => abortController.abort(), 30000);
 
       try {
         const response = await fetch('/api/register', {

@@ -305,8 +305,9 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
             registration_id, category, game, registration_type, team_name,
             college, captain_name, captain_email, captain_phone, player_count,
             total_amount, amount, fee_per_person, currency, payment_method, payment_status, registration_status,
+            primary_track, portfolio_url, concept_brief,
             confirmed_at, created_at, updated_at
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 'INR', 'FREE', 'VERIFIED', 'CONFIRMED', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 'INR', 'FREE', 'VERIFIED', 'CONFIRMED', ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
           args: [
             registrationId,
             eventConfig.category || 'HACKATHON',
@@ -317,7 +318,10 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
             cleanCaptain.name,
             cleanCaptain.email,
             cleanCaptain.phone,
-            providedPlayers.length
+            providedPlayers.length,
+            body.primary_track || body.primaryTrack || null,
+            body.portfolio_url || body.portfolioUrl || null,
+            body.concept_brief || body.conceptBrief || null
           ]
         }
       ]);
@@ -329,10 +333,10 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
         args: [
           registrationId,
           idx + 1,
-          (player.name || cleanCaptain.name).trim(),
-          (player.name || cleanCaptain.name).trim(),
-          (player.inGameName || player.ign || 'N/A').trim(),
-          (player.gameUid || player.uid || 'N/A').trim(),
+          (player.full_name || player.name || cleanCaptain.name).trim(),
+          (player.full_name || player.name || cleanCaptain.name).trim(),
+          (player.in_game_name || player.inGameName || player.ign || 'N/A').trim(),
+          (player.game_uid || player.gameUid || player.uid || 'N/A').trim(),
           (player.email || cleanCaptain.email).trim(),
           (player.phone || cleanCaptain.phone).trim(),
           idx === 0 ? 'CAPTAIN' : `BUILDER_${idx + 1}`
@@ -418,10 +422,10 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
         args: [
           registrationId,
           idx + 1,
-          (player.name || cleanCaptain.name).trim(),
-          (player.name || cleanCaptain.name).trim(),
-          (player.inGameName || player.ign || 'N/A').trim(),
-          (player.gameUid || player.uid || 'N/A').trim(),
+          (player.full_name || player.name || cleanCaptain.name).trim(),
+          (player.full_name || player.name || cleanCaptain.name).trim(),
+          (player.in_game_name || player.inGameName || player.ign || 'N/A').trim(),
+          (player.game_uid || player.gameUid || player.uid || 'N/A').trim(),
           (player.email || cleanCaptain.email).trim(),
           (player.phone || cleanCaptain.phone).trim(),
           idx === 0 ? 'CAPTAIN' : `PLAYER_${idx + 1}`
@@ -773,10 +777,10 @@ app.post(['/api/payments/verify', '/api/payment/verify'], async (req, res) => {
       args: [
         finalRegistrationId,
         idx + 1,
-        (player.name || captain.name).trim(),
-        (player.name || captain.name).trim(),
-        (player.inGameName || player.ign || 'N/A').trim(),
-        (player.gameUid || player.uid || 'N/A').trim(),
+        (player.full_name || player.name || captain.name).trim(),
+        (player.full_name || player.name || captain.name).trim(),
+        (player.in_game_name || player.inGameName || player.ign || 'N/A').trim(),
+        (player.game_uid || player.gameUid || player.uid || 'N/A').trim(),
         (player.email || captain.email).trim(),
         (player.phone || captain.phone).trim(),
         idx === 0 ? 'CAPTAIN' : `PLAYER_${idx + 1}`
