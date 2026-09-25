@@ -1,4 +1,4 @@
-﻿const { google } = require('googleapis');
+const { google } = require('googleapis');
 const { db } = require('./db');
 require('dotenv').config();
 
@@ -50,6 +50,31 @@ function getGoogleAuthClient() {
       console.warn('Warning loading service_account.json:', err.message);
     }
   }
+
+  // 1. Check if full JSON credentials are provided as raw JSON or base64 in environment variables
+  const rawKeyJson = (process.env.GOOGLE_SERVICE_ACCOUNT_KEY || process.env.GOOGLE_CREDENTIALS || '').trim();
+  if (rawKeyJson) {
+    try {
+      let parsed;
+      if (rawKeyJson.startsWith('{')) {
+        parsed = JSON.parse(rawKeyJson);
+      } else {
+        const decoded = Buffer.from(rawKeyJson, 'base64').toString('utf8');
+        parsed = JSON.parse(decoded);
+      }
+      if (parsed.client_email && parsed.private_key) {
+        return new google.auth.JWT({
+          email: parsed.client_email,
+          key: parsed.private_key.replace(/\\n/g, '\n'),
+          scopes: SCOPES
+        });
+      }
+    } catch (e) {
+      console.error('Error parsing GOOGLE_SERVICE_ACCOUNT_KEY:', e.message);
+    }
+  }
+
+  // 2. Check individual environment variables
   const clientEmail = (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '').trim();
   let privateKey = process.env.GOOGLE_PRIVATE_KEY || '';
   if (!clientEmail || !privateKey) return null;
@@ -304,23 +329,25 @@ async function syncAllPendingRegistrations() {
 async function testGoogleSheetsConnection() {
   const fs = require('fs'), path = require('path');
   const hasKeyFile = fs.existsSync(path.join(__dirname, 'service_account.json'));
+  const rawKeyJson = (process.env.GOOGLE_SERVICE_ACCOUNT_KEY || process.env.GOOGLE_CREDENTIALS || '').trim();
+  const hasEnvJson = Boolean(rawKeyJson);
   const clientEmail = (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '').trim();
   const rawPrivateKey = process.env.GOOGLE_PRIVATE_KEY || '';
   const spreadsheetId = getSpreadsheetId();
-  const hasEmail = Boolean(clientEmail) || hasKeyFile;
-  const hasKey = Boolean(rawPrivateKey) || hasKeyFile;
+  const hasEmail = Boolean(clientEmail) || hasKeyFile || hasEnvJson;
+  const hasKey = Boolean(rawPrivateKey) || hasKeyFile || hasEnvJson;
   const hasSheetId = Boolean(spreadsheetId);
 
-  if ((!hasKeyFile && (!clientEmail || !rawPrivateKey)) || !hasSheetId) {
+  if ((!hasKeyFile && !hasEnvJson && (!clientEmail || !rawPrivateKey)) || !hasSheetId) {
     const missing = [];
-    if (!hasKeyFile && !clientEmail) missing.push('GOOGLE_SERVICE_ACCOUNT_EMAIL');
-    if (!hasKeyFile && !rawPrivateKey) missing.push('GOOGLE_PRIVATE_KEY');
+    if (!hasKeyFile && !hasEnvJson && !clientEmail) missing.push('GOOGLE_SERVICE_ACCOUNT_EMAIL (or GOOGLE_SERVICE_ACCOUNT_KEY)');
+    if (!hasKeyFile && !hasEnvJson && !rawPrivateKey) missing.push('GOOGLE_PRIVATE_KEY (or GOOGLE_SERVICE_ACCOUNT_KEY)');
     if (!hasSheetId) missing.push('GOOGLE_SHEETS_SPREADSHEET_ID');
-    return { success: false, error: 'Missing: ' + missing.join(', '), diagnostics: { hasKeyFile, hasEmail, hasKey } };
+    return { success: false, error: 'Missing: ' + missing.join(', '), diagnostics: { hasKeyFile, hasEnvJson, hasEmail, hasKey } };
   }
 
   const auth = getGoogleAuthClient();
-  if (!auth) return { success: false, error: 'Failed to create auth client.', diagnostics: { hasEmail, hasKey, hasSheetId } };
+  if (!auth) return { success: false, error: 'Failed to create auth client.', diagnostics: { hasKeyFile, hasEnvJson, hasEmail, hasKey, hasSheetId } };
 
   try {
     const sheets = google.sheets({ version: 'v4', auth });

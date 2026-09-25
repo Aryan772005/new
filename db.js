@@ -71,12 +71,22 @@ setInterval(probeRemoteTurso, 120000).unref();
  */
 const db = {
   async execute(stmt) {
+    if (isVercel && remoteDb) {
+      try {
+        const remoteResult = await remoteDb.execute(stmt);
+        localDb.execute(stmt).catch(() => {});
+        return remoteResult;
+      } catch (err) {
+        console.warn('⚠️ [Turso Vercel Execute Fallback to local]:', err.message);
+        return await localDb.execute(stmt);
+      }
+    }
+
     const localResult = await localDb.execute(stmt);
 
     // Asynchronous background mirror to Turso if online
     if (isRemoteOnline && remoteDb) {
       remoteDb.execute(stmt).catch((err) => {
-        // Quietly handle remote mirror failure without impacting local operations
         isRemoteOnline = false;
       });
     }
@@ -85,6 +95,17 @@ const db = {
   },
 
   async batch(stmts, mode = 'deferred') {
+    if (isVercel && remoteDb) {
+      try {
+        const remoteResult = await remoteDb.batch(stmts, mode);
+        localDb.batch(stmts, mode).catch(() => {});
+        return remoteResult;
+      } catch (err) {
+        console.warn('⚠️ [Turso Vercel Batch Fallback to local]:', err.message);
+        return await localDb.batch(stmts, mode);
+      }
+    }
+
     const localResult = await localDb.batch(stmts, mode);
 
     // Asynchronous background mirror to Turso if online
@@ -98,6 +119,13 @@ const db = {
   },
 
   async transaction(mode = 'write') {
+    if (isVercel && remoteDb) {
+      try {
+        return await remoteDb.transaction(mode);
+      } catch (err) {
+        console.warn('⚠️ [Turso Transaction Fallback]:', err.message);
+      }
+    }
     return await localDb.transaction(mode);
   }
 };

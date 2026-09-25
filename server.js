@@ -343,19 +343,26 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
 
       console.log(`✅ [Flagship Hackathon Registration Created] Reg ID: ${registrationId} (${eventConfig.name}) - CONFIRMED`);
 
-      // Trigger Google Sheets Sync & Confirmation Email asynchronously
-      setImmediate(async () => {
-        try {
-          await googleSheetsService.syncConfirmedRegistration(registrationId);
-        } catch (gsErr) {
-          console.warn('⚠️ [Google Sheets Sync Notice]:', gsErr.message);
-        }
-        try {
-          await emailService.sendRegistrationConfirmation(registrationId);
-        } catch (emErr) {
-          console.warn('⚠️ [Email Notice] Failed to send hackathon confirmation email:', emErr.message);
-        }
-      });
+      // Synchronously await Google Sheets Sync (resilient for Vercel serverless)
+      try {
+        await Promise.race([
+          googleSheetsService.syncConfirmedRegistration(registrationId),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Google Sheets sync timed out after 5s')), 5000))
+        ]);
+        console.log(`✅ [Google Sheets Sync Completed] for Hackathon Reg ID: ${registrationId}`);
+      } catch (gsErr) {
+        console.warn('⚠️ [Google Sheets Sync Notice]:', gsErr.message);
+      }
+
+      // Send confirmation email
+      try {
+        await Promise.race([
+          emailService.sendRegistrationConfirmation(registrationId),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Email send timed out after 4s')), 4000))
+        ]);
+      } catch (emErr) {
+        console.warn('⚠️ [Email Notice] Failed to send hackathon confirmation email:', emErr.message);
+      }
 
       return res.json({
         success: true,
@@ -425,19 +432,26 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
 
       console.log(`📝 [Gaming Registration Created in Turso] Reg ID: ${registrationId} (${eventConfig.name}) Total: ₹${totalAmount} - AUTO CONFIRMED`);
 
-      // Trigger Google Sheets Sync & Confirmation Email asynchronously
-      setImmediate(async () => {
-        try {
-          await googleSheetsService.syncConfirmedRegistration(registrationId);
-        } catch (gsErr) {
-          console.warn('⚠️ [Google Sheets Sync Notice]:', gsErr.message);
-        }
-        try {
-          await emailService.sendRegistrationConfirmation(registrationId);
-        } catch (emErr) {
-          console.warn('⚠️ [Email Notice] Failed to send gaming confirmation email:', emErr.message);
-        }
-      });
+      // Synchronously await Google Sheets Sync (resilient for Vercel serverless)
+      try {
+        await Promise.race([
+          googleSheetsService.syncConfirmedRegistration(registrationId),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Google Sheets sync timed out after 5s')), 5000))
+        ]);
+        console.log(`✅ [Google Sheets Sync Completed] for Gaming Reg ID: ${registrationId}`);
+      } catch (gsErr) {
+        console.warn('⚠️ [Google Sheets Sync Notice]:', gsErr.message);
+      }
+
+      // Send confirmation email
+      try {
+        await Promise.race([
+          emailService.sendRegistrationConfirmation(registrationId),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Email send timed out after 4s')), 4000))
+        ]);
+      } catch (emErr) {
+        console.warn('⚠️ [Email Notice] Failed to send gaming confirmation email:', emErr.message);
+      }
 
       return res.json({
         success: true,
