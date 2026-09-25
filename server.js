@@ -177,6 +177,40 @@ app.get('/api/health', async (req, res) => {
   }
 });
 
+// 1.2 DIAGNOSTICS ENDPOINT (Helps users debug Vercel env vars)
+app.get('/api/diagnostics', (req, res) => {
+  const diagnostics = {
+    turso: {
+      hasUrl: !!process.env.TURSO_DATABASE_URL,
+      hasToken: !!process.env.TURSO_AUTH_TOKEN
+    },
+    googleSheets: {
+      hasKey: !!process.env.GOOGLE_SERVICE_ACCOUNT_KEY,
+      hasEmail: !!process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+      hasPrivateKey: !!process.env.GOOGLE_PRIVATE_KEY
+    },
+    email: {
+      hasUser: !!process.env.EMAIL_USER,
+      hasPass: !!process.env.EMAIL_PASS
+    }
+  };
+  
+  let errors = [];
+  if (!diagnostics.turso.hasUrl) errors.push('TURSO_DATABASE_URL is missing.');
+  if (!diagnostics.turso.hasToken) errors.push('TURSO_AUTH_TOKEN is missing.');
+  if (!diagnostics.googleSheets.hasKey && (!diagnostics.googleSheets.hasEmail || !diagnostics.googleSheets.hasPrivateKey)) {
+    errors.push('Google Sheets credentials are missing (either GOOGLE_SERVICE_ACCOUNT_KEY or GOOGLE_SERVICE_ACCOUNT_EMAIL+GOOGLE_PRIVATE_KEY).');
+  }
+  if (!diagnostics.email.hasUser || !diagnostics.email.hasPass) errors.push('EMAIL_USER or EMAIL_PASS is missing.');
+
+  res.json({
+    status: errors.length === 0 ? 'All Systems Go' : 'Configuration Errors Found',
+    environment: process.env.VERCEL ? 'Vercel Serverless' : 'Local Node',
+    errors,
+    diagnostics
+  });
+});
+
 // 1.5 SYSTEM CONFIGURATION ENDPOINT
 app.get('/api/config', (req, res) => {
   const paymentProvider = (process.env.PAYMENT_PROVIDER || 'upi').toLowerCase().trim();
