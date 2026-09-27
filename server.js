@@ -324,19 +324,18 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
     const paymentProvider = (process.env.PAYMENT_PROVIDER || 'upi').toLowerCase().trim();
 
     // Price calculation
-    let feePerPerson = eventConfig.feePerParticipant || 0;
-    let totalAmount = eventConfig.paymentRequired ? (providedPlayers.length * feePerPerson) : 0;
-    if (isHackathon) {
-      totalAmount = 0;
-      feePerPerson = 0;
+    let feePerPerson = eventConfig.feePerParticipant || eventConfig.feePerPerson || 0;
+    let totalAmount = 0;
+    if (eventConfig.paymentRequired) {
+      totalAmount = eventConfig.fixedFee > 0 ? eventConfig.fixedFee : (providedPlayers.length * feePerPerson);
     }
 
     // Generate canonical Registration ID
     const randomHex = crypto.randomBytes(3).toString('hex').toUpperCase();
     const registrationId = `CRAFT26-${eventConfig.id}-${randomHex}`;
 
-    if (isHackathon || !eventConfig.paymentRequired || totalAmount === 0) {
-      // FREE / HACKATHON REGISTRATION -> IMMEDIATELY CONFIRM
+    if (!eventConfig.paymentRequired || totalAmount === 0) {
+      // FREE REGISTRATION -> IMMEDIATELY CONFIRM
       await db.batch([
         {
           sql: `INSERT INTO registrations (
@@ -506,7 +505,7 @@ app.post(['/api/payments/create-order', '/api/payment/create-order'], async (req
     const requiredPlayerCount = eventConfig.minParticipants || eventConfig.minPlayers || 1;
     const count = Math.max(providedPlayers.length, requiredPlayerCount);
     const feePerPerson = eventConfig.feePerParticipant || eventConfig.feePerPerson || 50;
-    const totalAmount = eventConfig.fixedFee || (count * feePerPerson);
+    const totalAmount = eventConfig.fixedFee > 0 ? eventConfig.fixedFee : (count * feePerPerson);
     const amountInPaise = Math.round(totalAmount * 100);
 
     if (totalAmount <= 0) {
@@ -610,66 +609,155 @@ app.post(['/api/payments/create-order', '/api/payment/create-order'], async (req
 // 5. VERIFY PAYMENT & INSERT FINAL CONFIRMED REGISTRATION INTO TURSO
 app.post(['/api/payments/verify', '/api/payment/verify'], async (req, res) => {
   try {
-    const { registrationData, registrationId, paymentId, orderId, signature, mockGateway } = req.body;
+    const { registrationData, registrationId, paymentId, orderId, signature } = req.body;
 
-    const finalOrderId = orderId || `order_${Date.now()}_${crypto.randomBytes(3).toString('hex')}`;
-    const finalPaymentId = paymentId || `pay_${Date.now()}_${crypto.randomBytes(3).toString('hex')}`;
+    if (!paymentId || !orderId || !signature) {
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required payment verification parameters (orderId, paymentId, and signature are required).'
+      });
+    }
 
-    // IDEMPOTENCY CHECK: Check if registration/payment already exists in Turso DB
-    const existingRegRes = await db.execute({
-      sql: 'SELECT * FROM registrations WHERE razorpay_payment_id = ? OR razorpay_order_id = ? OR order_id = ? OR registration_id = ?',
-      args: [finalPaymentId, finalOrderId, finalOrderId, registrationId || '']
+    const cleanPaymentId = String(paymentId).trim();
+    const cleanOrderId = String(orderId).trim();
+    const cleanSignature = String(signature).trim();
+
+    if (!cleanPaymentId.startsWith('pay_') || cleanPaymentId.length < 8) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid Razorpay Payment ID format.'
+      });
+    }
+
+    if (!cleanOrderId.startsWith('order_') || cleanOrderId.length < 8) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid Razorpay Order ID format.'
+      });
+    }
+
+    // 1. Strict Cryptographic Signature Verification
+    const secret = (process.env.RAZORPAY_KEY_SECRET || '').trim();
+    if (!secret) {
+      console.error('❌ [VERIFY ERROR] RAZORPAY_KEY_SECRET is not configured on server.');
+      return res.status(500).json({
+        success: false,
+        error: 'Server payment security configuration error: Razorpay secret is not configured.'
+      });
+    }
+
+    const expectedSignature = crypto
+      .createHmac('sha256', secret)
+      .update(`${cleanOrderId}|${cleanPaymentId}`)
+      .digest('hex');
+
+    let isSignatureValid = false;
+    try {
+      isSignatureValid = crypto.timingSafeEqual(
+        Buffer.from(expectedSignature, 'utf-8'),
+        Buffer.from(cleanSignature, 'utf-8')
+      );
+    } catch (e) {
+      isSignatureValid = false;
+    }
+
+    if (!isSignatureValid) {
+      console.warn(`🚨 [SECURITY ALERT] Signature mismatch for Order ${cleanOrderId}, Payment ${cleanPaymentId}`);
+      return res.status(400).json({
+        success: false,
+        error: 'Payment signature verification failed. Untrusted payment attempt.'
+      });
+    }
+
+    // 2. Direct Server-Side Razorpay API Verification
+    const razorpayInstance = getRazorpayInstance();
+    if (razorpayInstance) {
+      try {
+        const paymentDetails = await razorpayInstance.payments.fetch(cleanPaymentId);
+        console.log(`💳 [VERIFY RAZORPAY API] Fetched payment ${cleanPaymentId}: status=${paymentDetails.status}, order_id=${paymentDetails.order_id}, amount=${paymentDetails.amount}`);
+
+        if (paymentDetails.order_id !== cleanOrderId) {
+          console.warn(`🚨 [SECURITY ALERT] Order mismatch! Razorpay order: ${paymentDetails.order_id}, Expected: ${cleanOrderId}`);
+          return res.status(400).json({
+            success: false,
+            error: 'Razorpay order ID does not match payment record.'
+          });
+        }
+
+        if (paymentDetails.status !== 'captured' && paymentDetails.status !== 'authorized') {
+          return res.status(400).json({
+            success: false,
+            error: `Payment is in invalid state: ${paymentDetails.status}. Must be captured or authorized.`
+          });
+        }
+
+        if (paymentDetails.status === 'authorized') {
+          try {
+            await razorpayInstance.payments.capture(cleanPaymentId, paymentDetails.amount, 'INR');
+            console.log(`✅ [VERIFY] Payment ${cleanPaymentId} auto-captured.`);
+          } catch (capErr) {
+            console.warn('Capture notice:', capErr.message);
+          }
+        }
+      } catch (rzpErr) {
+        console.error('❌ [VERIFY ERROR] Razorpay API fetch failed:', rzpErr.message);
+        return res.status(400).json({
+          success: false,
+          error: `Razorpay payment verification failed: ${rzpErr.message}`
+        });
+      }
+    }
+
+    // 3. IDEMPOTENCY & ANTI-REPLAY CHECK: Prevent reusing already-claimed payment IDs
+    const existingPaymentRes = await db.execute({
+      sql: 'SELECT * FROM registrations WHERE razorpay_payment_id = ? OR payment_id = ?',
+      args: [cleanPaymentId, cleanPaymentId]
     });
 
-    if (existingRegRes.rows && existingRegRes.rows.length > 0) {
-      const existingReg = existingRegRes.rows[0];
-      console.log(`ℹ️ Idempotency check: Registration ${existingReg.registration_id} already confirmed in Turso.`);
-      
-      const playersRes = await db.execute({
-        sql: 'SELECT * FROM players WHERE registration_id = ? ORDER BY player_index ASC',
-        args: [existingReg.registration_id]
-      });
+    if (existingPaymentRes.rows && existingPaymentRes.rows.length > 0) {
+      const existingReg = existingPaymentRes.rows[0];
+      const reqCaptainEmail = (registrationData && registrationData.captain && registrationData.captain.email)
+        ? registrationData.captain.email.trim().toLowerCase()
+        : '';
+      const existingEmail = (existingReg.captain_email || '').trim().toLowerCase();
 
-      return res.json({
-        success: true,
-        status: 'CONFIRMED',
-        registrationId: existingReg.registration_id,
-        paymentId: existingReg.razorpay_payment_id || finalPaymentId,
-        orderId: existingReg.razorpay_order_id || finalOrderId,
-        game: existingReg.game,
-        category: existingReg.category,
-        registrationType: existingReg.registration_type,
-        teamName: existingReg.team_name,
-        college: existingReg.college,
-        captainName: existingReg.captain_name,
-        captainEmail: existingReg.captain_email,
-        playerCount: existingReg.player_count,
-        feePerPerson: existingReg.fee_per_person,
-        totalAmount: existingReg.total_amount || existingReg.amount,
-        amount: existingReg.total_amount || existingReg.amount,
-        players: playersRes.rows || [],
-        paymentStatus: 'PAID',
-        confirmedAt: existingReg.confirmed_at || new Date().toISOString()
-      });
-    }
+      if (existingReg.registration_id === registrationId || 
+          (existingEmail && reqCaptainEmail && existingEmail === reqCaptainEmail)) {
+        console.log(`ℹ️ Idempotency check: Registration ${existingReg.registration_id} already confirmed in Turso.`);
+        
+        const playersRes = await db.execute({
+          sql: 'SELECT * FROM players WHERE registration_id = ? ORDER BY player_index ASC',
+          args: [existingReg.registration_id]
+        });
 
-    // Signature Verification
-    const secret = process.env.RAZORPAY_KEY_SECRET || 'craftcon_secret_key_2026';
-    let isValidPayment = false;
-
-    if (signature) {
-      const expectedSignature = crypto
-        .createHmac('sha256', secret)
-        .update(`${finalOrderId}|${paymentId}`)
-        .digest('hex');
-
-      isValidPayment = (expectedSignature === signature);
-    } else if (mockGateway || process.env.RAZORPAY_TEST_MODE === 'true' || paymentId) {
-      isValidPayment = true;
-    }
-
-    if (!isValidPayment) {
-      return res.status(400).json({ success: false, error: 'Payment signature verification failed.' });
+        return res.json({
+          success: true,
+          status: 'CONFIRMED',
+          registrationId: existingReg.registration_id,
+          paymentId: existingReg.razorpay_payment_id || cleanPaymentId,
+          orderId: existingReg.razorpay_order_id || cleanOrderId,
+          game: existingReg.game,
+          category: existingReg.category,
+          registrationType: existingReg.registration_type,
+          teamName: existingReg.team_name,
+          college: existingReg.college,
+          captainName: existingReg.captain_name,
+          captainEmail: existingReg.captain_email,
+          playerCount: existingReg.player_count,
+          feePerPerson: existingReg.fee_per_person,
+          totalAmount: existingReg.total_amount || existingReg.amount,
+          amount: existingReg.total_amount || existingReg.amount,
+          players: playersRes.rows || [],
+          paymentStatus: 'PAID',
+          confirmedAt: existingReg.confirmed_at || new Date().toISOString()
+        });
+      } else {
+        console.warn(`🚨 [SECURITY ALERT] Replay attack: Payment ID ${cleanPaymentId} already used for ${existingReg.registration_id}!`);
+        return res.status(400).json({
+          success: false,
+          error: 'This Payment ID has already been redeemed for an existing registration.'
+        });
+      }
     }
 
     // Extract registration data from client payload
@@ -711,7 +799,9 @@ app.post(['/api/payments/verify', '/api/payment/verify'], async (req, res) => {
     const requiredPlayerCount = eventConfig.minParticipants || eventConfig.minPlayers || 1;
     const count = Math.max(providedPlayers.length, requiredPlayerCount);
     const feePerPerson = eventConfig.feePerParticipant || eventConfig.feePerPerson || 50;
-    const totalAmount = eventConfig.fixedFee || (count * feePerPerson);
+    const totalAmount = eventConfig.fixedFee > 0 ? eventConfig.fixedFee : (count * feePerPerson);
+    const finalOrderId = cleanOrderId;
+    const finalPaymentId = cleanPaymentId;
 
     // 1. INSERT MASTER REGISTRATION INTO TURSO DB
     await db.execute({

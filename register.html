@@ -287,11 +287,11 @@
         minParticipants: 2,
         maxParticipants: 4,
         feePerParticipant: 0,
-        fixedFee: 0,
-        paymentRequired: false,
+        fixedFee: 300,
+        paymentRequired: true,
         active: true,
         description: '24-hour flagship sandbox hackathon at Desh Bhagat University. Build AI, Web3, CyberSec & CleanTech breakthroughs.',
-        badge: 'TEAM (2–4 BUILDERS)'
+        badge: 'TEAM (2–4 BUILDERS) • ₹300'
       },
       BGMI: {
         id: 'BGMI',
@@ -684,14 +684,15 @@
       }
     });
 
-    window.retryPaymentVerification = async function(customPaymentId) {
-      var resp = window.lastRazorpayResponse || {};
-      var paymentId = customPaymentId || resp.razorpay_payment_id;
-      if (!paymentId) {
-        paymentId = prompt("Enter your Razorpay Payment ID from your bank SMS / UPI app (e.g. pay_XXXXX):");
+    window.retryPaymentVerification = async function() {
+      var resp = window.lastRazorpayResponse;
+      if (!resp || !resp.razorpay_payment_id || !resp.razorpay_signature) {
+        showError(4, 'No active payment transaction found to retry. Please click Pay via Razorpay.');
+        return;
       }
-      if (!paymentId || !paymentId.trim()) return;
-      paymentId = paymentId.trim();
+      var paymentId = resp.razorpay_payment_id;
+      var orderId = resp.razorpay_order_id || (window.lastOrderData ? window.lastOrderData.orderId : null);
+      var signature = resp.razorpay_signature;
 
       var btn = document.getElementById('btn-submit');
       var sp = document.getElementById('submit-spinner');
@@ -705,8 +706,8 @@
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
             paymentId: paymentId,
-            orderId: resp.razorpay_order_id || (window.lastOrderData ? window.lastOrderData.orderId : null),
-            signature: resp.razorpay_signature,
+            orderId: orderId,
+            signature: signature,
             registrationData: {
               eventId: STATE.selectedEventId,
               teamName: STATE.teamName,
@@ -723,11 +724,11 @@
           document.getElementById('success-details').innerHTML = '<div class="sdi"><div class="lbl">Event</div><div class="val">' + (ev.name || 'Event') + '</div></div><div class="sdi"><div class="lbl">Captain</div><div class="val">' + (STATE.captain ? STATE.captain.name : '') + '</div></div><div class="sdi"><div class="lbl">Payment ID</div><div class="val" style="color:var(--green)">' + paymentId + ' (VERIFIED)</div></div>';
           goToStep('success');
         } else {
-          btn.disabled = false; sp.style.display = 'none'; lb.textContent = 'Confirm Registration';
+          btn.disabled = false; sp.style.display = 'none'; lb.textContent = 'Pay via Razorpay';
           showError(4, 'Verification failed: ' + (vData.error || 'Payment not found.'));
         }
       } catch (err) {
-        btn.disabled = false; sp.style.display = 'none'; lb.textContent = 'Confirm Registration';
+        btn.disabled = false; sp.style.display = 'none'; lb.textContent = 'Pay via Razorpay';
         showError(4, 'Verification request failed: ' + err.message);
       }
     };

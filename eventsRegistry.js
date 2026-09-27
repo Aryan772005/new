@@ -13,12 +13,12 @@ const EVENTS_REGISTRY = {
     minParticipants: 2,
     maxParticipants: 4,
     feePerParticipant: 0,
-    fixedFee: 0,
-    paymentRequired: false,
+    fixedFee: 300,
+    paymentRequired: true,
     active: true,
     description: '24-hour flagship sandbox hackathon hosted at Desh Bhagat University. Imagine, build, and ship real-world breakthroughs across AI, Web3, Cybersecurity, and CleanTech.',
     image: 'assets/images/hero_dribbble_portal.jpg',
-    badge: 'TEAM (2–4 BUILDERS)',
+    badge: 'TEAM (2–4 BUILDERS) • ₹300 / TEAM',
     rules: 'Bring your laptops, student ID cards, and ideation gear. 24 hours of continuous crafting, mentorship, and live demos.',
     tracks: [
       'AI / Machine Learning (Enchanted Forest Biome)',
@@ -159,7 +159,7 @@ function calculateRegistrationFee(selectedEventIds, eventParticipantCounts = {})
     }
 
     const count = eventParticipantCounts[eventId] || config.minParticipants;
-    const eventTotal = count * config.feePerParticipant;
+    const eventTotal = config.fixedFee > 0 ? config.fixedFee : count * (config.feePerParticipant || 0);
     totalAmount += eventTotal;
 
     eventBreakdown.push({
@@ -167,6 +167,7 @@ function calculateRegistrationFee(selectedEventIds, eventParticipantCounts = {})
       name: config.name,
       participantCount: count,
       feePerParticipant: config.feePerParticipant,
+      fixedFee: config.fixedFee || 0,
       amount: eventTotal
     });
   });
