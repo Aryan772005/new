@@ -86,7 +86,7 @@ const GAMES_REGISTRY = {
     type: 'solo',
     minPlayers: 1,
     maxPlayers: 1,
-    feePerPerson: 1,
+    feePerPerson: 50,
     description: 'Physical board-to-table dice strategy combat with zero ping latency.',
     image: 'assets/images/games/ludo_banner.jpg',
     badge: 'SOLO REGISTRATION (1 PLAYER)'
