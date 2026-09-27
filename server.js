@@ -692,10 +692,18 @@ app.post(['/api/payments/verify', '/api/payment/verify'], async (req, res) => {
     };
 
     const college = (regData.college || 'Desh Bhagat University').trim();
+    // Generate canonical final Registration ID and Pass ID
+    const randomHex = crypto.randomBytes(3).toString('hex').toUpperCase();
+    const finalRegistrationId = registrationId && registrationId.startsWith('CRAFT26-')
+      ? registrationId
+      : `CRAFT26-${eventConfig.id}-${randomHex}`;
+    const finalPassId = `PASS-${finalRegistrationId}`;
+
     const isTeam = (eventConfig.type === 'squad' || eventConfig.registrationType === 'TEAM' || eventConfig.type === 'TEAM');
     const teamName = isTeam 
-      ? (regData.teamName || 'Squad').trim() 
-      : `Solo: ${captain.name.trim()}`;
+      ? (regData.teamName || `Squad-${randomHex}`).trim() 
+      : (regData.teamName && regData.teamName !== 'SOLO_ENTRY' ? regData.teamName.trim() : `Solo: ${captain.name.trim()} (${randomHex})`);
+    const primaryTrackValue = regData.primary_track || regData.primaryTrack || eventConfig.name || 'General';
 
     const providedPlayers = Array.isArray(regData.players) && regData.players.length > 0 
       ? regData.players 
@@ -705,53 +713,48 @@ app.post(['/api/payments/verify', '/api/payment/verify'], async (req, res) => {
     const feePerPerson = eventConfig.feePerParticipant || eventConfig.feePerPerson || 50;
     const totalAmount = eventConfig.fixedFee || (count * feePerPerson);
 
-    // Generate canonical final Registration ID and Pass ID
-    const randomHex = crypto.randomBytes(3).toString('hex').toUpperCase();
-    const finalRegistrationId = registrationId && registrationId.startsWith('CRAFT26-')
-      ? registrationId
-      : `CRAFT26-${eventConfig.id}-${randomHex}`;
-    const finalPassId = `PASS-${finalRegistrationId}`;
+    // 1. INSERT MASTER REGISTRATION INTO TURSO DB
+    await db.execute({
+      sql: `INSERT INTO registrations (
+        registration_id, pass_id, category, game, registration_type, team_name, team_size,
+        college, college_name, captain_name, captain_email, captain_phone,
+        leader_name, leader_email, leader_phone, player_count,
+        total_amount, amount, fee_per_person, currency,
+        payment_method, payment_status, registration_status, status,
+        razorpay_order_id, razorpay_payment_id, order_id, payment_id, primary_track,
+        confirmed_at, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'INR', 'RAZORPAY', 'PAID', 'CONFIRMED', 'confirmed', ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+      args: [
+        finalRegistrationId,
+        finalPassId,
+        eventConfig.category || 'EVENT',
+        eventConfig.id,
+        eventConfig.type || eventConfig.registrationType || 'TEAM',
+        teamName,
+        count,
+        college,
+        college,
+        captain.name.trim(),
+        captain.email.trim(),
+        captain.phone.trim(),
+        captain.name.trim(),
+        captain.email.trim(),
+        captain.phone.trim(),
+        count,
+        totalAmount,
+        totalAmount,
+        feePerPerson,
+        finalOrderId,
+        finalPaymentId,
+        finalOrderId,
+        finalPaymentId,
+        primaryTrackValue
+      ]
+    });
 
-    // INSERT FINAL CONFIRMED REGISTRATION & PLAYERS INTO TURSO DB ATOMICALLY
-    await db.batch([
-      {
-        sql: `INSERT INTO registrations (
-          registration_id, pass_id, category, game, registration_type, team_name, team_size,
-          college, college_name, captain_name, captain_email, captain_phone,
-          leader_name, leader_email, leader_phone, player_count,
-          total_amount, amount, fee_per_person, currency,
-          payment_method, payment_status, registration_status, status,
-          razorpay_order_id, razorpay_payment_id, order_id, payment_id, primary_track,
-          confirmed_at, created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'INR', 'RAZORPAY', 'PAID', 'CONFIRMED', 'confirmed', ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
-        args: [
-          finalRegistrationId,
-          finalPassId,
-          eventConfig.category || 'EVENT',
-          eventConfig.id,
-          eventConfig.type || eventConfig.registrationType || 'TEAM',
-          teamName,
-          count,
-          college,
-          college,
-          captain.name.trim(),
-          captain.email.trim(),
-          captain.phone.trim(),
-          captain.name.trim(),
-          captain.email.trim(),
-          captain.phone.trim(),
-          count,
-          totalAmount,
-          totalAmount,
-          feePerPerson,
-          finalOrderId,
-          finalPaymentId,
-          finalOrderId,
-          finalPaymentId,
-          regData.primary_track || regData.primaryTrack || 'N/A'
-        ]
-      },
-      {
+    // 2. SAFELY RECORD PAYMENT DETAILS (non-blocking for registration confirmation)
+    try {
+      await db.execute({
         sql: `INSERT OR REPLACE INTO payments (
                 registration_id, razorpay_order_id, razorpay_payment_id, razorpay_signature, signature,
                 order_id, payment_id, amount, currency, status, method, provider, verified_at, updated_at
@@ -768,27 +771,32 @@ app.post(['/api/payments/verify', '/api/payment/verify'], async (req, res) => {
           totalAmount,
           process.env.RAZORPAY_TEST_MODE === 'true' ? 'RAZORPAY_TEST_MODE' : 'RAZORPAY'
         ]
-      }
-    ]);
+      });
+    } catch (payErr) {
+      console.warn('⚠️ Payments table write notice:', payErr.message);
+    }
 
-    // Insert Player Roster into Turso
-    const playerStatements = providedPlayers.slice(0, count).map((player, idx) => ({
-      sql: `INSERT INTO players (registration_id, player_index, name, full_name, in_game_name, game_uid, email, phone, role)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      args: [
-        finalRegistrationId,
-        idx + 1,
-        (player.full_name || player.name || captain.name).trim(),
-        (player.full_name || player.name || captain.name).trim(),
-        (player.in_game_name || player.inGameName || player.ign || 'N/A').trim(),
-        (player.game_uid || player.gameUid || player.uid || 'N/A').trim(),
-        (player.email || captain.email).trim(),
-        (player.phone || captain.phone).trim(),
-        idx === 0 ? 'CAPTAIN' : `MEMBER_${idx + 1}`
-      ]
-    }));
-
-    await db.batch(playerStatements);
+    // 3. SAFELY RECORD PLAYER ROSTER (non-blocking for registration confirmation)
+    try {
+      const playerStatements = providedPlayers.slice(0, count).map((player, idx) => ({
+        sql: `INSERT INTO players (registration_id, player_index, name, full_name, in_game_name, game_uid, email, phone, role)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        args: [
+          finalRegistrationId,
+          idx + 1,
+          (player.full_name || player.name || captain.name).trim(),
+          (player.full_name || player.name || captain.name).trim(),
+          (player.in_game_name || player.inGameName || player.ign || 'N/A').trim(),
+          (player.game_uid || player.gameUid || player.uid || 'N/A').trim(),
+          (player.email || captain.email).trim(),
+          (player.phone || captain.phone).trim(),
+          idx === 0 ? 'CAPTAIN' : `MEMBER_${idx + 1}`
+        ]
+      }));
+      await db.batch(playerStatements);
+    } catch (plErr) {
+      console.warn('⚠️ Players roster write notice:', plErr.message);
+    }
 
     console.log(`✅ Registration CONFIRMED & Inserted into Turso DB [${finalRegistrationId}] Payment ID: ${finalPaymentId}`);
 

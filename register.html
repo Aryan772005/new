@@ -253,6 +253,9 @@
             <span id="submit-label">&#9989; Confirm Registration</span>
           </button>
         </div>
+        <div style="text-align:center;margin-top:12px;">
+          <a href="javascript:void(0)" onclick="retryPaymentVerification()" style="color:#a78bfa;font-size:0.85rem;text-decoration:underline;">Already paid from your bank account? Enter Payment ID to verify &#8594;</a>
+        </div>
       </div>
 
       <!-- SUCCESS -->
@@ -638,6 +641,8 @@
             },
             handler: async function(resp){
               lb.textContent='Verifying Payment...';
+              window.lastRazorpayResponse = resp;
+              window.lastOrderData = orderData;
               try {
                 var verifyRes = await fetch('/api/payments/verify', {
                   method: 'POST',
@@ -663,11 +668,11 @@
                   goToStep('success');
                 } else {
                   btn.disabled=false;sp.style.display='none';lb.innerHTML='&#128179; Pay &#8377;'+fee+' via Razorpay';
-                  showError(4, vData.error || 'Payment verification failed.');
+                  showError(4, (vData.error || 'Payment verification failed.') + (resp.razorpay_payment_id ? '<br><button type="button" class="btn btn-sm btn-primary" style="margin-top:10px;padding:6px 14px;background:#8b5cf6;color:#fff;border-radius:6px;cursor:pointer;" onclick="retryPaymentVerification()">⚡ Retry Verification with Payment ID (' + resp.razorpay_payment_id + ')</button>' : ''));
                 }
               } catch(vErr) {
                 btn.disabled=false;sp.style.display='none';lb.innerHTML='&#128179; Pay &#8377;'+fee+' via Razorpay';
-                showError(4, 'Network error during verification: ' + vErr.message);
+                showError(4, 'Network error during verification: ' + vErr.message + (resp.razorpay_payment_id ? '<br><button type="button" class="btn btn-sm btn-primary" style="margin-top:10px;padding:6px 14px;background:#8b5cf6;color:#fff;border-radius:6px;cursor:pointer;" onclick="retryPaymentVerification()">⚡ Retry Verification with Payment ID (' + resp.razorpay_payment_id + ')</button>' : ''));
               }
             }
           });
@@ -678,6 +683,54 @@
         }
       }
     });
+
+    window.retryPaymentVerification = async function(customPaymentId) {
+      var resp = window.lastRazorpayResponse || {};
+      var paymentId = customPaymentId || resp.razorpay_payment_id;
+      if (!paymentId) {
+        paymentId = prompt("Enter your Razorpay Payment ID from your bank SMS / UPI app (e.g. pay_XXXXX):");
+      }
+      if (!paymentId || !paymentId.trim()) return;
+      paymentId = paymentId.trim();
+
+      var btn = document.getElementById('btn-submit');
+      var sp = document.getElementById('submit-spinner');
+      var lb = document.getElementById('submit-label');
+      btn.disabled = true; sp.style.display = 'block'; lb.textContent = 'Verifying ' + paymentId + '...';
+
+      try {
+        var ev = DEFAULT_CATALOGUE[STATE.selectedEventId] || {};
+        var verifyRes = await fetch('/api/payments/verify', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            paymentId: paymentId,
+            orderId: resp.razorpay_order_id || (window.lastOrderData ? window.lastOrderData.orderId : null),
+            signature: resp.razorpay_signature,
+            registrationData: {
+              eventId: STATE.selectedEventId,
+              teamName: STATE.teamName,
+              college: STATE.college,
+              captain: STATE.captain,
+              players: STATE.participants
+            }
+          })
+        });
+        var vData = await verifyRes.json();
+        if (vData.success) {
+          document.getElementById('success-reg-id').textContent = vData.registrationId || 'CRAFT26-XXXX';
+          document.getElementById('success-email').textContent = STATE.captain ? STATE.captain.email : '';
+          document.getElementById('success-details').innerHTML = '<div class="sdi"><div class="lbl">Event</div><div class="val">' + (ev.name || 'Event') + '</div></div><div class="sdi"><div class="lbl">Captain</div><div class="val">' + (STATE.captain ? STATE.captain.name : '') + '</div></div><div class="sdi"><div class="lbl">Payment ID</div><div class="val" style="color:var(--green)">' + paymentId + ' (VERIFIED)</div></div>';
+          goToStep('success');
+        } else {
+          btn.disabled = false; sp.style.display = 'none'; lb.textContent = 'Confirm Registration';
+          showError(4, 'Verification failed: ' + (vData.error || 'Payment not found.'));
+        }
+      } catch (err) {
+        btn.disabled = false; sp.style.display = 'none'; lb.textContent = 'Confirm Registration';
+        showError(4, 'Verification request failed: ' + err.message);
+      }
+    };
 
     fetchEvents();
   </script>
