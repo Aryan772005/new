@@ -830,7 +830,7 @@ app.post(['/api/payments/verify', '/api/payment/verify'], async (req, res) => {
 
   } catch (error) {
     console.error('Error in /api/payment/verify:', error);
-    res.status(500).json({ success: false, error: 'Failed to verify payment and record registration.' });
+    res.status(500).json({ success: false, error: 'Payment record error: ' + error.message });
   }
 });
 
