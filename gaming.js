@@ -81,7 +81,7 @@ const GAMES_CATALOGUE = {
     category: 'offline',
     type: 'solo',
     minPlayers: 1,
-    feePerPerson: 1,
+    feePerPerson: 50,
     description: 'Precision striker control, pocket calculation, and queen cover battles. Solo entry.',
     image: 'assets/images/games/carrom_banner.jpg'
   }
