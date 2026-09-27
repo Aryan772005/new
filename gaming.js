@@ -81,7 +81,7 @@ const GAMES_CATALOGUE = {
     category: 'offline',
     type: 'solo',
     minPlayers: 1,
-    feePerPerson: 50,
+    feePerPerson: 1,
     description: 'Precision striker control, pocket calculation, and queen cover battles. Solo entry.',
     image: 'assets/images/games/carrom_banner.jpg'
   }
@@ -149,7 +149,10 @@ function initGameDetailsModal() {
       descEl.textContent = config.description;
       typeEl.textContent = config.type.toUpperCase();
       playersEl.textContent = config.minPlayers;
-      totalEl.textContent = `₹${config.minPlayers * 50}`;
+      const fee = config.feePerPerson !== undefined ? config.feePerPerson : 50;
+      const feeEl = document.getElementById('details-modal-fee');
+      if (feeEl) feeEl.textContent = `₹${fee}`;
+      totalEl.textContent = `₹${config.minPlayers * fee}`;
 
       regBtn.setAttribute('data-preset-game', gameId);
 

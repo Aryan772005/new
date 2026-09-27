@@ -110,7 +110,7 @@ const GAMES_REGISTRY = {
     type: 'solo',
     minPlayers: 1,
     maxPlayers: 1,
-    feePerPerson: 50,
+    feePerPerson: 1,
     description: 'Precision striker control, pocket calculation, and queen cover battles.',
     image: 'assets/images/games/carrom_banner.jpg',
     badge: 'SOLO REGISTRATION (1 PLAYER)'
