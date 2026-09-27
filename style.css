@@ -1605,24 +1605,9 @@ a {
 }
 
 /* --- TECHFEST-STYLE PERSISTENT SIDE DOCKS --- */
-.tf-dock-left {
-  position: fixed;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 90;
-  pointer-events: auto;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
+.tf-dock-left,
 .tf-dock-right {
-  position: fixed;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 90;
-  pointer-events: auto;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  display: none !important;
 }
 
 .tf-dock-pill {
