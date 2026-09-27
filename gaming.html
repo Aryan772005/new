@@ -692,11 +692,11 @@
           </div>
         </div>
 
-        <!-- STEP 6: PAYMENT PORTAL (UPI QR / RAZORPAY FEATURE-FLAGGED) -->
+        <!-- STEP 6: PAYMENT PORTAL (RAZORPAY GATEWAY) -->
         <div class="wizard-step-pane" id="step-pane-6">
           <div style="text-align:center; margin-bottom:16px;">
-            <h4 style="font-family:'Space Grotesk', sans-serif; font-size:1.4rem; color:var(--text-white);" id="pay-portal-title">SCAN & PAY VIA UPI</h4>
-            <p style="color:var(--text-muted); font-size:0.88rem;" id="pay-portal-subtitle">Scan the QR code below using any UPI app to complete your registration payment.</p>
+            <h4 style="font-family:'Space Grotesk', sans-serif; font-size:1.4rem; color:var(--text-white);" id="pay-portal-title">COMPLETE PAYMENT VIA RAZORPAY</h4>
+            <p style="color:var(--text-muted); font-size:0.88rem;" id="pay-portal-subtitle">Fast, safe & encrypted payment via Razorpay. Pay with UPI, Debit/Credit Card, or NetBanking.</p>
           </div>
 
           <!-- Visually Prominent Amount Summary Block -->
@@ -706,59 +706,41 @@
             <div style="font-size:0.8rem; color:var(--color-amber-bright); font-weight:600;" id="pay-reg-id-display">REGISTRATION: CRAFT-26-XXXX</div>
           </div>
 
-          <!-- UPI Scan & Pay Section (Active when PAYMENT_PROVIDER = upi) -->
-          <div id="upi-payment-section">
-            <div style="text-align:center; margin-bottom:16px;">
-              <!-- OFFICIAL UPI QR IMAGE - CRISP & UNFILTERED FOR EASY SCANNING -->
-              <div style="display:inline-block; padding:10px; background:#ffffff; border-radius:12px; border:2px solid var(--color-amber); box-shadow:0 10px 30px rgba(0,0,0,0.5);">
-                <img id="upi-qr-image" src="assets/images/upi_qr.png" alt="CRAFTCON 2K26 UPI Payment QR Code" style="width:240px; height:240px; object-fit:contain; display:block; border-radius:6px;">
-              </div>
+          <!-- Razorpay Payment Section -->
+          <div id="razorpay-payment-section" style="margin-top:16px;">
+            <div style="background:var(--bg-deep); border:1px solid var(--gaming-border); border-radius:10px; padding:20px; text-align:center; margin-bottom:16px;">
+              <div style="font-size:2rem; margin-bottom:8px;">💳</div>
+              <h5 style="font-family:'Space Grotesk', sans-serif; font-size:1rem; color:var(--text-white); margin-bottom:8px;">OFFICIAL RAZORPAY CHECKOUT</h5>
+              <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:14px;">Instant digital verification with zero delays. Choose your preferred payment method:</p>
               
-              <p style="font-size:0.85rem; color:var(--text-white); margin-top:10px; font-weight:600;">
-                Scan the QR code using any supported UPI app (GPay, PhonePe, Paytm, BHIM)
-              </p>
-              
-              <div style="margin-top:6px; font-size:0.85rem; color:var(--color-amber-bright); font-weight:700;">
-                UPI ID: <span id="upi-id-display">paytm.s2sp1kq@pty</span>
-                <button type="button" id="btn-copy-upi" style="padding:2px 8px; font-size:0.72rem; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25); border-radius:4px; color:#fff; cursor:pointer; margin-left:6px;">COPY</button>
+              <div style="display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+                <span style="font-size:0.75rem; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,0.06); border:1px solid var(--gaming-border); color:var(--text-white);">⚡ GPay / PhonePe / Paytm UPI</span>
+                <span style="font-size:0.75rem; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,0.06); border:1px solid var(--gaming-border); color:var(--text-white);">💳 Debit / Credit Cards</span>
+                <span style="font-size:0.75rem; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,0.06); border:1px solid var(--gaming-border); color:var(--text-white);">🏦 NetBanking</span>
+                <span style="font-size:0.75rem; padding:4px 10px; border-radius:6px; background:rgba(255,255,255,0.06); border:1px solid var(--gaming-border); color:var(--text-white);">👛 Wallets</span>
               </div>
+
+              <button type="button" class="btn-gaming-primary" id="btn-trigger-razorpay" style="width:100%; justify-content:center; font-size:1.05rem; padding:14px; background:linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); border-color:#00f2fe; color:#000; font-weight:700;">
+                <span>💳 PAY NOW VIA RAZORPAY</span>
+              </button>
             </div>
 
-            <!-- UTR & Screenshot Verification Form -->
-            <form id="upi-proof-form" style="display:flex; flex-direction:column; gap:14px;">
-              <div class="form-group-wrap">
-                <label class="form-label-custom">UTR / TRANSACTION ID *</label>
-                <input type="text" id="reg-utr-input" class="input-field-custom" placeholder="Enter 12-digit UTR / Transaction ID" required minlength="6" maxlength="35">
-              </div>
-
-              <div class="form-group-wrap">
-                <label class="form-label-custom">PAYMENT SCREENSHOT * (JPG, PNG, WEBP, MAX 5MB)</label>
-                <input type="file" id="reg-screenshot-input" accept="image/jpeg,image/png,image/webp" class="input-field-custom" style="padding:8px;" required>
-                <div id="screenshot-preview-wrap" style="display:none; margin-top:8px; text-align:center;">
-                  <img id="screenshot-preview-img" alt="Payment Screenshot Preview" style="max-height:100px; border-radius:6px; border:1px solid var(--color-amber);">
-                </div>
-              </div>
-
-              <button type="submit" class="btn-gaming-primary" id="btn-submit-upi-proof" style="width:100%; justify-content:center; background:var(--color-amber); border-color:var(--color-amber-bright); margin-top:6px;">
-                <span>📥 SUBMIT PAYMENT PROOF</span>
-              </button>
-            </form>
-          </div>
-
-          <!-- Razorpay Section (Hidden when PAYMENT_PROVIDER = upi) -->
-          <div id="razorpay-payment-section" style="display:none; margin-top:16px;">
-            <button class="btn-gaming-primary" id="btn-trigger-razorpay" style="width:100%; justify-content:center;">
-              <span>💳 PAY VIA RAZORPAY</span>
-            </button>
+            <div style="text-align:center; font-size:0.75rem; color:var(--text-dim); display:flex; align-items:center; justify-content:center; gap:6px;">
+              <span>🔒 256-Bit SSL Encrypted</span>
+              <span>•</span>
+              <span>Instant Pass Generation</span>
+              <span>•</span>
+              <span>Official Tournament Protection</span>
+            </div>
           </div>
         </div>
 
         <!-- STEP 7: REGISTRATION SUBMITTED / SUCCESS -->
         <div class="wizard-step-pane" id="step-pane-7">
           <div style="text-align:center; margin-bottom:20px;">
-            <div style="font-size:3rem; margin-bottom:8px;" id="success-icon">📋</div>
-            <h3 style="font-family:'Space Grotesk', sans-serif; font-size:1.6rem; color:var(--color-amber-bright);" id="success-title">PAYMENT PROOF SUBMITTED!</h3>
-            <p style="color:var(--text-muted); font-size:0.9rem;" id="success-subtext">Your registration details and payment proof have been recorded. Pending organizer verification.</p>
+            <div style="font-size:3rem; margin-bottom:8px;" id="success-icon">🏆</div>
+            <h3 style="font-family:'Space Grotesk', sans-serif; font-size:1.6rem; color:var(--color-green-bright);" id="success-title">REGISTRATION & PAYMENT CONFIRMED!</h3>
+            <p style="color:var(--text-muted); font-size:0.9rem;" id="success-subtext">Your payment has been verified via Razorpay and your spot in the arena is confirmed.</p>
           </div>
 
           <div class="voucher-card" id="printable-voucher-card">
@@ -768,12 +750,12 @@
               <div><strong>Game:</strong> <span id="succ-game">BGMI</span></div>
               <div><strong>Team:</strong> <span id="succ-team">Phoenix Squad</span></div>
               <div><strong>College:</strong> <span id="succ-college">DBU</span></div>
-              <div><strong>Status:</strong> <span id="succ-status" style="color:var(--color-amber-bright); font-weight:700;">PENDING VERIFICATION</span></div>
+              <div><strong>Status:</strong> <span id="succ-status" style="color:var(--color-green-bright); font-weight:700;">CONFIRMED (PAID)</span></div>
             </div>
           </div>
 
-          <div style="padding:14px; background:rgba(245,166,35,0.08); border:1px dashed var(--color-amber); border-radius:8px; font-size:0.85rem; color:var(--text-muted); line-height:1.5; margin-bottom:20px;">
-            ℹ️ Our team is verifying your UTR against our bank statement. Once verified, your status will update to <strong>CONFIRMED</strong> and your official pass will be emailed to your captain email.
+          <div style="padding:14px; background:rgba(112,224,0,0.08); border:1px dashed var(--mc-xp-green); border-radius:8px; font-size:0.85rem; color:var(--text-white); line-height:1.5; margin-bottom:20px;">
+            ✅ Your registration has been confirmed! An official digital pass with tournament instructions has been sent to your captain's email.
           </div>
 
           <div style="display:flex; gap:12px;">
