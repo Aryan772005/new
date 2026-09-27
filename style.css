@@ -392,20 +392,22 @@ a {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: clamp(14px, 1.8vw, 32px);
   list-style: none;
+  flex-wrap: nowrap;
 }
 
 .nav-link {
   font-family: var(--font-display);
   font-size: 0.82rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   color: #bfbfc9;
   text-transform: uppercase;
   position: relative;
   padding: 6px 0;
   transition: color var(--transition-fast);
+  white-space: nowrap;
 }
 
 .nav-link:hover,
@@ -434,12 +436,14 @@ a {
 .nav-item-center-reg {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .nav-center-register-btn {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  justify-content: center;
+  gap: 6px;
   background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
   color: #ffffff !important;
   font-family: var(--font-display, sans-serif);
@@ -464,12 +468,6 @@ a {
   transform: translateY(-2px) scale(1.05);
   box-shadow: 0 0 28px rgba(219, 39, 119, 0.75), 0 4px 14px rgba(0, 0, 0, 0.5);
   filter: brightness(1.15);
-}
-
-.nav-center-register-btn .reg-sparkle {
-  font-size: 0.95rem;
-  display: inline-block;
-  animation: pulse-glow 1.5s infinite ease-in-out;
 }
 
 /* ==========================================================================
@@ -570,24 +568,41 @@ a {
   }
 
   .nav-links {
-    gap: clamp(24px, 2.2vw, 42px);
+    gap: clamp(12px, 1.5vw, 32px);
+    flex-wrap: nowrap;
   }
 
   .nav-link {
-    font-size: 0.88rem;
-    letter-spacing: 0.12em;
+    font-size: clamp(0.76rem, 0.85vw, 0.88rem);
+    letter-spacing: 0.06em;
     padding: 6px 2px;
     font-weight: 600;
+    white-space: nowrap;
   }
 
   .header-actions {
-    gap: 16px;
+    gap: 12px;
+    flex-shrink: 0;
   }
 
   .cube-status-pill {
-    padding: 7px 16px;
-    font-size: 0.78rem;
-    gap: 8px;
+    padding: 6px 14px;
+    font-size: 0.74rem;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  /* Between 1025px and 1350px, hide duplicate right CTA since middle Register is active */
+  @media (max-width: 1350px) {
+    .header-actions .pill-cta-btn {
+      display: none !important;
+    }
+  }
+
+  @media (max-width: 1350px) {
+    .cube-status-pill {
+      display: none !important;
+    }
   }
 
   .nav-github-pill {
@@ -597,14 +612,15 @@ a {
   }
 
   .icon-toggle-btn {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
   }
 
   .pill-cta-btn {
-    padding: 11px 26px;
-    font-size: 0.86rem;
-    letter-spacing: 0.08em;
+    padding: 9px 20px;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
   }
 }
 
@@ -774,6 +790,10 @@ a {
   position: relative;
   transition: all var(--transition-smooth);
   box-shadow: 0 0 16px rgba(157, 78, 221, 0.2);
+}
+
+.header-actions .pill-cta-btn {
+  display: none;
 }
 
 .pill-cta-btn:hover {
@@ -3340,6 +3360,99 @@ a {
 }
 
 /* --- 20. RESPONSIVE BREAKPOINTS (TABLETS & DESKTOP SITE IN PHONE ENGINE) --- */
+@media (max-width: 1200px) and (min-width: 769px) {
+  .site-header {
+    height: 72px !important;
+  }
+
+  .header-container {
+    height: 100% !important;
+    padding: 0 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+  }
+
+  .brand-wordmark {
+    font-size: 1.05rem !important;
+    gap: 7px !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  .nav-dbu-badge {
+    width: 28px !important;
+    height: 28px !important;
+    padding: 2px !important;
+    border-radius: 6px !important;
+  }
+
+  .brand-cube {
+    width: 10px !important;
+    height: 10px !important;
+  }
+
+  .desktop-nav {
+    display: flex !important;
+    align-items: center !important;
+    padding: 5px 12px !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: var(--radius-pill) !important;
+    flex-shrink: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .nav-links {
+    gap: clamp(8px, 1.1vw, 16px) !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .nav-link {
+    font-size: clamp(0.72rem, 0.78vw, 0.8rem) !important;
+    letter-spacing: 0.04em !important;
+    padding: 4px 1px !important;
+    white-space: nowrap !important;
+  }
+
+  .nav-center-register-btn {
+    padding: 6px 14px !important;
+    font-size: 0.74rem !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    min-width: unset !important;
+    min-height: unset !important;
+    flex-shrink: 0 !important;
+    box-shadow: 0 0 14px rgba(124, 58, 237, 0.5) !important;
+  }
+
+  /* In desktop site mode on mobile, hide the redundant right register button to prevent overflow */
+  .header-actions .pill-cta-btn {
+    display: none !important;
+  }
+
+  /* Hide 3D World pill on mobile desktop site to prevent right-edge clipping */
+  .cube-status-pill {
+    display: none !important;
+  }
+
+  .header-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .icon-toggle-btn {
+    width: 36px !important;
+    height: 36px !important;
+  }
+}
+
 @media (max-width: 1024px) {
   :root {
     --max-width: 100%;
@@ -5230,10 +5343,10 @@ body, input, select, textarea, button {
     transform: none !important;
   }
 
-  /* 8. Ensure the register CTA is always huge and tappable */
-  .pill-cta-btn,
-  .nav-center-register-btn,
-  a[href="/register"] {
+  /* 8. Ensure the register CTA is always huge and tappable on mobile screens */
+  .mobile-drawer .pill-cta-btn,
+  .hero-meta-bar a[href="/register"],
+  .final-cta-box a[href="/register"] {
     min-height: 48px !important;
     min-width: 140px !important;
     font-size: 1rem !important;

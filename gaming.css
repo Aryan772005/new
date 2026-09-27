@@ -1364,7 +1364,26 @@ footer {
   }
 
   .header-actions .btn-gaming-secondary {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 6px 12px !important;
+    font-size: 0.74rem !important;
+    font-weight: 700 !important;
+    border-radius: 999px !important;
+    background: rgba(251, 191, 36, 0.12) !important;
+    border: 1px solid rgba(251, 191, 36, 0.45) !important;
+    color: #fbbf24 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+  }
+
+  .header-actions .btn-gaming-secondary .btn-text-full {
     display: none !important;
+  }
+
+  .header-actions .btn-gaming-secondary .btn-text-short {
+    display: inline !important;
   }
 
   .header-actions .pill-cta-btn {
@@ -1936,6 +1955,252 @@ select.input-field-custom {
     padding: 10px 8px !important;
   }
 }
+
+/* ==========================================================================
+   GAMING ARENA ENTRANCE POP-UP: RETURN TO MAIN WEBSITE
+   ========================================================================== */
+.btn-text-full { display: inline; }
+.btn-text-short { display: none; }
+
+.gaming-entrance-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.32s ease, visibility 0.32s ease;
+  pointer-events: none;
+}
+
+.gaming-entrance-popup.is-active {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.gep-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 6, 12, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+}
+
+.gep-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  background: linear-gradient(145deg, #151528 0%, #0d0d18 100%);
+  border: 1.5px solid rgba(251, 191, 36, 0.45);
+  box-shadow: 0 0 40px rgba(251, 191, 36, 0.28), 0 25px 60px rgba(0, 0, 0, 0.85);
+  border-radius: 20px;
+  padding: 34px 28px;
+  text-align: center;
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
+}
+
+.gaming-entrance-popup.is-active .gep-dialog {
+  transform: scale(1) translateY(0);
+}
+
+.gep-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #c7c7d4;
+  font-size: 1.3rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gep-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+.gep-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 14px;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  border-radius: 999px;
+  font-family: var(--font-pixel, monospace);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fbbf24;
+  letter-spacing: 0.08em;
+  margin-bottom: 14px;
+}
+
+.gep-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fbbf24;
+  box-shadow: 0 0 8px #fbbf24;
+  animation: pulse-glow 1.5s infinite ease-in-out;
+}
+
+.gep-icon-wrap {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 14px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.22), rgba(157, 78, 221, 0.22));
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 24px rgba(251, 191, 36, 0.25);
+}
+
+.gep-icon {
+  font-size: 2rem;
+}
+
+.gep-title {
+  font-family: var(--font-display, sans-serif);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.gep-subtitle {
+  font-size: 0.9rem;
+  color: #e4e4f2;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.gep-text {
+  font-size: 0.84rem;
+  color: #a5a5c2;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.gep-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gep-btn-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 24px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+  color: #ffffff !important;
+  font-family: var(--font-display, sans-serif);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  box-shadow: 0 0 24px rgba(124, 58, 237, 0.55), 0 4px 14px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease, filter 0.2s ease;
+  cursor: pointer;
+}
+
+.gep-btn-back:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 0 32px rgba(219, 39, 119, 0.75), 0 6px 18px rgba(0, 0, 0, 0.5);
+  filter: brightness(1.15);
+}
+
+.gep-btn-stay {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 20px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #c7c7d4;
+  font-family: var(--font-display, sans-serif);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gep-btn-stay:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+/* Persistent Floating Return Button */
+.floating-return-main-btn {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 999;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: rgba(14, 14, 24, 0.94);
+  border: 1.5px solid rgba(251, 191, 36, 0.5);
+  color: #fbbf24 !important;
+  font-family: var(--font-display, sans-serif);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.65), 0 0 16px rgba(251, 191, 36, 0.25);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.floating-return-main-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  border-color: #fbbf24;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.75), 0 0 24px rgba(251, 191, 36, 0.5);
+  color: #ffffff !important;
+}
+
+@media (max-width: 600px) {
+  .gep-dialog {
+    padding: 24px 18px;
+    border-radius: 16px;
+  }
+  .floating-return-main-btn {
+    bottom: 16px;
+    left: 14px;
+    padding: 8px 14px;
+    font-size: 0.74rem;
+  }
+}
+
 
 
 

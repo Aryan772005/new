@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroParallax();
   initCardTiltPhysics();
   initThreeJSScene();
+  initGamingEntrancePopup();
 });
 
 /* ==========================================================================
@@ -1236,6 +1237,42 @@ function initMobileNavMenu() {
     }
   });
 }
+
+/* ==========================================================================
+   GAMING ARENA ENTRANCE RETURN POP-UP CONTROLLER
+   ========================================================================== */
+function initGamingEntrancePopup() {
+  const popup = document.getElementById('gaming-entrance-popup');
+  if (!popup) return;
+
+  const closeBtn = document.getElementById('gep-close-btn');
+  const stayBtn = document.getElementById('gep-btn-stay');
+  const backdrop = document.getElementById('gep-backdrop');
+
+  function openPopup() {
+    popup.classList.add('is-active');
+  }
+
+  function closePopup() {
+    popup.classList.remove('is-active');
+  }
+
+  // Smoothly pop up option to return shortly after entering the Gaming Arena
+  setTimeout(() => {
+    openPopup();
+  }, 500);
+
+  if (closeBtn) closeBtn.addEventListener('click', closePopup);
+  if (stayBtn) stayBtn.addEventListener('click', closePopup);
+  if (backdrop) backdrop.addEventListener('click', closePopup);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && popup.classList.contains('is-active')) {
+      closePopup();
+    }
+  });
+}
+
 
 
 

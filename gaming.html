@@ -73,8 +73,10 @@
 
       <div class="header-actions">
         <!-- Switch to Hackathon Site -->
-        <a href="index.html" target="_self" class="btn-gaming-secondary" style="padding: 8px 16px; font-size: 0.85rem;" title="Switch to Main CRAFTCON Landing Page">
-          <span>🏛️ CRAFTCON HACKATHON</span>
+        <a href="index.html" target="_self" class="btn-gaming-secondary" title="Return to Main CRAFTCON Website">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <span class="btn-text-full">Back to Main Website</span>
+          <span class="btn-text-short">Main Site</span>
         </a>
 
         <!-- Centralized Register Button -->
@@ -804,6 +806,47 @@
       </div>
     </div>
   </div>
+
+  <!-- ENTRANCE POP-UP: GO BACK TO MAIN WEBSITE OPTION -->
+  <div id="gaming-entrance-popup" class="gaming-entrance-popup" role="dialog" aria-modal="true" aria-labelledby="gep-title">
+    <div class="gep-backdrop" id="gep-backdrop"></div>
+    <div class="gep-dialog">
+      <button class="gep-close-btn" id="gep-close-btn" aria-label="Close Pop-up">&times;</button>
+      
+      <div class="gep-badge">
+        <span class="gep-badge-dot"></span>
+        <span>CRAFTCON '26 NAVIGATION</span>
+      </div>
+      
+      <div class="gep-icon-wrap">
+        <span class="gep-icon">🎮</span>
+      </div>
+      
+      <h2 id="gep-title" class="gep-title">Welcome to Gaming Arena!</h2>
+      <p class="gep-subtitle">
+        You are currently in the <strong>CRAFTCON '26 Esports & Gaming Tournament</strong> zone.
+      </p>
+      <p class="gep-text">
+        Looking for the main 24-Hour Collegiate Hackathon, tracks, rules, schedule, and team registration?
+      </p>
+      
+      <div class="gep-actions">
+        <a href="index.html" class="gep-btn-back" id="gep-btn-back">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <span>← Back to Main Website</span>
+        </a>
+        <button class="gep-btn-stay" id="gep-btn-stay">
+          <span>Stay in Gaming Arena ⚔️</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSISTENT FLOATING RETURN BUTTON -->
+  <a href="index.html" class="floating-return-main-btn" title="Return to Main CRAFTCON Hackathon Website">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    <span>← Back to Main Website</span>
+  </a>
 
   <!-- MINIMAL LEGAL FOOTER FOR RAZORPAY COMPLIANCE -->
   <footer style="text-align: center; padding: 20px; color: #a5a5c2; font-size: 0.85rem; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); background: #0b0c10;">
