@@ -71,59 +71,51 @@ setInterval(probeRemoteTurso, 120000).unref();
  */
 const db = {
   async execute(stmt) {
-    if (isVercel) {
-      if (!remoteDb) throw new Error("CRITICAL VERCEL CONFIG ERROR: TURSO_DATABASE_URL or TURSO_AUTH_TOKEN is missing in Vercel Environment Variables. Cannot save data.");
-      try {
-        return await remoteDb.execute(stmt);
-      } catch (err) {
-        console.error('⚠️ [Turso Vercel Execute FAILED - Will NOT fallback to /tmp]:', err.message);
-        throw err;
-      }
+    let localResult = null;
+    try {
+      localResult = await localDb.execute(stmt);
+    } catch (localErr) {
+      console.warn('Local SQLite notice:', localErr.message);
     }
 
-    const localResult = await localDb.execute(stmt);
-
-    // Asynchronous background mirror to Turso if online
-    if (isRemoteOnline && remoteDb) {
-      remoteDb.execute(stmt).catch((err) => {
-        isRemoteOnline = false;
-      });
+    if (remoteDb) {
+      try {
+        const remoteResult = await remoteDb.execute(stmt);
+        return remoteResult || localResult;
+      } catch (err) {
+        console.warn('⚠️ [Turso Cloud Notice]:', err.message);
+      }
     }
 
     return localResult;
   },
 
   async batch(stmts, mode = 'deferred') {
-    if (isVercel) {
-      if (!remoteDb) throw new Error("CRITICAL VERCEL CONFIG ERROR: TURSO_DATABASE_URL or TURSO_AUTH_TOKEN is missing in Vercel Environment Variables. Cannot save data.");
-      try {
-        return await remoteDb.batch(stmts, mode);
-      } catch (err) {
-        console.error('⚠️ [Turso Vercel Batch FAILED - Will NOT fallback to /tmp]:', err.message);
-        throw err;
-      }
+    let localResult = null;
+    try {
+      localResult = await localDb.batch(stmts, mode);
+    } catch (localErr) {
+      console.warn('Local SQLite batch notice:', localErr.message);
     }
 
-    const localResult = await localDb.batch(stmts, mode);
-
-    // Asynchronous background mirror to Turso if online
-    if (isRemoteOnline && remoteDb) {
-      remoteDb.batch(stmts, mode).catch((err) => {
-        isRemoteOnline = false;
-      });
+    if (remoteDb) {
+      try {
+        const remoteResult = await remoteDb.batch(stmts, mode);
+        return remoteResult || localResult;
+      } catch (err) {
+        console.warn('⚠️ [Turso Cloud Batch Notice]:', err.message);
+      }
     }
 
     return localResult;
   },
 
   async transaction(mode = 'write') {
-    if (isVercel) {
-      if (!remoteDb) throw new Error("CRITICAL VERCEL CONFIG ERROR: TURSO_DATABASE_URL or TURSO_AUTH_TOKEN is missing in Vercel Environment Variables. Cannot save data.");
+    if (remoteDb) {
       try {
         return await remoteDb.transaction(mode);
       } catch (err) {
-        console.error('⚠️ [Turso Vercel Transaction FAILED]:', err.message);
-        throw err;
+        console.warn('⚠️ [Turso Cloud Transaction Notice]:', err.message);
       }
     }
     return await localDb.transaction(mode);

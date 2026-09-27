@@ -245,25 +245,39 @@ async function upsertRow(sheets, spreadsheetId, sheetName, registrationId, row) 
   return rowIdx;
 }
 
-async function syncConfirmedRegistration(registrationId) {
-  if (!registrationId) return { success: false, error: 'Registration ID required.' };
+async function syncConfirmedRegistration(registrationId, directReg = null, directPlayers = null) {
+  if (!registrationId && !directReg) return { success: false, error: 'Registration ID or data required.' };
+  const targetRegId = registrationId || (directReg && directReg.registration_id);
 
   try {
-    const regRes = await db.execute({ sql: 'SELECT * FROM registrations WHERE registration_id = ?', args: [registrationId] });
-    if (!regRes.rows || regRes.rows.length === 0) return { success: false, error: 'Registration not found.' };
+    let reg = directReg;
+    let players = directPlayers || [];
 
-    const reg = regRes.rows[0];
+    if (!reg) {
+      const regRes = await db.execute({ sql: 'SELECT * FROM registrations WHERE registration_id = ?', args: [targetRegId] });
+      if (regRes && regRes.rows && regRes.rows.length > 0) {
+        reg = regRes.rows[0];
+      }
+    }
+
+    if (!players || players.length === 0) {
+      try {
+        const playersRes = await db.execute({ sql: 'SELECT * FROM players WHERE registration_id = ? ORDER BY player_index ASC', args: [targetRegId] });
+        if (playersRes && playersRes.rows) players = playersRes.rows;
+      } catch (e) {}
+    }
+
+    if (!reg) return { success: false, error: 'Registration not found.' };
     if (reg.registration_status === 'CANCELLED') return { success: false, error: 'Registration is cancelled.' };
-
-    const playersRes = await db.execute({ sql: 'SELECT * FROM players WHERE registration_id = ? ORDER BY player_index ASC', args: [registrationId] });
-    const players = playersRes.rows || [];
 
     const auth = getGoogleAuthClient();
     const spreadsheetId = getSpreadsheetId();
 
     if (!auth || !spreadsheetId) {
       const reason = !spreadsheetId ? 'Missing GOOGLE_SHEETS_SPREADSHEET_ID' : 'Missing credentials';
-      await db.execute({ sql: 'UPDATE registrations SET google_sheets_sync_status = ?, google_sheets_sync_error = ?, updated_at = CURRENT_TIMESTAMP WHERE registration_id = ?', args: ['PENDING', reason, registrationId] });
+      try {
+        await db.execute({ sql: 'UPDATE registrations SET google_sheets_sync_status = ?, google_sheets_sync_error = ?, updated_at = CURRENT_TIMESTAMP WHERE registration_id = ?', args: ['PENDING', reason, targetRegId] });
+      } catch (e) {}
       return { success: false, error: reason, status: 'PENDING' };
     }
 
@@ -273,19 +287,19 @@ async function syncConfirmedRegistration(registrationId) {
     const isHackathon = (reg.category === 'HACKATHON') || (reg.game === 'HACKATHON') || (!reg.category && reg.total_amount === 0);
 
     // 1. Legacy Registrations sheet
-    const legacyRowIdx = await upsertRow(sheets, spreadsheetId, 'Registrations', registrationId, buildLegacyRow(reg));
+    const legacyRowIdx = await upsertRow(sheets, spreadsheetId, 'Registrations', targetRegId, buildLegacyRow(reg));
 
     // 2. Category-specific sheet
     if (isHackathon) {
-      await upsertRow(sheets, spreadsheetId, 'Hackathon Registrations', registrationId, buildHackathonRow(reg, players));
+      await upsertRow(sheets, spreadsheetId, 'Hackathon Registrations', targetRegId, buildHackathonRow(reg, players));
     } else {
-      await upsertRow(sheets, spreadsheetId, 'Gaming Registrations', registrationId, buildGamingRow(reg, players));
+      await upsertRow(sheets, spreadsheetId, 'Gaming Registrations', targetRegId, buildGamingRow(reg, players));
     }
 
     // 3. Players sheet (only on first sync)
     if (players.length > 0 && legacyRowIdx <= 0) {
       const playerRows = players.map((p, idx) => [
-        registrationId, 'P' + (p.player_index || idx + 1),
+        targetRegId, 'P' + (p.player_index || idx + 1),
         p.full_name || p.name || '', p.in_game_name || 'N/A', p.game_uid || 'N/A',
         p.email || reg.captain_email || '', p.phone || reg.captain_phone || '',
         p.role || (idx === 0 ? 'Captain' : 'Player'), reg.game || 'HACKATHON',
@@ -298,14 +312,16 @@ async function syncConfirmedRegistration(registrationId) {
       });
     }
 
-    await db.execute({ sql: 'UPDATE registrations SET google_sheets_sync_status = ?, google_sheets_synced_at = CURRENT_TIMESTAMP, google_sheets_sync_error = NULL, updated_at = CURRENT_TIMESTAMP WHERE registration_id = ?', args: ['SYNCED', registrationId] });
-    console.log('[GoogleSheets] Synced: ' + registrationId);
-    return { success: true, registrationId, status: 'SYNCED' };
+    try {
+      await db.execute({ sql: 'UPDATE registrations SET google_sheets_sync_status = ?, google_sheets_synced_at = CURRENT_TIMESTAMP, google_sheets_sync_error = NULL, updated_at = CURRENT_TIMESTAMP WHERE registration_id = ?', args: ['SYNCED', targetRegId] });
+    } catch (e) {}
+    console.log('[GoogleSheets] Synced directly: ' + targetRegId);
+    return { success: true, registrationId: targetRegId, status: 'SYNCED' };
 
   } catch (err) {
     console.error('[GoogleSheets Error]:', err.message);
     try {
-      await db.execute({ sql: 'UPDATE registrations SET google_sheets_sync_status = ?, google_sheets_sync_error = ?, updated_at = CURRENT_TIMESTAMP WHERE registration_id = ?', args: ['FAILED', err.message, registrationId] });
+      await db.execute({ sql: 'UPDATE registrations SET google_sheets_sync_status = ?, google_sheets_sync_error = ?, updated_at = CURRENT_TIMESTAMP WHERE registration_id = ?', args: ['FAILED', err.message, targetRegId] });
     } catch (e) {}
     return { success: false, error: err.message, status: 'FAILED' };
   }

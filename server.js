@@ -391,11 +391,33 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
 
       console.log(`✅ [Flagship Hackathon Registration Created] Reg ID: ${registrationId} (${eventConfig.name}) - CONFIRMED`);
 
+      const regRecord = {
+        registration_id: registrationId,
+        pass_id: registrationId,
+        category: eventConfig.category || 'HACKATHON',
+        game: eventConfig.id,
+        registration_type: regType,
+        team_name: cleanTeamName,
+        college: cleanCollege,
+        captain_name: cleanCaptain.name,
+        captain_email: cleanCaptain.email,
+        captain_phone: cleanCaptain.phone,
+        player_count: providedPlayers.length,
+        total_amount: totalAmount,
+        amount: totalAmount,
+        currency: 'INR',
+        payment_method: totalAmount > 0 ? 'RAZORPAY' : 'FREE',
+        payment_status: 'VERIFIED',
+        registration_status: 'CONFIRMED',
+        primary_track: body.primary_track || body.primaryTrack || 'N/A',
+        confirmed_at: new Date().toISOString()
+      };
+
       // Run Google Sheets Sync & Email concurrently (resilient for Vercel serverless)
       try {
         await Promise.race([
           Promise.allSettled([
-            googleSheetsService.syncConfirmedRegistration(registrationId),
+            googleSheetsService.syncConfirmedRegistration(registrationId, regRecord, providedPlayers),
             emailService.sendRegistrationConfirmation(registrationId)
           ]),
           new Promise((_, reject) => setTimeout(() => reject(new Error('Background tasks timed out after 7s')), 7000))
@@ -890,11 +912,35 @@ app.post(['/api/payments/verify', '/api/payment/verify'], async (req, res) => {
 
     console.log(`✅ Registration CONFIRMED & Inserted into Turso DB [${finalRegistrationId}] Payment ID: ${finalPaymentId}`);
 
+    const regRecord = {
+      registration_id: finalRegistrationId,
+      pass_id: finalPassId,
+      category: eventConfig.category || 'EVENT',
+      game: eventConfig.id,
+      registration_type: eventConfig.type || eventConfig.registrationType || 'TEAM',
+      team_name: teamName,
+      college: college,
+      captain_name: captain.name.trim(),
+      captain_email: captain.email.trim(),
+      captain_phone: captain.phone.trim(),
+      player_count: count,
+      total_amount: totalAmount,
+      amount: totalAmount,
+      currency: 'INR',
+      payment_method: 'RAZORPAY',
+      payment_status: 'PAID',
+      registration_status: 'CONFIRMED',
+      razorpay_payment_id: finalPaymentId,
+      razorpay_order_id: finalOrderId,
+      primary_track: primaryTrackValue,
+      confirmed_at: new Date().toISOString()
+    };
+
     // Synchronously await Google Sheets Sync & Confirmation Email concurrently
     try {
       await Promise.race([
         Promise.allSettled([
-          googleSheetsService.syncConfirmedRegistration(finalRegistrationId),
+          googleSheetsService.syncConfirmedRegistration(finalRegistrationId, regRecord, providedPlayers),
           emailService.sendRegistrationConfirmation(finalRegistrationId)
         ]),
         new Promise((_, reject) => setTimeout(() => reject(new Error('Background tasks timed out after 7s')), 7000))
