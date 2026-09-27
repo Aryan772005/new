@@ -721,9 +721,9 @@ app.post(['/api/payments/verify', '/api/payment/verify'], async (req, res) => {
           leader_name, leader_email, leader_phone, player_count,
           total_amount, amount, fee_per_person, currency,
           payment_method, payment_status, registration_status, status,
-          razorpay_order_id, razorpay_payment_id, order_id, payment_id,
+          razorpay_order_id, razorpay_payment_id, order_id, payment_id, primary_track,
           confirmed_at, created_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'INR', 'RAZORPAY', 'PAID', 'CONFIRMED', 'confirmed', ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'INR', 'RAZORPAY', 'PAID', 'CONFIRMED', 'confirmed', ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
         args: [
           finalRegistrationId,
           finalPassId,
@@ -747,7 +747,8 @@ app.post(['/api/payments/verify', '/api/payment/verify'], async (req, res) => {
           finalOrderId,
           finalPaymentId,
           finalOrderId,
-          finalPaymentId
+          finalPaymentId,
+          regData.primary_track || regData.primaryTrack || 'N/A'
         ]
       },
       {
