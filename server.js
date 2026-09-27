@@ -192,6 +192,10 @@ app.get('/api/diagnostics', (req, res) => {
     email: {
       hasUser: !!process.env.EMAIL_USER,
       hasPass: !!process.env.EMAIL_PASS
+    },
+    razorpay: {
+      hasKeyId: !!process.env.RAZORPAY_KEY_ID,
+      hasKeySecret: !!process.env.RAZORPAY_KEY_SECRET
     }
   };
   
@@ -202,6 +206,8 @@ app.get('/api/diagnostics', (req, res) => {
     errors.push('Google Sheets credentials are missing (either GOOGLE_SERVICE_ACCOUNT_KEY or GOOGLE_SERVICE_ACCOUNT_EMAIL+GOOGLE_PRIVATE_KEY).');
   }
   if (!diagnostics.email.hasUser || !diagnostics.email.hasPass) errors.push('EMAIL_USER or EMAIL_PASS is missing.');
+  if (!diagnostics.razorpay.hasKeyId) errors.push('RAZORPAY_KEY_ID is missing.');
+  if (!diagnostics.razorpay.hasKeySecret) errors.push('RAZORPAY_KEY_SECRET is missing.');
 
   res.json({
     status: errors.length === 0 ? 'All Systems Go' : 'Configuration Errors Found',
@@ -213,15 +219,13 @@ app.get('/api/diagnostics', (req, res) => {
 
 // 1.5 SYSTEM CONFIGURATION ENDPOINT
 app.get('/api/config', (req, res) => {
-  const paymentProvider = (process.env.PAYMENT_PROVIDER || 'upi').toLowerCase().trim();
-  const upiQrUrl = process.env.UPI_PAYMENT_QR_URL || '/assets/images/upi_qr.png';
-  const upiId = process.env.UPI_ID || 'paytm.s2sp1kq@pty';
+  const paymentProvider = 'razorpay';
+  const keyId = (process.env.RAZORPAY_KEY_ID || '').trim();
 
   res.json({
     success: true,
     paymentProvider,
-    upiQrUrl,
-    upiId
+    keyId
   });
 });
 
@@ -420,94 +424,14 @@ app.post(['/api/registrations/create', '/api/register'], async (req, res) => {
         message: 'Hackathon Registration Confirmed! Your official pass has been generated.'
       });
     } else {
-      // PAID GAMING REGISTRATION -> INITIAL DB RECORD WITH PENDING PAYMENT
-      await db.batch([
-        {
-          sql: `INSERT INTO registrations (
-            registration_id, pass_id, category, game, registration_type, team_name, team_size,
-            college, college_name, captain_name, captain_email, captain_phone,
-            leader_name, leader_email, leader_phone, player_count,
-            total_amount, amount, fee_per_person, currency, payment_method, payment_status, registration_status,
-            primary_track, utr_transaction_id, created_at, updated_at, confirmed_at
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'INR', 'UPI', 'VERIFIED', 'CONFIRMED', 'N/A', ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
-          args: [
-            registrationId,
-            registrationId, // Satisfy NOT NULL pass_id
-            eventConfig.category || 'GAMING',
-            eventConfig.id,
-            regType,
-            cleanTeamName,
-            providedPlayers.length, // Satisfy NOT NULL team_size
-            cleanCollege,
-            cleanCollege, // Satisfy NOT NULL college_name
-            cleanCaptain.name,
-            cleanCaptain.email,
-            cleanCaptain.phone,
-            cleanCaptain.name, // Satisfy NOT NULL leader_name
-            cleanCaptain.email, // Satisfy NOT NULL leader_email
-            cleanCaptain.phone, // Satisfy NOT NULL leader_phone
-            providedPlayers.length,
-            totalAmount,
-            totalAmount,
-            feePerPerson,
-            req.body.utr || null
-          ]
-        }
-      ]);
-
-      // Insert Player Roster into Turso
-      const playerStatements = providedPlayers.map((player, idx) => ({
-        sql: `INSERT INTO players (registration_id, player_index, name, full_name, in_game_name, game_uid, email, phone, role)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        args: [
-          registrationId,
-          idx + 1,
-          (player.full_name || player.name || cleanCaptain.name).trim(),
-          (player.full_name || player.name || cleanCaptain.name).trim(),
-          (player.in_game_name || player.inGameName || player.ign || 'N/A').trim(),
-          (player.game_uid || player.gameUid || player.uid || 'N/A').trim(),
-          (player.email || cleanCaptain.email).trim(),
-          (player.phone || cleanCaptain.phone).trim(),
-          idx === 0 ? 'CAPTAIN' : `PLAYER_${idx + 1}`
-        ]
-      }));
-
-      await db.batch(playerStatements);
-
-      console.log(`📝 [Gaming Registration Created in Turso] Reg ID: ${registrationId} (${eventConfig.name}) Total: ₹${totalAmount} - AUTO CONFIRMED`);
-
-      // Run Google Sheets Sync & Email concurrently (resilient for Vercel serverless)
-      try {
-        await Promise.race([
-          Promise.allSettled([
-            googleSheetsService.syncConfirmedRegistration(registrationId),
-            emailService.sendRegistrationConfirmation(registrationId)
-          ]),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('Background tasks timed out after 7s')), 7000))
-        ]);
-      } catch (err) {
-        console.warn('⚠️ [Background Tasks Notice]:', err.message);
-      }
-
-      return res.json({
-        success: true,
-        status: 'CONFIRMED',
-        registrationId,
-        game: eventConfig.name,
-        gameId: eventConfig.id,
-        eventId: eventConfig.id,
-        category: eventConfig.category,
-        registrationType: regType,
-        teamName: cleanTeamName,
-        college: cleanCollege,
-        captain: cleanCaptain,
-        playerCount: providedPlayers.length,
-        feePerPerson,
-        totalAmount,
-        amount: totalAmount,
-        currency: 'INR',
+      // PAID REGISTRATIONS -> REQUIRE RAZORPAY CHECKOUT
+      console.log(`ℹ️ [Registration Init] Event ${eventConfig.name} requires Razorpay payment (₹${totalAmount}).`);
+      return res.status(400).json({
+        success: false,
         paymentRequired: true,
-        paymentProvider: 'UPI'
+        totalAmount,
+        currency: 'INR',
+        error: 'Paid event registrations must be completed through the Razorpay payment gateway (/api/payments/create-order).'
       });
     }
 
@@ -533,15 +457,24 @@ app.post(['/api/payments/create-order', '/api/payment/create-order'], async (req
   console.log(`💳 [DIAGNOSTICS] Razorpay SDK Loaded: ${diag.isSdkLoaded}`);
 
   try {
-    const { gameId, teamName, college, captain, players, registrationId } = req.body;
+    const { gameId, eventId, teamName, college, captain, players, registrationId } = req.body;
 
-    let targetGameId = gameId;
     let targetTeamName = teamName;
     let targetCollege = college;
-    let targetCaptain = captain;
+    let targetCaptain = captain || {};
+
+    if (!targetCaptain.name && (req.body.leader_name || req.body.leaderName)) {
+      targetCaptain = {
+        name: req.body.leader_name || req.body.leaderName || '',
+        email: req.body.leader_email || req.body.leaderEmail || '',
+        phone: req.body.leader_phone || req.body.leaderPhone || ''
+      };
+    }
+
+    let rawTargetId = (eventId || gameId || '').toUpperCase();
 
     // If registrationId is supplied (e.g. from existing DB record during retry)
-    if (registrationId && !gameId) {
+    if (registrationId && !rawTargetId) {
       try {
         const regRes = await db.execute({
           sql: 'SELECT * FROM registrations WHERE registration_id = ?',
@@ -549,7 +482,7 @@ app.post(['/api/payments/create-order', '/api/payment/create-order'], async (req
         });
         const existingReg = regRes.rows && regRes.rows.length > 0 ? regRes.rows[0] : null;
         if (existingReg) {
-          targetGameId = existingReg.game;
+          rawTargetId = (existingReg.game || existingReg.category || '').toUpperCase();
           targetTeamName = existingReg.team_name;
           targetCollege = existingReg.college;
           targetCaptain = { name: existingReg.captain_name, email: existingReg.captain_email, phone: existingReg.captain_phone };
@@ -559,19 +492,28 @@ app.post(['/api/payments/create-order', '/api/payment/create-order'], async (req
       }
     }
 
-    const gameConfig = GAMES_REGISTRY[targetGameId || 'BGMI'];
-    if (!gameConfig) {
-      console.error(`❌ [CREATE-ORDER ERROR] Invalid game selected: ${targetGameId}`);
-      return res.status(400).json({ success: false, error: 'Invalid game selected.' });
+    let eventConfig = EVENTS_REGISTRY[rawTargetId] || GAMES_REGISTRY[rawTargetId];
+    if (!eventConfig && rawTargetId) {
+      const matchedKey = Object.keys(EVENTS_REGISTRY).find(k => k === rawTargetId || (EVENTS_REGISTRY[k].slug && EVENTS_REGISTRY[k].slug === rawTargetId.toLowerCase()));
+      if (matchedKey) eventConfig = EVENTS_REGISTRY[matchedKey];
+    }
+    if (!eventConfig) {
+      eventConfig = GAMES_REGISTRY['BGMI'];
     }
 
-    // Authoritative Backend Price Calculation (₹50 / person rule)
-    const requiredPlayerCount = gameConfig.minPlayers;
-    const feePerPerson = 50;
-    const totalAmount = requiredPlayerCount * feePerPerson; // e.g. Ludo = ₹50
-    const amountInPaise = Math.round(totalAmount * 100); // e.g. Ludo = 5000 paise
+    // Authoritative Backend Price Calculation
+    const providedPlayers = Array.isArray(players) && players.length > 0 ? players : [targetCaptain];
+    const requiredPlayerCount = eventConfig.minParticipants || eventConfig.minPlayers || 1;
+    const count = Math.max(providedPlayers.length, requiredPlayerCount);
+    const feePerPerson = eventConfig.feePerParticipant || eventConfig.feePerPerson || 50;
+    const totalAmount = eventConfig.fixedFee || (count * feePerPerson);
+    const amountInPaise = Math.round(totalAmount * 100);
 
-    console.log(`💳 [CREATE-ORDER] Game: ${gameConfig.name} (${gameConfig.id}), Players: ${requiredPlayerCount}, Amount: ₹${totalAmount} (${amountInPaise} paise)`);
+    if (totalAmount <= 0) {
+      return res.status(400).json({ success: false, error: 'This event is free of charge and does not require an online payment order.' });
+    }
+
+    console.log(`💳 [CREATE-ORDER] Event: ${eventConfig.name} (${eventConfig.id}), Players: ${count}, Amount: ₹${totalAmount} (${amountInPaise} paise)`);
 
     // Verify Server-Side Credentials & SDK
     if (!diag.isSdkLoaded) {
@@ -602,7 +544,7 @@ app.post(['/api/payments/create-order', '/api/payment/create-order'], async (req
     }
 
     const randomHex = crypto.randomBytes(3).toString('hex').toUpperCase();
-    const referenceId = `CRAFT26-${gameConfig.id}-${randomHex}`;
+    const referenceId = `CRAFT26-${eventConfig.id}-${randomHex}`;
 
     console.log(`💳 [CREATE-ORDER] Invoking Razorpay API orders.create for receipt ${referenceId}...`);
 
@@ -613,7 +555,8 @@ app.post(['/api/payments/create-order', '/api/payment/create-order'], async (req
         currency: 'INR',
         receipt: referenceId,
         notes: {
-          game: gameConfig.id,
+          eventId: eventConfig.id,
+          game: eventConfig.id,
           teamName: targetTeamName || '',
           college: targetCollege || '',
           captainEmail: targetCaptain ? targetCaptain.email : ''
@@ -649,7 +592,8 @@ app.post(['/api/payments/create-order', '/api/payment/create-order'], async (req
       amount: amountInPaise,
       displayAmount: totalAmount,
       currency: 'INR',
-      game: gameConfig.name,
+      game: eventConfig.name,
+      eventId: eventConfig.id,
       teamName: targetTeamName,
       college: targetCollege
     });
@@ -730,52 +674,73 @@ app.post(['/api/payments/verify', '/api/payment/verify'], async (req, res) => {
 
     // Extract registration data from client payload
     const regData = registrationData || {};
-    const gameId = regData.gameId || 'BGMI';
-    const gameConfig = GAMES_REGISTRY[gameId] || GAMES_REGISTRY['BGMI'];
+    const rawTargetId = (regData.eventId || regData.gameId || regData.event || regData.game || '').toUpperCase();
+    let eventConfig = EVENTS_REGISTRY[rawTargetId] || GAMES_REGISTRY[rawTargetId];
+    if (!eventConfig && rawTargetId) {
+      const matchedKey = Object.keys(EVENTS_REGISTRY).find(k => k === rawTargetId || (EVENTS_REGISTRY[k].slug && EVENTS_REGISTRY[k].slug === rawTargetId.toLowerCase()));
+      if (matchedKey) eventConfig = EVENTS_REGISTRY[matchedKey];
+    }
+    if (!eventConfig) {
+      eventConfig = GAMES_REGISTRY['BGMI'] || { id: 'BGMI', name: 'BGMI Tournament', category: 'GAMING', type: 'squad', minPlayers: 4, feePerPerson: 50 };
+    }
 
     const captain = regData.captain || {
-      name: 'Arena Player',
-      email: 'player@craftcon.in',
+      name: 'Participant',
+      email: 'attendee@craftcon.in',
       phone: '9876543210',
       ign: 'Player1'
     };
 
     const college = (regData.college || 'Desh Bhagat University').trim();
-    const teamName = gameConfig.type === 'squad' 
+    const isTeam = (eventConfig.type === 'squad' || eventConfig.registrationType === 'TEAM' || eventConfig.type === 'TEAM');
+    const teamName = isTeam 
       ? (regData.teamName || 'Squad').trim() 
       : `Solo: ${captain.name.trim()}`;
 
-    const providedPlayers = Array.isArray(regData.players) ? regData.players : [captain];
-    const requiredPlayerCount = gameConfig.minPlayers;
-    const feePerPerson = 50;
-    const totalAmount = requiredPlayerCount * feePerPerson;
+    const providedPlayers = Array.isArray(regData.players) && regData.players.length > 0 
+      ? regData.players 
+      : [captain];
+    const requiredPlayerCount = eventConfig.minParticipants || eventConfig.minPlayers || 1;
+    const count = Math.max(providedPlayers.length, requiredPlayerCount);
+    const feePerPerson = eventConfig.feePerParticipant || eventConfig.feePerPerson || 50;
+    const totalAmount = eventConfig.fixedFee || (count * feePerPerson);
 
-    // Generate canonical final Registration ID
+    // Generate canonical final Registration ID and Pass ID
     const randomHex = crypto.randomBytes(3).toString('hex').toUpperCase();
     const finalRegistrationId = registrationId && registrationId.startsWith('CRAFT26-')
       ? registrationId
-      : `CRAFT26-${gameConfig.id}-${randomHex}`;
+      : `CRAFT26-${eventConfig.id}-${randomHex}`;
+    const finalPassId = `PASS-${finalRegistrationId}`;
 
     // INSERT FINAL CONFIRMED REGISTRATION & PLAYERS INTO TURSO DB ATOMICALLY
     await db.batch([
       {
         sql: `INSERT INTO registrations (
-          registration_id, category, game, registration_type, team_name,
-          college, captain_name, captain_email, captain_phone, player_count,
-          total_amount, amount, fee_per_person, currency, payment_status, registration_status,
-          razorpay_order_id, razorpay_payment_id, order_id, payment_id, confirmed_at, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'INR', 'PAID', 'CONFIRMED', ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+          registration_id, pass_id, category, game, registration_type, team_name, team_size,
+          college, college_name, captain_name, captain_email, captain_phone,
+          leader_name, leader_email, leader_phone, player_count,
+          total_amount, amount, fee_per_person, currency,
+          payment_method, payment_status, registration_status, status,
+          razorpay_order_id, razorpay_payment_id, order_id, payment_id,
+          confirmed_at, created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'INR', 'RAZORPAY', 'PAID', 'CONFIRMED', 'confirmed', ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
         args: [
           finalRegistrationId,
-          gameConfig.category,
-          gameConfig.id,
-          gameConfig.type,
+          finalPassId,
+          eventConfig.category || 'EVENT',
+          eventConfig.id,
+          eventConfig.type || eventConfig.registrationType || 'TEAM',
           teamName,
+          count,
+          college,
           college,
           captain.name.trim(),
           captain.email.trim(),
           captain.phone.trim(),
-          requiredPlayerCount,
+          captain.name.trim(),
+          captain.email.trim(),
+          captain.phone.trim(),
+          count,
           totalAmount,
           totalAmount,
           feePerPerson,
@@ -788,9 +753,9 @@ app.post(['/api/payments/verify', '/api/payment/verify'], async (req, res) => {
       {
         sql: `INSERT OR REPLACE INTO payments (
                 registration_id, razorpay_order_id, razorpay_payment_id, razorpay_signature, signature,
-                order_id, payment_id, amount, currency, status, provider, verified_at, updated_at
+                order_id, payment_id, amount, currency, status, method, provider, verified_at, updated_at
               )
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'INR', 'CAPTURED', ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'INR', 'CAPTURED', 'RAZORPAY', ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
         args: [
           finalRegistrationId,
           finalOrderId,
@@ -806,7 +771,7 @@ app.post(['/api/payments/verify', '/api/payment/verify'], async (req, res) => {
     ]);
 
     // Insert Player Roster into Turso
-    const playerStatements = providedPlayers.slice(0, requiredPlayerCount).map((player, idx) => ({
+    const playerStatements = providedPlayers.slice(0, count).map((player, idx) => ({
       sql: `INSERT INTO players (registration_id, player_index, name, full_name, in_game_name, game_uid, email, phone, role)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       args: [
@@ -818,7 +783,7 @@ app.post(['/api/payments/verify', '/api/payment/verify'], async (req, res) => {
         (player.game_uid || player.gameUid || player.uid || 'N/A').trim(),
         (player.email || captain.email).trim(),
         (player.phone || captain.phone).trim(),
-        idx === 0 ? 'CAPTAIN' : `PLAYER_${idx + 1}`
+        idx === 0 ? 'CAPTAIN' : `MEMBER_${idx + 1}`
       ]
     }));
 
@@ -843,20 +808,22 @@ app.post(['/api/payments/verify', '/api/payment/verify'], async (req, res) => {
       success: true,
       status: 'CONFIRMED',
       registrationId: finalRegistrationId,
+      passId: finalPassId,
       paymentId: finalPaymentId,
       orderId: finalOrderId,
-      game: gameConfig.name,
-      category: gameConfig.category,
-      registrationType: gameConfig.type,
+      game: eventConfig.name,
+      category: eventConfig.category,
+      registrationType: eventConfig.type || eventConfig.registrationType || 'TEAM',
       teamName,
       college,
       captainName: captain.name,
       captainEmail: captain.email,
-      playerCount: requiredPlayerCount,
+      playerCount: count,
       feePerPerson,
       totalAmount,
       amount: totalAmount,
       players: providedPlayers,
+      paymentMethod: 'RAZORPAY',
       paymentStatus: 'PAID',
       confirmedAt: new Date().toISOString()
     });
@@ -867,120 +834,12 @@ app.post(['/api/payments/verify', '/api/payment/verify'], async (req, res) => {
   }
 });
 
-// 5.5 SUBMIT UPI PAYMENT PROOF (UTR + SCREENSHOT)
+// 5.5 SUBMIT UPI PAYMENT PROOF (DISCONTINUED - ALL PAYMENTS PROCESSED VIA RAZORPAY)
 app.post('/api/payments/submit-proof', async (req, res) => {
-  try {
-    const registrationId = req.body.registrationId || req.body.registration_id;
-    const rawUtr = req.body.utr || req.body.utrTransactionId || req.body.utr_transaction_id || '';
-    const rawScreenshot = req.body.screenshot || req.body.paymentScreenshotUrl || req.body.screenshotUrl || '';
-
-    if (!registrationId) {
-      return res.status(400).json({ success: false, error: 'Registration ID is required.' });
-    }
-
-    const cleanUtr = rawUtr.trim();
-    if (!cleanUtr || cleanUtr.length < 6 || cleanUtr.length > 35) {
-      return res.status(400).json({
-        success: false,
-        error: 'Please enter a valid 12-digit UTR or Transaction ID (minimum 6 characters).'
-      });
-    }
-
-    if (!rawScreenshot || typeof rawScreenshot !== 'string' || !rawScreenshot.startsWith('data:image/')) {
-      return res.status(400).json({
-        success: false,
-        error: 'A valid payment screenshot (JPG, PNG, or WEBP image file) is required.'
-      });
-    }
-
-    if (rawScreenshot.length > 8 * 1024 * 1024) {
-      return res.status(400).json({
-        success: false,
-        error: 'Payment screenshot image file size is too large. Please upload an image under 5MB.'
-      });
-    }
-
-    // Fetch registration from Turso DB
-    const regRes = await db.execute({
-      sql: 'SELECT * FROM registrations WHERE registration_id = ?',
-      args: [registrationId]
-    });
-
-    if (!regRes.rows || regRes.rows.length === 0) {
-      return res.status(404).json({ success: false, error: 'Registration record not found.' });
-    }
-
-    const reg = regRes.rows[0];
-
-    // Check Duplicate UTR (prevent same UTR on different registrations)
-    const duplicateUtrRes = await db.execute({
-      sql: 'SELECT registration_id FROM registrations WHERE utr_transaction_id = ? AND registration_id != ?',
-      args: [cleanUtr, registrationId]
-    });
-
-    if (duplicateUtrRes.rows && duplicateUtrRes.rows.length > 0) {
-      return res.status(400).json({
-        success: false,
-        error: `This UTR / Transaction ID (${cleanUtr}) has already been submitted for another registration.`
-      });
-    }
-
-    // Update Turso DB: registration_status = 'PAYMENT_SUBMITTED', payment_status = 'SUBMITTED'
-    await db.execute({
-      sql: `UPDATE registrations 
-            SET payment_method = 'UPI',
-                payment_status = 'SUBMITTED',
-                registration_status = 'PAYMENT_SUBMITTED',
-                utr_transaction_id = ?,
-                payment_screenshot_url = ?,
-                submitted_at = CURRENT_TIMESTAMP,
-                updated_at = CURRENT_TIMESTAMP
-            WHERE registration_id = ?`,
-      args: [cleanUtr, rawScreenshot, registrationId]
-    });
-
-    try {
-      await db.execute({
-        sql: `INSERT OR REPLACE INTO payments (
-                registration_id, provider, method, amount, status, utr_transaction_id,
-                payment_screenshot_url, submitted_at, updated_at
-              ) VALUES (?, 'UPI', 'UPI', ?, 'SUBMITTED', ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
-        args: [registrationId, reg.total_amount || reg.amount || 200, cleanUtr, rawScreenshot]
-      });
-    } catch (payErr) {
-      console.warn('⚠️ [Payments Table Notice]:', payErr.message);
-    }
-
-    console.log(`📥 [UPI Payment Proof Submitted] Reg ID: ${registrationId}, UTR: ${cleanUtr}`);
-
-    // Synchronously await Google Sheets Sync & Confirmation Email concurrently
-    try {
-      await Promise.race([
-        Promise.allSettled([
-          googleSheetsService.syncConfirmedRegistration(registrationId),
-          emailService.sendPaymentProofSubmittedEmail(registrationId)
-        ]),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Background tasks timed out after 7s')), 7000))
-      ]);
-    } catch (err) {
-      console.warn('⚠️ [Background Tasks Notice]:', err.message);
-    }
-
-    return res.json({
-      success: true,
-      status: 'PAYMENT_SUBMITTED',
-      registrationId: registrationId,
-      utr: cleanUtr,
-      message: 'Payment details submitted successfully. Your registration is awaiting admin verification.'
-    });
-
-  } catch (error) {
-    console.error('❌ Error in /api/payments/submit-proof:', error);
-    return res.status(500).json({ 
-      success: false, 
-      error: `Failed to submit payment proof: ${error.message || 'Database or server error'}` 
-    });
-  }
+  return res.status(400).json({
+    success: false,
+    error: 'Payment by QR code/UTR screenshot proof has been discontinued. All registrations must be completed securely via online Razorpay checkout.'
+  });
 });
 
 // 5.6 ADMIN VERIFY / REJECT PAYMENT ENDPOINT

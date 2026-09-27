@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{--bg:#080b14;--surface:#0e1220;--surface2:#141826;--border:rgba(255,255,255,0.08);--purple:#8b5cf6;--purple-dark:#6d28d9;--cyan:#06b6d4;--green:#10b981;--gold:#f59e0b;--red:#ef4444;--text:#f1f5f9;--text-muted:#94a3b8;--text-dim:#64748b;--radius:14px;--radius-sm:8px}
@@ -87,11 +88,11 @@
     .summary-val{font-weight:600;color:var(--text)}
     .summary-val.amount{color:var(--gold);font-size:1.1rem;font-weight:800}
     .summary-val.free-tag{color:var(--green);font-weight:700}
-    .upi-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;text-align:center;margin-bottom:20px}
-    .upi-box h3{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;margin-bottom:20px}
-    .upi-qr{width:200px;height:200px;border-radius:12px;border:2px solid var(--border);object-fit:cover;margin:0 auto 16px;display:block;background:var(--surface2)}
-    .upi-id{font-size:1rem;font-weight:700;color:var(--purple);background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.2);padding:8px 16px;border-radius:6px;display:inline-block;margin-bottom:8px;letter-spacing:.04em}
-    .upi-note{font-size:.8rem;color:var(--text-muted)}
+    .rzp-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;text-align:center;margin-bottom:20px}
+    .rzp-box h3{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:8px;color:var(--text)}
+    .rzp-box p{font-size:.85rem;color:var(--text-muted);margin-bottom:14px}
+    .rzp-pills{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+    .rzp-pill{font-size:.75rem;padding:4px 10px;border-radius:6px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text)}
     .free-entry-badge{display:flex;flex-direction:column;align-items:center;gap:12px;padding:30px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:var(--radius);margin-bottom:20px;text-align:center}
     .free-entry-badge .bigcheck{font-size:3rem}
     .free-entry-badge h3{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:800;color:var(--green)}
@@ -537,8 +538,10 @@
         +'<div class="summary-row"><span class="summary-key">Total Fee</span><span class="summary-val '+(fee===0?'free-tag':'amount')+'">'+(fee===0?'&#10003; FREE ENTRY':'&#8377;'+fee)+'</span></div></div>';
       if(fee===0){
         document.getElementById('payment-action-area').innerHTML='<div class="free-entry-badge"><div class="bigcheck">&#x1F193;</div><h3>Free Entry - No Payment Required!</h3><p>Click Confirm Registration below. A confirmation email will be sent to '+STATE.captain.email+'.</p></div>';
+        document.getElementById('submit-label').innerHTML='&#9989; Confirm Registration';
       } else {
-        document.getElementById('payment-action-area').innerHTML='<div class="upi-box"><h3>&#128179; Pay via UPI to Complete Registration</h3><img class="upi-qr" src="assets/images/upi_qr.png" alt="UPI QR Code" onerror="this.style.background=\'var(--surface2)\'"><div class="upi-id">paytm.s2sp1kq@pty</div><p class="upi-note">Payee: PAYAL BHARTI • Scan or transfer &#8377;'+fee+' via PhonePe, GPay, Paytm</p></div><div class="form-card"><h3>&#128221; Enter Payment Proof</h3><div class="form-grid single"><div class="form-group"><label for="reg-utr">UTR / Transaction ID <span class="req">*</span></label><input type="text" id="reg-utr" placeholder="Enter 12-digit UTR number" maxlength="30"><span class="input-hint">Find this in your UPI payment receipt / bank notification</span></div></div></div>';
+        document.getElementById('payment-action-area').innerHTML='<div class="rzp-box"><div style="font-size:2.2rem;margin-bottom:8px">&#128179;</div><h3>Secure Online Payment via Razorpay</h3><p>Instant digital confirmation with zero delay. All payment options supported:</p><div class="rzp-pills"><span class="rzp-pill">&#9889; UPI (GPay, PhonePe, Paytm)</span><span class="rzp-pill">&#128179; Debit / Credit Cards</span><span class="rzp-pill">&#127963; NetBanking</span><span class="rzp-pill">&#128274; 256-Bit SSL Encrypted</span></div><div style="font-size:0.85rem;color:var(--gold);font-weight:700">Amount Payable: &#8377;'+fee+'</div></div>';
+        document.getElementById('submit-label').innerHTML='&#128179; Pay &#8377;'+fee+' via Razorpay';
       }
     }
 
@@ -546,25 +549,133 @@
       hideError(4);
       var ev=CATALOGUE[STATE.selectedEventId];
       var fee=ev.paymentRequired?(ev.fixedFee>0?ev.fixedFee:ev.feePerParticipant*STATE.participants.length):0;
-      var utr=null;
-      if(fee>0){var uel=document.getElementById('reg-utr');utr=uel?uel.value.trim():'';if(!utr)return showError(4,'Please enter your UTR / Transaction ID.');}
       var btn=document.getElementById('btn-submit'),sp=document.getElementById('submit-spinner'),lb=document.getElementById('submit-label');
-      btn.disabled=true;sp.style.display='block';lb.textContent='Processing...';
-      try{
-        var res=await fetch('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({eventId:STATE.selectedEventId,teamName:STATE.teamName,college:STATE.college,captain:STATE.captain,players:STATE.participants,utr:utr,amount:fee})});
-        var data=await res.json();
-        if(data.success||data.registrationId){
-          document.getElementById('success-reg-id').textContent=data.registrationId||'CRAFT26-XXXX';
-          document.getElementById('success-email').textContent=STATE.captain.email;
-          document.getElementById('success-details').innerHTML='<div class="sdi"><div class="lbl">Event</div><div class="val">'+ev.name+'</div></div><div class="sdi"><div class="lbl">Team</div><div class="val">'+STATE.teamName+'</div></div><div class="sdi"><div class="lbl">Captain</div><div class="val">'+STATE.captain.name+'</div></div><div class="sdi"><div class="lbl">Entry Fee</div><div class="val" style="color:'+(fee===0?'var(--green)':'var(--gold)')+'">'+(fee===0?'FREE':'&#8377;'+fee)+'</div></div>';
-          goToStep('success');
-        } else {
-          showError(4,data.error||'Registration failed. Please try again.');
-          btn.disabled=false;sp.style.display='none';lb.textContent='&#9989; Confirm Registration';
+
+      if(fee === 0){
+        // Free registration flow
+        btn.disabled=true;sp.style.display='block';lb.textContent='Processing...';
+        try{
+          var res=await fetch('/api/register',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({
+              eventId:STATE.selectedEventId,
+              teamName:STATE.teamName,
+              college:STATE.college,
+              captain:STATE.captain,
+              players:STATE.participants,
+              amount:0
+            })
+          });
+          var data=await res.json();
+          if(data.success||data.registrationId){
+            document.getElementById('success-reg-id').textContent=data.registrationId||'CRAFT26-XXXX';
+            document.getElementById('success-email').textContent=STATE.captain.email;
+            document.getElementById('success-details').innerHTML='<div class="sdi"><div class="lbl">Event</div><div class="val">'+ev.name+'</div></div><div class="sdi"><div class="lbl">Team</div><div class="val">'+STATE.teamName+'</div></div><div class="sdi"><div class="lbl">Captain</div><div class="val">'+STATE.captain.name+'</div></div><div class="sdi"><div class="lbl">Entry Fee</div><div class="val" style="color:var(--green)">FREE</div></div>';
+            goToStep('success');
+          } else {
+            showError(4,data.error||'Registration failed. Please try again.');
+            btn.disabled=false;sp.style.display='none';lb.innerHTML='&#9989; Confirm Registration';
+          }
+        }catch(err){
+          showError(4,'Network error: '+err.message);
+          btn.disabled=false;sp.style.display='none';lb.innerHTML='&#9989; Confirm Registration';
         }
-      }catch(err){
-        showError(4,'Network error: '+err.message);
-        btn.disabled=false;sp.style.display='none';lb.textContent='&#9989; Confirm Registration';
+      } else {
+        // Razorpay payment flow
+        btn.disabled=true;sp.style.display='block';lb.textContent='Connecting to Razorpay...';
+
+        if(typeof Razorpay === 'undefined'){
+          try {
+            await new Promise(function(resolve, reject){
+              var s = document.createElement('script');
+              s.src = 'https://checkout.razorpay.com/v1/checkout.js';
+              s.onload = resolve;
+              s.onerror = reject;
+              document.head.appendChild(s);
+            });
+          } catch(e) {
+            btn.disabled=false;sp.style.display='none';lb.innerHTML='&#128179; Pay &#8377;'+fee+' via Razorpay';
+            return showError(4, 'Failed to load Razorpay checkout SDK. Please check your internet connection.');
+          }
+        }
+
+        try {
+          var orderRes = await fetch('/api/payments/create-order', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              eventId: STATE.selectedEventId,
+              teamName: STATE.teamName,
+              college: STATE.college,
+              captain: STATE.captain,
+              players: STATE.participants
+            })
+          });
+          var orderData = await orderRes.json();
+          if(!orderData.success){
+            btn.disabled=false;sp.style.display='none';lb.innerHTML='&#128179; Pay &#8377;'+fee+' via Razorpay';
+            return showError(4, orderData.error || 'Failed to create payment order.');
+          }
+
+          var rzp = new Razorpay({
+            key: orderData.keyId,
+            amount: orderData.amount,
+            currency: orderData.currency || 'INR',
+            name: "CRAFTCON '26",
+            description: "Registration for " + ev.name,
+            order_id: orderData.orderId,
+            prefill: {
+              name: STATE.captain.name,
+              email: STATE.captain.email,
+              contact: STATE.captain.phone
+            },
+            theme: { color: "#8b5cf6" },
+            modal: {
+              ondismiss: function(){
+                btn.disabled=false;sp.style.display='none';lb.innerHTML='&#128179; Pay &#8377;'+fee+' via Razorpay';
+              }
+            },
+            handler: async function(resp){
+              lb.textContent='Verifying Payment...';
+              try {
+                var verifyRes = await fetch('/api/payments/verify', {
+                  method: 'POST',
+                  headers: {'Content-Type': 'application/json'},
+                  body: JSON.stringify({
+                    orderId: resp.razorpay_order_id || orderData.orderId,
+                    paymentId: resp.razorpay_payment_id,
+                    signature: resp.razorpay_signature,
+                    registrationData: {
+                      eventId: STATE.selectedEventId,
+                      teamName: STATE.teamName,
+                      college: STATE.college,
+                      captain: STATE.captain,
+                      players: STATE.participants
+                    }
+                  })
+                });
+                var vData = await verifyRes.json();
+                if(vData.success){
+                  document.getElementById('success-reg-id').textContent=vData.registrationId||'CRAFT26-XXXX';
+                  document.getElementById('success-email').textContent=STATE.captain.email;
+                  document.getElementById('success-details').innerHTML='<div class="sdi"><div class="lbl">Event</div><div class="val">'+ev.name+'</div></div><div class="sdi"><div class="lbl">Team</div><div class="val">'+STATE.teamName+'</div></div><div class="sdi"><div class="lbl">Captain</div><div class="val">'+STATE.captain.name+'</div></div><div class="sdi"><div class="lbl">Paid</div><div class="val" style="color:var(--green)">&#8377;'+fee+' (VERIFIED)</div></div>';
+                  goToStep('success');
+                } else {
+                  btn.disabled=false;sp.style.display='none';lb.innerHTML='&#128179; Pay &#8377;'+fee+' via Razorpay';
+                  showError(4, vData.error || 'Payment verification failed.');
+                }
+              } catch(vErr) {
+                btn.disabled=false;sp.style.display='none';lb.innerHTML='&#128179; Pay &#8377;'+fee+' via Razorpay';
+                showError(4, 'Network error during verification: ' + vErr.message);
+              }
+            }
+          });
+          rzp.open();
+        } catch(err) {
+          btn.disabled=false;sp.style.display='none';lb.innerHTML='&#128179; Pay &#8377;'+fee+' via Razorpay';
+          showError(4, 'Order creation error: ' + err.message);
+        }
       }
     });
 

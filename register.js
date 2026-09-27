@@ -233,17 +233,17 @@ function renderPaymentStep() {
 
   if (fee > 0) {
     paymentActionArea.innerHTML = `
-      <div style="margin: 20px auto; max-width: 300px;">
-        <img src="/assets/images/upi_qr.png" alt="UPI QR" style="width:100%; border-radius:8px;">
-        <p style="margin-top:10px;">Scan to pay ₹${fee}</p>
-        <div style="margin-top:15px; text-align:left;">
-          <label>UTR / Transaction ID *</label>
-          <input type="text" id="reg-utr" class="form-group" style="width:100%; padding:10px; margin-top:5px; background:rgba(0,0,0,0.5); color:#fff; border:1px solid rgba(255,255,255,0.2);" placeholder="Enter 12-digit UTR number" required>
-        </div>
+      <div style="margin: 20px auto; max-width: 320px; padding: 18px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; text-align: center;">
+        <div style="font-size:2rem; margin-bottom:8px;">💳</div>
+        <h4 style="margin-bottom:6px; font-size:1.05rem;">Online Payment via Razorpay</h4>
+        <p style="font-size:0.85rem; color:#a1a1aa; margin-bottom:12px;">Instant confirmation with UPI (GPay, PhonePe, Paytm), Cards, or NetBanking.</p>
+        <div style="font-size:0.85rem; color:#f59e0b; font-weight:700;">Payable: ₹${fee}</div>
       </div>
     `;
+    btnSubmit.textContent = `PAY ₹${fee} VIA RAZORPAY`;
   } else {
     paymentActionArea.innerHTML = `<p style="color:#10b981; font-weight:bold; font-size:1.2rem;">Free Entry. No payment required.</p>`;
+    btnSubmit.textContent = 'SUBMIT REGISTRATION';
   }
 }
 
@@ -255,51 +255,148 @@ btnSubmit.addEventListener('click', async () => {
     fee = ev.fixedFee > 0 ? ev.fixedFee : ev.feePerParticipant * WIZARD_STATE.participants.length;
   }
 
-  let utr = null;
-  if (fee > 0) {
-    const utrEl = document.getElementById('reg-utr');
-    if (!utrEl || !utrEl.value.trim()) {
-      alert("Please enter the UTR / Transaction ID.");
-      return;
-    }
-    utr = utrEl.value.trim();
-  }
+  if (fee === 0) {
+    btnSubmit.disabled = true;
+    btnSubmit.textContent = 'Processing...';
 
-  btnSubmit.disabled = true;
-  btnSubmit.textContent = 'Processing...';
+    const payload = {
+      eventId: ev.id,
+      category: ev.category,
+      teamName: WIZARD_STATE.teamName,
+      college: WIZARD_STATE.college,
+      captain: WIZARD_STATE.captain,
+      players: WIZARD_STATE.participants,
+      amount: 0
+    };
 
-  const payload = {
-    eventId: ev.id,
-    category: ev.category,
-    teamName: WIZARD_STATE.teamName,
-    college: WIZARD_STATE.college,
-    captain: WIZARD_STATE.captain,
-    players: WIZARD_STATE.participants,
-    utr: utr,
-    amount: fee
-  };
-
-  try {
-    const res = await fetch('/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    
-    const data = await res.json();
-    
-    if (data.success || data.registrationId) {
-      document.getElementById('success-reg-id').textContent = data.registrationId || data.registration?.registration_id || 'CFT-NEW-REG';
-      goToStep('success');
-    } else {
-      alert("Registration failed: " + (data.error || 'Unknown error'));
+    try {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      
+      const data = await res.json();
+      
+      if (data.success || data.registrationId) {
+        document.getElementById('success-reg-id').textContent = data.registrationId || data.registration?.registration_id || 'CFT-NEW-REG';
+        goToStep('success');
+      } else {
+        alert("Registration failed: " + (data.error || 'Unknown error'));
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = 'SUBMIT REGISTRATION';
+      }
+    } catch (err) {
+      alert("Network error: " + err.message);
       btnSubmit.disabled = false;
       btnSubmit.textContent = 'SUBMIT REGISTRATION';
     }
-  } catch (err) {
-    alert("Network error: " + err.message);
-    btnSubmit.disabled = false;
-    btnSubmit.textContent = 'SUBMIT REGISTRATION';
+  } else {
+    // Razorpay payment flow
+    btnSubmit.disabled = true;
+    btnSubmit.textContent = 'Connecting to Razorpay...';
+
+    if (typeof Razorpay === 'undefined') {
+      try {
+        await new Promise((resolve, reject) => {
+          const s = document.createElement('script');
+          s.src = 'https://checkout.razorpay.com/v1/checkout.js';
+          s.onload = resolve;
+          s.onerror = reject;
+          document.head.appendChild(s);
+        });
+      } catch (e) {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = `PAY ₹${fee} VIA RAZORPAY`;
+        alert('Failed to load Razorpay Checkout SDK. Please check your internet connection.');
+        return;
+      }
+    }
+
+    try {
+      const orderRes = await fetch('/api/payments/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          eventId: ev.id,
+          gameId: ev.id,
+          teamName: WIZARD_STATE.teamName,
+          college: WIZARD_STATE.college,
+          captain: WIZARD_STATE.captain,
+          players: WIZARD_STATE.participants
+        })
+      });
+      const orderData = await orderRes.json();
+
+      if (!orderData.success) {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = `PAY ₹${fee} VIA RAZORPAY`;
+        alert('Order creation failed: ' + (orderData.error || 'Unknown error'));
+        return;
+      }
+
+      const rzp = new Razorpay({
+        key: orderData.keyId,
+        amount: orderData.amount,
+        currency: orderData.currency || 'INR',
+        name: "CRAFTCON '26",
+        description: `Registration for ${ev.name}`,
+        order_id: orderData.orderId,
+        prefill: {
+          name: WIZARD_STATE.captain.name,
+          email: WIZARD_STATE.captain.email,
+          contact: WIZARD_STATE.captain.phone
+        },
+        theme: { color: "#8b5cf6" },
+        modal: {
+          ondismiss: function () {
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = `PAY ₹${fee} VIA RAZORPAY`;
+          }
+        },
+        handler: async function (resp) {
+          btnSubmit.textContent = 'Verifying Payment...';
+          try {
+            const verifyRes = await fetch('/api/payments/verify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                orderId: resp.razorpay_order_id || orderData.orderId,
+                paymentId: resp.razorpay_payment_id,
+                signature: resp.razorpay_signature,
+                registrationData: {
+                  eventId: ev.id,
+                  gameId: ev.id,
+                  category: ev.category,
+                  teamName: WIZARD_STATE.teamName,
+                  college: WIZARD_STATE.college,
+                  captain: WIZARD_STATE.captain,
+                  players: WIZARD_STATE.participants
+                }
+              })
+            });
+            const vData = await verifyRes.json();
+            if (vData.success) {
+              document.getElementById('success-reg-id').textContent = vData.registrationId || 'CRAFT26-XXXX';
+              goToStep('success');
+            } else {
+              btnSubmit.disabled = false;
+              btnSubmit.textContent = `PAY ₹${fee} VIA RAZORPAY`;
+              alert('Payment verification failed: ' + (vData.error || 'Invalid signature'));
+            }
+          } catch (vErr) {
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = `PAY ₹${fee} VIA RAZORPAY`;
+            alert('Verification network error: ' + vErr.message);
+          }
+        }
+      });
+      rzp.open();
+    } catch (err) {
+      btnSubmit.disabled = false;
+      btnSubmit.textContent = `PAY ₹${fee} VIA RAZORPAY`;
+      alert('Order creation error: ' + err.message);
+    }
   }
 });
 
