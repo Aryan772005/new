@@ -49,7 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initCodexTabs();
     initRegistrationModal();
     initBrochureAction();
-    return; // ← EXIT — no 3D, no GSAP, no audio, no canvas, no tilt physics
+    initAudioAmbiance();
+    return; // ← EXIT — no heavy 3D WebGL, native smooth touch scroll preserved
   }
   // ── DESKTOP FULL EXPERIENCE ─────────────────────────────────────────────
   initCountdown();
