@@ -13,16 +13,13 @@
   let audioCtx = null;
   let masterGain = null;
   let compressor = null;
-  let isMuted = false;
+  const isMuted = false; // Always ON by default for everyone! Sound cut option removed.
   let isUnlocked = false;
   let lastSoundTime = 0;
 
-  // Retrieve saved mute preference (defaults to unmuted / sound ON)
+  // Clear any old mute preference so sound ALWAYS plays by default
   try {
-    const saved = localStorage.getItem('craftcon_sound_muted');
-    if (saved !== null) {
-      isMuted = saved === 'true';
-    }
+    localStorage.removeItem('craftcon_sound_muted');
   } catch (e) {}
 
   /**
@@ -52,7 +49,7 @@
 
       masterGain = audioCtx.createGain();
       // High-clarity volume calibrated for phone speakers & desktop headphones
-      masterGain.gain.setValueAtTime(isMuted ? 0 : 0.96, audioCtx.currentTime);
+      masterGain.gain.setValueAtTime(0.96, audioCtx.currentTime);
 
       masterGain.connect(compressor);
       compressor.connect(audioCtx.destination);
@@ -407,94 +404,19 @@
       }
     },
 
-    toggleMute() {
-      isMuted = !isMuted;
-      try {
-        localStorage.setItem('craftcon_sound_muted', isMuted ? 'true' : 'false');
-      } catch (e) {}
-
-      if (masterGain && audioCtx) {
-        masterGain.gain.setValueAtTime(isMuted ? 0 : 0.96, audioCtx.currentTime);
-      }
-
-      this.updateToggleButtonsUI();
-      this.showToast(isMuted ? '🔇 Sound Muted' : '🔊 Sound Effects ON');
-
-      if (!isMuted) {
-        this.play('cyberChime');
-      }
-      return !isMuted;
-    },
-
     isMuted() {
-      return isMuted;
-    },
-
-    updateToggleButtonsUI() {
-      const toggleButtons = document.querySelectorAll('#audio-toggle, .sound-fx-toggle-btn, .audio-toggle-btn');
-      toggleButtons.forEach(btn => {
-        if (isMuted) {
-          btn.classList.add('audio-muted');
-          btn.setAttribute('title', 'Unmute Sound Effects');
-          btn.setAttribute('aria-label', 'Unmute Sound Effects');
-        } else {
-          btn.classList.remove('audio-muted');
-          btn.setAttribute('title', 'Mute Sound Effects');
-          btn.setAttribute('aria-label', 'Mute Sound Effects');
-        }
-      });
-    },
-
-    showToast(message) {
-      let toast = document.getElementById('sound-feedback-toast');
-      if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'sound-feedback-toast';
-        toast.style.cssText = `
-          position: fixed;
-          bottom: 24px;
-          right: 24px;
-          background: rgba(14, 14, 24, 0.94);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          color: #ffffff;
-          border: 1px solid rgba(157, 78, 221, 0.45);
-          box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 20px rgba(157, 78, 221, 0.3);
-          border-radius: 999px;
-          padding: 8px 18px;
-          font-family: 'Space Grotesk', -apple-system, sans-serif;
-          font-size: 0.82rem;
-          font-weight: 700;
-          letter-spacing: 0.04em;
-          z-index: 100000;
-          pointer-events: none;
-          opacity: 0;
-          transform: translateY(12px) scale(0.95);
-          transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        `;
-        document.body.appendChild(toast);
-      }
-
-      toast.textContent = message;
-      toast.style.opacity = '1';
-      toast.style.transform = 'translateY(0) scale(1)';
-
-      clearTimeout(toast._timer);
-      toast._timer = setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateY(12px) scale(0.95)';
-      }, 2000);
+      return false; // Sound is permanently active by default
     }
   };
 
   /**
    * Universal Instant Audio Interaction Delegator
-   * Triggers with 0ms latency on pointerdown (touch or click)
+   * Triggers with 0ms latency on pointerdown, touchstart, or click
    */
   function handleInteraction(e) {
     // Debounce rapid double-events (e.g. pointerdown followed by click)
     const nowMs = Date.now();
-    if (nowMs - lastSoundTime < 65) return;
+    if (nowMs - lastSoundTime < 40) return;
     lastSoundTime = nowMs;
 
     unlockAudioEngine();
@@ -513,12 +435,6 @@
     );
 
     if (interactiveEl) {
-      // Audio toggle button clicks are handled directly by toggleMute
-      if (interactiveEl.id === 'audio-toggle' || interactiveEl.classList.contains('sound-fx-toggle-btn')) {
-        SoundEngine.toggleMute();
-        return;
-      }
-
       // 1. Primary CTA / Action buttons -> Shimmering Cyber Chime
       if (
         interactiveEl.matches(
@@ -588,14 +504,5 @@
   window.playMinecraftSound = function (type) {
     SoundEngine.play(type);
   };
-
-  // Sync toggle buttons once DOM is loaded
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      SoundEngine.updateToggleButtonsUI();
-    });
-  } else {
-    SoundEngine.updateToggleButtonsUI();
-  }
 
 })();
