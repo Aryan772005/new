@@ -104,6 +104,10 @@ function triggerHaptic(duration = 15) {
 }
 
 function playMinecraftSound(type) {
+  if (window.SoundEngine && typeof window.SoundEngine.play === 'function') {
+    window.SoundEngine.play(type);
+    return;
+  }
   const ctx = getAudioContext();
   if (!ctx) return;
 

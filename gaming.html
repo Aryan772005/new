@@ -29,6 +29,7 @@
 
   <!-- Razorpay Checkout Integration (Optional Gateway Connector) -->
   <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+  <script src="sound-engine.js" defer></script>
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="gaming.css">
@@ -56,9 +57,9 @@
         <span class="nav-dbu-badge">
           <img src="assets/images/dbu_logo_cropped.png" alt="DBU Logo" class="nav-dbu-img" width="30" height="30" decoding="async">
         </span>
-        <span class="brand-cube" style="background:#ff0054;"></span>
-        <span class="brand-text">CRAFTCON<span class="brand-year">'26</span></span>
-        <span class="brand-tag" style="background:#ff0054; color:#fff;">ARENA</span>
+        <span class="brand-cube" style="background:#ff003c; border-color:#ff4d6d; box-shadow:0 0 12px #ff003c;"></span>
+        <span class="brand-text">CRAFTCON<span class="brand-year" style="color:#ff4d6d;">'26</span></span>
+        <span class="brand-tag" style="background:#ff003c; color:#fff; clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%); box-shadow:0 0 12px rgba(255,0,60,0.6);">ARENA</span>
       </a>
 
       <nav class="desktop-nav">
@@ -72,6 +73,20 @@
       </nav>
 
       <div class="header-actions">
+        <!-- Audio Ambiance & SFX Toggle -->
+        <button id="audio-toggle" class="icon-toggle-btn sound-fx-toggle-btn" aria-label="Toggle Sound Effects" title="Toggle Sound Effects">
+          <svg class="audio-icon on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+          <svg class="audio-icon off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        </button>
+
         <!-- Switch to Hackathon Site -->
         <a href="index.html" target="_self" class="btn-gaming-secondary" title="Return to Main CRAFTCON Website">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
@@ -80,7 +95,7 @@
         </a>
 
         <!-- Centralized Register Button -->
-        <button class="pill-cta-btn open-gaming-reg-btn" style="background:var(--color-green); border-color:var(--mc-xp-green);">
+        <button class="pill-cta-btn open-gaming-reg-btn" style="background:linear-gradient(135deg, #ff003c 0%, #b7092b 100%); border-color:#ff4d6d; box-shadow:0 0 20px rgba(255,0,60,0.65); clip-path:polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); border-radius:0;">
           <span>REGISTER NOW</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </button>
@@ -105,6 +120,9 @@
         <li><a href="#faq" class="mobile-nav-link">FAQ</a></li>
       </ul>
       <div class="mobile-nav-actions">
+        <button id="gaming-drawer-sound-btn" class="sound-fx-toggle-btn ghost-cta-btn" style="width:100%; justify-content:center; gap:8px; font-weight:700; padding:10px 14px;">
+          <span>🔊 Sound Effects & Audio</span>
+        </button>
         <a href="index.html" target="_self" class="btn-gaming-secondary mobile-action-btn">
           <span>🏛️ CRAFTCON HACKATHON</span>
         </a>

@@ -299,14 +299,19 @@ a {
   width: 100%;
   height: var(--nav-height);
   z-index: 100;
-  transition: background-color var(--transition-smooth), border-color var(--transition-smooth), backdrop-filter var(--transition-smooth);
+  background: rgba(8, 8, 14, 0.25);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background-color var(--transition-smooth), border-color var(--transition-smooth), backdrop-filter var(--transition-smooth), box-shadow var(--transition-smooth);
 }
 
 .site-header.scrolled {
-  background-color: var(--bg-glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(10, 10, 18, 0.78);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .header-container {
@@ -2098,10 +2103,28 @@ a {
 .flame-box {
   position: relative !important;
   overflow: visible !important;
-  background: #0d0d16 !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  box-shadow: none !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.015) 100%), rgba(12, 14, 26, 0.46) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
   z-index: 1;
+}
+
+.track-card:hover,
+.loot-card:hover,
+.voxel-stat-card:hover,
+.tf-hero-card:hover,
+.special-bounty-card:hover,
+.dbu-institutional-card:hover,
+.node-content:hover,
+.criteria-card:hover,
+.metric-box:hover,
+.sponsor-card:hover,
+.faq-item:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%), rgba(16, 20, 38, 0.6) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
 }
 
 /* Realistic Licking Flame Border (Behind the Card, Licking Outward) */
@@ -3034,7 +3057,7 @@ a {
 /* --- 17. REGISTRATION MODAL --- */
 .modal-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.92); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); z-index: 9999; display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 30px 16px 80px 16px; opacity: 0; visibility: hidden; transition: opacity var(--transition-fast), visibility var(--transition-fast); }
 .modal-backdrop.open { opacity: 1; visibility: visible; }
-.modal-dialog { background: #141422; border: 1.5px solid var(--border-purple); border-radius: var(--radius-lg); max-width: 640px; width: 100%; position: relative; padding: 36px 30px 44px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(157, 78, 221, 0.25); transform: translateY(16px); transition: transform var(--transition-smooth); margin: 20px auto 40px auto; }
+.modal-dialog { background: linear-gradient(180deg, rgba(18, 18, 32, 0.93) 0%, rgba(10, 10, 18, 0.97) 100%), url('assets/images/registration_bg.jpg') center top / cover no-repeat; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1.5px solid var(--border-purple); border-radius: var(--radius-lg); max-width: 640px; width: 100%; position: relative; padding: 36px 30px 44px 30px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(157, 78, 221, 0.25); transform: translateY(16px); transition: transform var(--transition-smooth); margin: 20px auto 40px auto; }
 .modal-backdrop.open .modal-dialog { transform: translateY(0); }
 .modal-close-btn { position: absolute; top: 18px; right: 22px; background: transparent; border: none; font-size: 2.2rem; line-height: 1; color: var(--text-dim); cursor: pointer; transition: color var(--transition-fast); z-index: 10; }
 .modal-close-btn:hover { color: var(--text-white); }
@@ -3605,20 +3628,23 @@ a {
     --nav-height: 60px;
   }
 
-  /* 1GB RAM Phone Performance: Eliminate GPU-thrashing backdrop blur & hide 3D canvas on mobile */
-  *, *::before, *::after {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
-
-  #webgl-canvas, #ambient-canvas, .webgl-canvas, .ambient-canvas {
-    display: none !important;
-  }
-
+  /* Mobile UI: Clean GPU-accelerated Glassmorphism with Transparent Top Bar */
   .site-header {
     height: 60px !important;
-    background: rgba(10, 10, 16, 0.98) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(10, 10, 18, 0.35) !important;
+    backdrop-filter: blur(16px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+  }
+
+  .site-header.scrolled {
+    background: rgba(10, 10, 18, 0.78) !important;
+    backdrop-filter: blur(20px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55) !important;
   }
 
   .header-container {
@@ -3633,11 +3659,22 @@ a {
 
   .desktop-nav { display: none !important; }
 
-  /* Hide 3D World pill and audio toggle on mobile to give full room to REGISTER button */
+  /* Hide heavy pills on mobile to keep navbar clean and spacious */
   .cube-status-pill,
-  .nav-github-pill,
-  .icon-toggle-btn {
+  .nav-github-pill {
     display: none !important;
+  }
+
+  .icon-toggle-btn {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
   }
 
   .nav-dbu-badge {
@@ -5237,15 +5274,19 @@ body, input, select, textarea, button {
    MOBILE PERFORMANCE OVERDRIVE (SILKY 60-120FPS ON ALL PHONES)
    ========================================================================== */
 @media (max-width: 768px) {
-  /* Eliminate GPU-killing backdrop filters on mobile devices */
-  *, *::before, *::after {
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
+  /* GPU-Accelerated Mobile Glass UI */
+  .site-header {
+    background: rgba(10, 10, 18, 0.35) !important;
+    backdrop-filter: blur(16px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
   }
 
-  .site-header {
-    background: rgba(10, 10, 16, 0.98) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  .site-header.scrolled {
+    background: rgba(10, 10, 18, 0.78) !important;
+    backdrop-filter: blur(20px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
   }
 
   .hero-inner,
@@ -5254,14 +5295,25 @@ body, input, select, textarea, button {
   .node-content,
   .faq-item,
   .tilt-3d-card,
+  .voxel-stat-card,
+  .dbu-institutional-card,
   .gaming-arena-showcase-module,
   .special-bounties-wrap,
-  .rules-tabs-container,
-  .mobile-drawer {
-    background: rgba(16, 16, 26, 0.96) !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+  .rules-tabs-container {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.015) 100%), rgba(12, 14, 26, 0.48) !important;
+    backdrop-filter: blur(14px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
     transform: none !important;
     will-change: auto !important;
+  }
+
+  .mobile-drawer {
+    background: rgba(12, 12, 22, 0.88) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    box-shadow: -15px 0 50px rgba(0, 0, 0, 0.85) !important;
   }
 
   /* Prevent scroll locking / stutter on mobile */
@@ -5338,47 +5390,52 @@ body, input, select, textarea, button {
 }
 
 /* =======================================================================
-   MOBILE ZERO-ANIMATION MODE — for touch / low-RAM devices
-   Kills ALL non-essential GPU work so registration is instant and smooth
+   MOBILE & TOUCH HARMONIZATION & TRANSPARENT GLASS UI SYSTEM
+   High performance 60fps animations, rich glassmorphism, transparent headers
    ======================================================================= */
-@media (pointer: coarse), (max-width: 768px) {
-
-  /* 1. Kill ALL CSS animations and transitions site-wide */
-  *, *::before, *::after {
-    animation-duration: 0.001ms !important;
-    animation-delay: 0ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.15s !important; /* keep micro-transitions but super fast */
-    will-change: auto !important;           /* remove extra GPU compositing layers */
+@media (max-width: 768px) {
+  /* 1. Header transparency on mobile */
+  .site-header {
+    background: rgba(10, 10, 18, 0.35) !important;
+    backdrop-filter: blur(16px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
   }
 
-  /* 2. Remove ALL backdrop-filter (biggest GPU killer on mobile) */
-  *  {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+  .site-header.scrolled {
+    background: rgba(10, 10, 18, 0.78) !important;
+    backdrop-filter: blur(20px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55) !important;
   }
 
-  /* 3. Hide heavy visual layers entirely */
-  #webgl-canvas,
-  #ambient-canvas,
-  .scroll-progress-bar,
-  .tf-dock-left,
-  .tf-dock-right,
-  #hud-scroll-tracker,
-  .hero-portal-vortex-fx,
-  .cloud-bank,
-  .furnace-fire-overlay,
-  .smelt-flame {
-    display: none !important;
+  /* 2. Frosted Translucent Mobile Navigation Drawer */
+  .mobile-drawer,
+  .mobile-nav-drawer {
+    background: rgba(12, 12, 22, 0.85) !important;
+    backdrop-filter: blur(24px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+    border-left: 1.5px solid rgba(157, 78, 221, 0.35) !important;
+    box-shadow: -15px 0 50px rgba(0, 0, 0, 0.85) !important;
   }
 
-  /* 4. Flatten all 3D transforms — no perspective, no rotateY */
-  * {
-    perspective: none !important;
-    transform-style: flat !important;
+  /* 3. Glassmorphic cards with luminous borders */
+  .track-card, .faq-item, .sponsor-card,
+  .rules-tabs-container, .codex-nav-tabs,
+  .timeline-node, .modal-panel,
+  .voxel-stat-card, .dbu-institutional-card,
+  .loot-card, .tf-hero-card, .special-bounty-card,
+  .criteria-card, .metric-box {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.015) 100%), rgba(12, 14, 26, 0.45) !important;
+    backdrop-filter: blur(14px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
   }
 
-  /* 5. Make sections visible by default (GSAP won't animate them in) */
+  /* 4. Ensure sections are visible and responsive */
   section, .section-inner, .about-grid,
   .tracks-grid, .timeline-list, .rules-wrap,
   .sponsors-grid, .organizers-grid, .faq-list,
@@ -5388,22 +5445,16 @@ body, input, select, textarea, button {
     visibility: visible !important;
   }
 
-  /* 6. Simple solid backgrounds instead of blurs for cards/panels */
-  .site-header,
-  .track-card, .faq-item, .sponsor-card,
-  .rules-tabs-container, .codex-nav-tabs,
-  .timeline-node, .modal-panel {
-    background: #0e1220 !important;
-    border: 1px solid rgba(139, 92, 246, 0.2) !important;
+  /* 5. Fluid touch feedback & smooth transitions */
+  button, .pill-cta-btn, .hero-primary-btn, .ghost-cta-btn, .mobile-link {
+    transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), background 0.18s ease !important;
   }
 
-  /* 7. Hero — simple readable layout, no parallax layers */
-  .hero-stage {
-    min-height: 100svh !important;
-    transform: none !important;
+  button:active, .pill-cta-btn:active, .hero-primary-btn:active, .ghost-cta-btn:active {
+    transform: scale(0.96) !important;
   }
 
-  /* 8. Ensure the register CTA is always huge and tappable on mobile screens */
+  /* 6. Ensure the register CTA is always prominent and tappable */
   .mobile-drawer .pill-cta-btn,
   .hero-meta-bar a[href="/register"],
   .final-cta-box a[href="/register"] {
@@ -5416,5 +5467,152 @@ body, input, select, textarea, button {
   }
 }
 
+/* =======================================================================
+   UNIVERSAL HIGH-CONTRAST GLASS UI & CRYSTAL-CLEAR TYPOGRAPHY
+   Applies across Desktop & Mobile for sleek transparency with 100% text legibility
+   ======================================================================= */
 
+/* 1. Universal Glass Cards & Content Divs */
+.voxel-stat-card,
+.dbu-institutional-card,
+.track-card,
+.loot-card,
+.tf-hero-card,
+.special-bounty-card,
+.bounty-pill-card,
+.node-content,
+.criteria-card,
+.metric-box,
+.sponsor-card,
+.organizer-card,
+.highlight-item,
+.faq-item,
+.rules-tabs-container,
+.final-cta-box,
+.footer-hologram-card,
+.dbu-seal-box {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.015) 100%), rgba(12, 14, 26, 0.44) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
 
+.voxel-stat-card:hover,
+.dbu-institutional-card:hover,
+.track-card:hover,
+.loot-card:hover,
+.tf-hero-card:hover,
+.special-bounty-card:hover,
+.node-content:hover,
+.criteria-card:hover,
+.metric-box:hover,
+.sponsor-card:hover,
+.organizer-card:hover,
+.highlight-item:hover,
+.faq-item:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.025) 100%), rgba(16, 20, 36, 0.6) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+/* 2. Crystal-Clear Font Visibility & Contrast Enhancement */
+.stat-big-num {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 0 2px #000000 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.stat-caption {
+  color: #f1f5f9 !important;
+  font-weight: 500 !important;
+  line-height: 1.45 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+}
+
+.stat-biome {
+  color: #f8fafc !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95) !important;
+}
+
+.stat-glyph {
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.85)) !important;
+}
+
+/* Institutional Credibility Strip Font Visibility */
+.dbu-institutional-card .dbu-info h4,
+.dbu-seal-box .seal-info strong {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+  font-size: 0.98rem !important;
+}
+
+.dbu-institutional-card .dbu-info p,
+.dbu-seal-box .seal-info span {
+  color: #cbd5e1 !important;
+  font-weight: 500 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85) !important;
+}
+
+/* Track Cards Font Visibility */
+.track-name {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
+}
+
+.track-desc {
+  color: #e2e8f0 !important;
+  font-weight: 400 !important;
+  line-height: 1.55 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85) !important;
+}
+
+/* Prize & Bounty Cards Font Visibility */
+.loot-card .loot-tier {
+  color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+}
+
+.loot-card .loot-bounty {
+  color: #fbbf24 !important;
+  font-weight: 800 !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 0 15px rgba(245, 158, 11, 0.5) !important;
+}
+
+.loot-card .loot-desc {
+  color: #e2e8f0 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85) !important;
+}
+
+/* FAQ Item Font Visibility */
+.faq-item summary {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+}
+
+.faq-item p {
+  color: #e2e8f0 !important;
+  line-height: 1.6 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85) !important;
+}
+
+/* Timeline & Highlight Item Font Visibility */
+.node-title,
+.highlight-item strong {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+}
+
+.node-desc,
+.highlight-item span {
+  color: #e2e8f0 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85) !important;
+}

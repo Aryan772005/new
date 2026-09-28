@@ -33,6 +33,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
   <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js" defer></script>
+  <script src="sound-engine.js" defer></script>
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -140,8 +141,10 @@
         <li><a href="/gaming.html" class="mobile-link" style="color: #fbbf24; font-weight: bold;">GAMING ARENA</a></li>
       </ul>
       <div class="mobile-drawer-footer">
-        <a href="/register" class="pill-cta-btn full-width">REGISTER NOW
-          -></a>
+        <button id="drawer-sound-btn" class="sound-fx-toggle-btn ghost-cta-btn" style="width: 100%; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; padding: 10px 14px;">
+          <span>🔊 Sound Effects & Audio</span>
+        </button>
+        <a href="/register" class="pill-cta-btn full-width">REGISTER NOW -></a>
       </div>
   </header>
 

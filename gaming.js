@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 60);
 
   initScrollProgress();
+  initHeaderScroll();
   initMobileNavMenu();
   initGamingCategoryFilter();
   initGameDetailsModal();
@@ -20,6 +21,22 @@ document.addEventListener('DOMContentLoaded', () => {
   initThreeJSScene();
   initGamingEntrancePopup();
 });
+
+function initHeaderScroll() {
+  const header = document.getElementById('site-header');
+  if (!header) return;
+
+  function updateHeader() {
+    if (window.pageYOffset > 30) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  }
+
+  window.addEventListener('scroll', updateHeader, { passive: true });
+  updateHeader();
+}
 
 /* ==========================================================================
    GAMES REGISTRY & CONFIGURATION
