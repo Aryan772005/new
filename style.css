@@ -2305,58 +2305,155 @@ a {
   }
 }
 
-.track-card { background: rgba(20, 20, 32, 0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 28px 24px; display: flex; flex-direction: column; position: relative; }
-.track-card:hover { border-color: var(--border-active); box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6); }
-.track-top-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-.track-tag { font-family: var(--font-pixel); font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.1em; }
+.track-card {
+  padding: 0 !important;
+  overflow: hidden !important;
+  border-radius: var(--radius-lg) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  position: relative !important;
+  transition: transform 0.38s var(--motion-ease-out), box-shadow 0.38s var(--motion-ease-out), border-color 0.38s ease !important;
+}
 
-.biome-pill { font-family: var(--font-pixel); font-size: 0.62rem; letter-spacing: 0.1em; padding: 3px 8px; border-radius: var(--radius-sm); }
-.biome-purple { background: rgba(157, 78, 221, 0.15); color: var(--color-purple-bright); border: 1px solid var(--border-purple); }
-.biome-green { background: rgba(56, 176, 0, 0.15); color: var(--color-green-bright); border: 1px solid var(--border-green); }
-.biome-red { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
-.biome-teal { background: rgba(6, 182, 212, 0.15); color: #67e8f9; border: 1px solid rgba(6, 182, 212, 0.4); }
-.biome-orange { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.4); }
-.biome-cyan { background: rgba(56, 189, 248, 0.15); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.4); }
+.track-card:hover {
+  border-color: var(--border-active) !important;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6) !important;
+  transform: translateY(-6px) scale(1.015) !important;
+}
 
-.track-icon-wrap { margin-bottom: 18px; }
-.voxel-box {
-  width: 76px;
-  height: 76px;
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  background: var(--bg-surface-elevated);
-  border: 2px solid var(--border-subtle);
-  transition: transform var(--transition-bounce), box-shadow var(--transition-fast), border-color var(--transition-fast);
-  position: relative;
+/* Full-Width Biome Card Header Banner (Identical to Free Fire & Gaming Cards) */
+.track-card-img-wrap,
+.track-card .track-icon-wrap {
+  position: relative !important;
+  width: 100% !important;
+  height: 200px !important;
+  overflow: hidden !important;
+  background: #080810 !important;
+  margin: 0 !important;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.12) !important;
 }
-.track-biome-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+.track-card-img-wrap img,
+.track-card .track-biome-photo {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
-.track-card:hover .voxel-box {
-  transform: translateY(-4px) scale(1.06);
-}
+
+.track-card:hover .track-card-img-wrap img,
 .track-card:hover .track-biome-photo {
-  transform: scale(1.12);
+  transform: scale(1.08) !important;
 }
-.purple-glow { box-shadow: 0 0 24px rgba(157, 78, 221, 0.35); border-color: var(--border-purple); }
-.green-glow { box-shadow: 0 0 24px rgba(56, 176, 0, 0.35); border-color: var(--border-green); }
-.red-glow { box-shadow: 0 0 24px rgba(239, 68, 68, 0.35); border-color: rgba(239, 68, 68, 0.5); }
-.teal-glow { box-shadow: 0 0 24px rgba(6, 182, 212, 0.35); border-color: rgba(6, 182, 212, 0.5); }
-.orange-glow { box-shadow: 0 0 24px rgba(249, 115, 22, 0.35); border-color: rgba(249, 115, 22, 0.5); }
-.cyan-glow { box-shadow: 0 0 24px rgba(56, 189, 248, 0.35); border-color: rgba(56, 189, 248, 0.5); }
 
-.track-name { font-size: 1.18rem; margin-bottom: 12px; line-height: 1.35; }
-.track-desc { font-size: 0.88rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 20px; flex-grow: 1; }
-.track-tech-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
-.track-tech-tags span { font-size: 0.72rem; padding: 3px 8px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); color: var(--text-muted); }
-.track-bounty-badge { font-family: var(--font-pixel); font-size: 0.7rem; letter-spacing: 0.06em; color: var(--color-amber); border-top: 1px solid var(--border-subtle); padding-top: 14px; }
+/* Floating Badges Over Biome Image (Track Tag + Biome Pill) */
+.track-card .track-top-meta {
+  position: absolute !important;
+  top: 14px !important;
+  left: 14px !important;
+  right: 14px !important;
+  z-index: 3 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin: 0 !important;
+  pointer-events: none !important;
+}
+
+.track-card .track-tag {
+  background: rgba(8, 8, 14, 0.82) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  padding: 5px 12px !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  font-family: var(--font-pixel) !important;
+  font-size: 0.68rem !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+}
+
+.biome-pill {
+  font-family: var(--font-pixel) !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  padding: 5px 12px !important;
+  border-radius: 20px !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+}
+
+.biome-purple { background: rgba(157, 78, 221, 0.35) !important; color: #d8b4fe !important; border: 1.5px solid rgba(192, 132, 252, 0.6) !important; }
+.biome-green { background: rgba(16, 185, 129, 0.35) !important; color: #6ee7b7 !important; border: 1.5px solid rgba(52, 211, 153, 0.6) !important; }
+.biome-red { background: rgba(239, 68, 68, 0.35) !important; color: #fca5a5 !important; border: 1.5px solid rgba(248, 113, 113, 0.6) !important; }
+.biome-teal { background: rgba(6, 182, 212, 0.35) !important; color: #67e8f9 !important; border: 1.5px solid rgba(34, 211, 238, 0.6) !important; }
+.biome-orange { background: rgba(249, 115, 22, 0.35) !important; color: #fdba74 !important; border: 1.5px solid rgba(251, 146, 60, 0.6) !important; }
+.biome-cyan { background: rgba(56, 189, 248, 0.35) !important; color: #7dd3fc !important; border: 1.5px solid rgba(56, 189, 248, 0.6) !important; }
+
+/* Track Card Content Body */
+.track-card-body {
+  padding: 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex-grow: 1 !important;
+}
+
+.track-name {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif) !important;
+  font-size: 1.25rem !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+  color: #ffffff !important;
+  margin-bottom: 12px !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95) !important;
+}
+
+.track-desc {
+  font-size: 0.88rem !important;
+  line-height: 1.6 !important;
+  color: #e2e8f0 !important;
+  margin-bottom: 20px !important;
+  flex-grow: 1 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85) !important;
+}
+
+.track-tech-tags {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin-bottom: 20px !important;
+}
+
+.track-tech-tags span {
+  font-size: 0.74rem !important;
+  font-weight: 600 !important;
+  padding: 4px 10px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: var(--radius-sm) !important;
+  color: #f1f5f9 !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8) !important;
+}
+
+.track-bounty-badge {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding-top: 14px !important;
+  margin-top: auto !important;
+  font-family: var(--font-pixel) !important;
+  font-size: 0.7rem !important;
+  letter-spacing: 0.06em !important;
+  color: var(--color-amber) !important;
+}
 
 /* --- 9. TIMELINE: FURNACE SMELTER & REDSTONE WIRE --- */
 .mc-furnace-banner {
@@ -4266,13 +4363,19 @@ a {
   }
 
   .track-card {
-    padding: 20px 16px;
-    background: rgba(18, 18, 30, 0.82);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0 !important;
+    overflow: hidden !important;
     border-radius: var(--radius-md);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .track-card-img-wrap,
+  .track-card .track-icon-wrap {
+    height: 180px !important;
+  }
+
+  .track-card-body {
+    padding: 18px 16px !important;
   }
 
   /* Timeline Section */
