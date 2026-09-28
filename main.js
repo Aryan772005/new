@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobileDrawer();
     initTimelineFilter();
     initCodexTabs();
+    initVillagerFAQAnimation();
     initRegistrationModal();
     initBrochureAction();
     initAudioAmbiance();
@@ -1539,6 +1540,27 @@ function initNavScrollspy() {
             lenis.scrollTo(targetEl, { offset: -40, duration: 1.2 });
           } else {
             targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      }
+    });
+  });
+
+  // Universal smooth scroll for all anchor hash links (Navbar, Mobile Drawer, Footer, etc.)
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener('click', (e) => {
+      const href = anchor.getAttribute('href');
+      if (href && href !== '#' && href.startsWith('#')) {
+        const targetEl = document.querySelector(href);
+        if (targetEl) {
+          e.preventDefault();
+          if (typeof lenis !== 'undefined' && lenis) {
+            lenis.scrollTo(targetEl, { offset: -70, duration: 1.0 });
+          } else {
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          if (window.history && window.history.pushState) {
+            window.history.pushState(null, null, href);
           }
         }
       }

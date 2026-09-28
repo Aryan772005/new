@@ -176,7 +176,23 @@
 
         <!-- PHASE 1: HERO INTRO CONTENT (Left Corner Iconic Typography & Event Info) -->
         <div class="hero-content-wrapper hero-intro-layer" id="hero-content-3d">
-          <div class="hero-inner flame-purple" id="hero-inner-card">
+          <div class="hero-inner mecha-hud-stream-overlay flame-red" id="hero-inner-card">
+            <!-- Top Cyber-Mecha HUD Visor Tab (Esports Overlay Style) -->
+            <div class="mecha-hud-top-tab" aria-hidden="true">
+              <span class="mecha-tab-notch left"></span>
+              <div class="mecha-tab-center">
+                <span class="hud-pulse-dot"></span>
+                <span class="hud-tab-label">CRAFTCON '26 // PROTOCOL // SYSTEM ONLINE</span>
+              </div>
+              <span class="mecha-tab-notch right"></span>
+            </div>
+
+            <!-- Mecha Corner Wings/Brackets -->
+            <div class="mecha-corner-bracket tl" aria-hidden="true"></div>
+            <div class="mecha-corner-bracket tr" aria-hidden="true"></div>
+            <div class="mecha-corner-bracket bl" aria-hidden="true"></div>
+            <div class="mecha-corner-bracket br" aria-hidden="true"></div>
+
             <!-- Top Badge / Homage Kicker -->
             <div class="hero-kicker-badge elem-3d-float">
               <span class="kicker-icon"></span>
@@ -187,16 +203,16 @@
             </div>
 
             <!-- Prominent Prizes Highlight Badge in Front -->
-            <div class="hero-prize-pill elem-3d-float" style="display:inline-flex; align-items:center; gap:8px; background:linear-gradient(90deg, rgba(245,158,11,0.25), rgba(234,179,8,0.15)); border:1.5px solid #fbbf24; padding:8px 18px; border-radius:999px; margin-bottom:14px; box-shadow:0 0 20px rgba(251,191,36,0.35);">
+            <div class="hero-prize-pill elem-3d-float" style="display:inline-flex; align-items:center; gap:8px; background:linear-gradient(90deg, rgba(255,0,60,0.25), rgba(234,179,8,0.15)); border:1.5px solid #ff4d6d; padding:8px 18px; border-radius:4px; clip-path:polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); margin-bottom:14px; box-shadow:0 0 20px rgba(255,0,60,0.45);">
               <span style="font-size:1.2rem;">🏆</span>
-              <span style="font-size:0.95rem; font-weight:800; letter-spacing:0.08em; color:#fde047; text-transform:uppercase; text-shadow:0 0 10px rgba(253,224,71,0.5);">PRIZES UP TO ₹2 LAKHS</span>
+              <span style="font-size:0.95rem; font-weight:800; letter-spacing:0.08em; color:#ffffff; text-transform:uppercase; text-shadow:0 0 10px rgba(255,77,109,0.8);">PRIZES UP TO ₹2 LAKHS</span>
             </div>
 
             <!-- Oversized Stacked Wordmark Headline -->
             <h1 class="hero-headline elem-3d-headline">
               <span class="headline-row block-white row-1">IMAGINE</span>
               <span class="headline-row block-white row-2">BUILD</span>
-              <span class="headline-row block-purple text-glow-purple row-3">BEYOND</span>
+              <span class="headline-row block-purple text-glow-red row-3">BEYOND</span>
             </h1>
 
             <!-- Subtitle / Elevator Pitch -->
@@ -288,6 +304,13 @@
                   <span class="cd-label">SECS</span>
                 </div>
               </div>
+            </div>
+
+            <!-- Bottom Cyber-Mecha HUD Status Wings -->
+            <div class="mecha-hud-bottom-bar" aria-hidden="true">
+              <div class="mecha-wing left"><span>OCTOBER 22–23, 2026</span></div>
+              <div class="mecha-center-gem"><span class="gem-core"></span></div>
+              <div class="mecha-wing right"><span>PRIZES UP TO ₹2 LAKHS</span></div>
             </div>
           </div>
 
@@ -1751,6 +1774,34 @@
                 For teams participating in <em>Track 03: Redstone Lab</em>, basic sensor modules, ESP32 boards,
                 soldering stations, and 3D printing assistance will be available in the Maker Lab. Teams with
                 specialized hardware needs are welcome to bring their own kits.
+              </p>
+            </div>
+          </details>
+
+          <!-- Item 7 -->
+          <details class="faq-item tilt-3d-card mc-dialogue-card flame-gold">
+            <summary class="faq-question">
+              <span class="mc-npc-prefix">🎮 [ARENA MASTER]</span>
+              <span class="faq-q-text">Can we participate in both the Hackathon and Gaming Arena tournaments?</span>
+              <span class="faq-icon-arrow"></span>
+            </summary>
+            <div class="faq-answer">
+              <p>
+                Yes! The Gaming Arena runs alongside the hackathon with dedicated tournament windows for BGMI, Free Fire, Mobile Legends, Chess, Ludo, and Carrom. You can register for the hackathon as a squad (₹300/team) and also register for your favorite esports titles at ₹50 per player.
+              </p>
+            </div>
+          </details>
+
+          <!-- Item 8 -->
+          <details class="faq-item tilt-3d-card mc-dialogue-card flame-purple">
+            <summary class="faq-question">
+              <span class="mc-npc-prefix">📜 [HACKATHON CONVENER]</span>
+              <span class="faq-q-text">How will projects and gaming tournament winners be judged?</span>
+              <span class="faq-icon-arrow"></span>
+            </summary>
+            <div class="faq-answer">
+              <p>
+                Hackathon submissions will be evaluated across Innovation, Technical Execution, Real-World Impact, and Presentation by industry judges and academic leads. Gaming tournaments follow official esports point-tables (placement points + kill points for BGMI/Free Fire; knockouts for Chess, Ludo & Carrom).
               </p>
             </div>
           </details>

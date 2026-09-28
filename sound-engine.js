@@ -42,17 +42,17 @@
     try {
       audioCtx = new AudioContextClass();
 
-      // Punchy compressor to ensure rich, clear audio on phone speakers without clipping
+      // Punchy compressor calibrated for phone speakers & desktop headphones
       compressor = audioCtx.createDynamicsCompressor();
-      compressor.threshold.setValueAtTime(-14, audioCtx.currentTime);
-      compressor.knee.setValueAtTime(10, audioCtx.currentTime);
-      compressor.ratio.setValueAtTime(4.5, audioCtx.currentTime);
-      compressor.attack.setValueAtTime(0.002, audioCtx.currentTime);
-      compressor.release.setValueAtTime(0.1, audioCtx.currentTime);
+      compressor.threshold.setValueAtTime(-8, audioCtx.currentTime);
+      compressor.knee.setValueAtTime(6, audioCtx.currentTime);
+      compressor.ratio.setValueAtTime(2.2, audioCtx.currentTime);
+      compressor.attack.setValueAtTime(0.001, audioCtx.currentTime);
+      compressor.release.setValueAtTime(0.08, audioCtx.currentTime);
 
       masterGain = audioCtx.createGain();
       // High-clarity volume calibrated for phone speakers & desktop headphones
-      masterGain.gain.setValueAtTime(isMuted ? 0 : 0.82, audioCtx.currentTime);
+      masterGain.gain.setValueAtTime(isMuted ? 0 : 0.96, audioCtx.currentTime);
 
       masterGain.connect(compressor);
       compressor.connect(audioCtx.destination);
@@ -110,29 +110,29 @@
   const SoundSynthesizers = {
     // 1. Crisp, tactile, ASMR mechanical micro-click (buttons, links, pills)
     tactileClick(ctx, now) {
-      // Layer A: Transient high snap
+      // Layer A: Transient high snap (audible on tiny mobile speakers)
       const osc1 = ctx.createOscillator();
       const gain1 = ctx.createGain();
       osc1.type = 'triangle';
-      osc1.frequency.setValueAtTime(1250, now);
-      osc1.frequency.exponentialRampToValueAtTime(320, now + 0.022);
+      osc1.frequency.setValueAtTime(1450, now);
+      osc1.frequency.exponentialRampToValueAtTime(420, now + 0.024);
 
-      gain1.gain.setValueAtTime(0.48, now);
-      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.022);
+      gain1.gain.setValueAtTime(0.68, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.024);
 
       osc1.connect(gain1);
       gain1.connect(masterGain);
       osc1.start(now);
-      osc1.stop(now + 0.025);
+      osc1.stop(now + 0.026);
 
-      // Layer B: Resonant warm body
+      // Layer B: Resonant punch
       const osc2 = ctx.createOscillator();
       const gain2 = ctx.createGain();
-      osc2.type = 'sine';
-      osc2.frequency.setValueAtTime(440, now);
-      osc2.frequency.exponentialRampToValueAtTime(140, now + 0.038);
+      osc2.type = 'square';
+      osc2.frequency.setValueAtTime(540, now);
+      osc2.frequency.exponentialRampToValueAtTime(220, now + 0.038);
 
-      gain2.gain.setValueAtTime(0.55, now);
+      gain2.gain.setValueAtTime(0.38, now);
       gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.038);
 
       osc2.connect(gain2);
@@ -231,17 +231,17 @@
     softTick(ctx, now) {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(560, now);
-      osc.frequency.exponentialRampToValueAtTime(210, now + 0.025);
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(880, now);
+      osc.frequency.exponentialRampToValueAtTime(360, now + 0.024);
 
-      gain.gain.setValueAtTime(0.32, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
+      gain.gain.setValueAtTime(0.48, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.024);
 
       osc.connect(gain);
       gain.connect(masterGain);
       osc.start(now);
-      osc.stop(now + 0.028);
+      osc.stop(now + 0.026);
     },
 
     // 6. Smooth air whoosh (drawers, modal open/close, accordion toggles)
@@ -344,59 +344,66 @@
       const ctx = initAudioContext();
       if (!ctx) return;
 
+      const renderSound = () => {
+        const now = ctx.currentTime;
+        switch (soundType) {
+          case 'chime':
+          case 'cyberChime':
+          case 'primary':
+            SoundSynthesizers.cyberChime(ctx, now);
+            hapticFeedback(24);
+            break;
+          case 'pop':
+          case 'bubblePop':
+          case 'item':
+            SoundSynthesizers.bubblePop(ctx, now);
+            hapticFeedback(14);
+            break;
+          case 'switch':
+          case 'toggle':
+          case 'tab':
+            SoundSynthesizers.mechanicalSwitch(ctx, now);
+            hapticFeedback(16);
+            break;
+          case 'whoosh':
+          case 'drawer':
+          case 'modal':
+            SoundSynthesizers.whoosh(ctx, now);
+            hapticFeedback(18);
+            break;
+          case 'level_up':
+          case 'levelUp':
+          case 'success':
+            SoundSynthesizers.levelUp(ctx, now);
+            hapticFeedback([25, 45, 30]);
+            break;
+          case 'villager':
+          case 'faq':
+            SoundSynthesizers.villager(ctx, now);
+            hapticFeedback(16);
+            break;
+          case 'tick':
+          case 'softTick':
+            SoundSynthesizers.softTick(ctx, now);
+            hapticFeedback(8);
+            break;
+          case 'click':
+          case 'tactileClick':
+          default:
+            SoundSynthesizers.tactileClick(ctx, now);
+            hapticFeedback(14);
+            break;
+        }
+      };
+
       if (ctx.state === 'suspended') {
-        ctx.resume().catch(() => {});
-      }
-
-      const now = ctx.currentTime;
-
-      switch (soundType) {
-        case 'chime':
-        case 'cyberChime':
-        case 'primary':
-          SoundSynthesizers.cyberChime(ctx, now);
-          hapticFeedback(24);
-          break;
-        case 'pop':
-        case 'bubblePop':
-        case 'item':
-          SoundSynthesizers.bubblePop(ctx, now);
-          hapticFeedback(14);
-          break;
-        case 'switch':
-        case 'toggle':
-        case 'tab':
-          SoundSynthesizers.mechanicalSwitch(ctx, now);
-          hapticFeedback(16);
-          break;
-        case 'whoosh':
-        case 'drawer':
-        case 'modal':
-          SoundSynthesizers.whoosh(ctx, now);
-          hapticFeedback(18);
-          break;
-        case 'level_up':
-        case 'levelUp':
-        case 'success':
-          SoundSynthesizers.levelUp(ctx, now);
-          hapticFeedback([25, 45, 30]);
-          break;
-        case 'villager':
-        case 'faq':
-          SoundSynthesizers.villager(ctx, now);
-          hapticFeedback(16);
-          break;
-        case 'tick':
-        case 'softTick':
-          SoundSynthesizers.softTick(ctx, now);
-          hapticFeedback(8);
-          break;
-        case 'click':
-        case 'tactileClick':
-        default:
-          SoundSynthesizers.tactileClick(ctx, now);
-          hapticFeedback(14);
-          break;
+        ctx.resume().then(() => {
+          renderSound();
+        }).catch(() => {
+          renderSound();
+        });
+      } else {
+        renderSound();
       }
     },
 
@@ -407,7 +414,7 @@
       } catch (e) {}
 
       if (masterGain && audioCtx) {
-        masterGain.gain.setValueAtTime(isMuted ? 0 : 0.82, audioCtx.currentTime);
+        masterGain.gain.setValueAtTime(isMuted ? 0 : 0.96, audioCtx.currentTime);
       }
 
       this.updateToggleButtonsUI();
@@ -572,6 +579,7 @@
   }
 
   // Bind instant 0ms touch & click listeners
+  window.addEventListener('touchstart', handleInteraction, { capture: true, passive: true });
   window.addEventListener('pointerdown', handleInteraction, { capture: true, passive: true });
   window.addEventListener('click', handleInteraction, { capture: true, passive: true });
 

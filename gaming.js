@@ -1256,6 +1256,23 @@ function initMobileNavMenu() {
       menuBtn.classList.remove('active');
     }
   });
+
+  // Universal smooth scroll for anchor links (HOME, GAMES, TOURNAMENT, RULES, FAQ)
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener('click', (e) => {
+      const href = anchor.getAttribute('href');
+      if (href && href !== '#' && href.startsWith('#')) {
+        const targetEl = document.querySelector(href);
+        if (targetEl) {
+          e.preventDefault();
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (window.history && window.history.pushState) {
+            window.history.pushState(null, null, href);
+          }
+        }
+      }
+    });
+  });
 }
 
 /* ==========================================================================

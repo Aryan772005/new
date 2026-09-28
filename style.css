@@ -5571,151 +5571,387 @@ body, input, select, textarea, button {
 }
 
 /* =======================================================================
-   UNIVERSAL HIGH-CONTRAST GLASS UI & CRYSTAL-CLEAR TYPOGRAPHY
-   Applies across Desktop & Mobile for sleek transparency with 100% text legibility
+   CYBER-MECHA ESPORTS STREAM HUD DESIGN SYSTEM (MAIN WEBSITE)
+   Inspired by Reference Image: Glowing Crimson Neon, Chamfered Mecha Frames,
+   Transparent Glass UI & 100% Crystal-Clear Typography
    ======================================================================= */
 
-/* 1. Universal Glass Cards & Content Divs */
+/* 1. Global HUD Tokens & Accents */
+:root {
+  --hud-crimson: #ff003c;
+  --hud-crimson-bright: #ff1744;
+  --hud-crimson-neon: #ff4d6d;
+  --hud-crimson-dark: #b7092b;
+  --hud-crimson-deep: #80001c;
+  --hud-glow-intense: 0 0 30px rgba(255, 0, 60, 0.75), inset 0 0 18px rgba(255, 0, 60, 0.25);
+  --hud-glow-medium: 0 0 20px rgba(255, 0, 60, 0.45), inset 0 0 10px rgba(255, 0, 60, 0.15);
+  --hud-glow-subtle: 0 0 14px rgba(255, 0, 60, 0.3);
+  --hud-border-neon: 1.5px solid #ff003c;
+  --hud-border-subtle: 1.5px solid rgba(255, 0, 60, 0.45);
+  --hud-glass-surface: linear-gradient(135deg, rgba(255, 0, 60, 0.12) 0%, rgba(22, 6, 14, 0.55) 45%, rgba(10, 3, 7, 0.72) 100%);
+}
+
+/* 2. Primary Mecha Stream Overlay Frame (Hero Stage Main Window) */
+.mecha-hud-stream-overlay {
+  position: relative !important;
+  background: linear-gradient(135deg, rgba(255, 0, 60, 0.14) 0%, rgba(24, 6, 15, 0.58) 40%, rgba(10, 3, 8, 0.76) 100%) !important;
+  backdrop-filter: blur(20px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+  border: 2px solid var(--hud-crimson) !important;
+  clip-path: polygon(22px 0, calc(100% - 22px) 0, 100% 22px, 100% calc(100% - 22px), calc(100% - 22px) 100%, 22px 100%, 0 calc(100% - 22px), 0 22px) !important;
+  box-shadow: 0 0 40px rgba(255, 0, 60, 0.55), inset 0 0 25px rgba(255, 0, 60, 0.22), 0 25px 60px rgba(0, 0, 0, 0.85) !important;
+  padding: 34px 30px 42px 30px !important;
+}
+
+/* Top Visor Plate (Trapezoidal HUD header with "SYSTEM PROTOCOL ONLINE") */
+.mecha-hud-top-tab {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #ff003c 0%, #b7092b 100%);
+  border: 1px solid #ff4d6d;
+  border-top: none;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 10px 100%);
+  padding: 5px 24px;
+  box-shadow: 0 0 18px rgba(255, 0, 60, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  z-index: 10;
+  white-space: nowrap;
+}
+
+.mecha-tab-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 10px #ffffff, 0 0 18px #ff4d6d;
+  animation: hudPulse 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes hudPulse {
+  0% { transform: scale(0.85); opacity: 0.7; }
+  100% { transform: scale(1.3); opacity: 1; }
+}
+
+.hud-tab-label {
+  font-family: var(--font-pixel, monospace);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+/* Corner Bracket Accents */
+.mecha-corner-bracket {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  border: 2.5px solid #ff1744;
+  box-shadow: 0 0 12px #ff003c;
+  z-index: 5;
+}
+
+.mecha-corner-bracket.tl { top: 6px; left: 6px; border-right: none; border-bottom: none; }
+.mecha-corner-bracket.tr { top: 6px; right: 6px; border-left: none; border-bottom: none; }
+.mecha-corner-bracket.bl { bottom: 6px; left: 6px; border-right: none; border-top: none; }
+.mecha-corner-bracket.br { bottom: 6px; right: 6px; border-left: none; border-top: none; }
+
+/* Bottom Status Wings */
+.mecha-hud-bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px 4px 18px;
+  pointer-events: none;
+  z-index: 8;
+}
+
+.mecha-wing {
+  background: linear-gradient(180deg, rgba(255, 0, 60, 0.85) 0%, rgba(183, 9, 43, 0.95) 100%);
+  border: 1px solid #ff4d6d;
+  padding: 3px 14px;
+  font-family: var(--font-pixel, monospace);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 0 14px rgba(255, 0, 60, 0.6);
+}
+
+.mecha-wing.left {
+  clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+}
+
+.mecha-wing.right {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%);
+}
+
+.mecha-center-gem {
+  width: 14px;
+  height: 14px;
+  background: #ff003c;
+  border: 1.5px solid #ffffff;
+  transform: rotate(45deg);
+  box-shadow: 0 0 16px #ff003c, inset 0 0 6px #ffffff;
+}
+
+/* 3. Secondary Stream HUD Panels ("STREAM STARTING SOON" / "OFFLINE" Panels) */
 .voxel-stat-card,
-.dbu-institutional-card,
-.track-card,
-.loot-card,
-.tf-hero-card,
-.special-bounty-card,
-.bounty-pill-card,
-.node-content,
-.criteria-card,
 .metric-box,
-.sponsor-card,
-.organizer-card,
-.highlight-item,
-.faq-item,
-.rules-tabs-container,
-.final-cta-box,
-.footer-hologram-card,
-.dbu-seal-box {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.015) 100%), rgba(12, 14, 26, 0.44) !important;
-  backdrop-filter: blur(16px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+.special-bounty-card,
+.bounty-pill-card {
+  position: relative !important;
+  background: linear-gradient(135deg, rgba(255, 0, 60, 0.12) 0%, rgba(20, 5, 12, 0.52) 40%, rgba(10, 3, 7, 0.68) 100%) !important;
+  backdrop-filter: blur(18px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
+  border: 1.5px solid var(--hud-crimson) !important;
+  clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 18px rgba(255, 0, 60, 0.35), inset 0 0 12px rgba(255, 0, 60, 0.15) !important;
   transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .voxel-stat-card:hover,
+.metric-box:hover,
+.special-bounty-card:hover {
+  border-color: #ff4d6d !important;
+  background: linear-gradient(135deg, rgba(255, 0, 60, 0.18) 0%, rgba(26, 7, 16, 0.65) 40%, rgba(14, 4, 10, 0.78) 100%) !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65), 0 0 30px rgba(255, 0, 60, 0.7), inset 0 0 18px rgba(255, 0, 60, 0.28) !important;
+  transform: translateY(-3px) scale(1.02) !important;
+}
+
+/* 4. Lower-Third Alert Badges ("NEW CHEER", "NEW DONATION", "NEW RAID") */
+.dbu-institutional-card,
+.track-card,
+.loot-card,
+.node-content,
+.criteria-card,
+.sponsor-card,
+.organizer-card,
+.faq-item,
+.rules-tabs-container,
+.final-cta-box,
+.footer-hologram-card,
+.dbu-seal-box,
+.highlight-item {
+  position: relative !important;
+  background: linear-gradient(135deg, rgba(255, 0, 60, 0.08) 0%, rgba(18, 5, 13, 0.52) 45%, rgba(9, 2, 7, 0.7) 100%) !important;
+  backdrop-filter: blur(18px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
+  border: 1.5px solid rgba(255, 0, 60, 0.45) !important;
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55), 0 0 20px rgba(255, 0, 60, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
 .dbu-institutional-card:hover,
 .track-card:hover,
 .loot-card:hover,
-.tf-hero-card:hover,
-.special-bounty-card:hover,
 .node-content:hover,
 .criteria-card:hover,
-.metric-box:hover,
 .sponsor-card:hover,
 .organizer-card:hover,
-.highlight-item:hover,
-.faq-item:hover {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.025) 100%), rgba(16, 20, 36, 0.6) !important;
-  border-color: rgba(255, 255, 255, 0.28) !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+.faq-item:hover,
+.highlight-item:hover {
+  border-color: #ff003c !important;
+  background: linear-gradient(135deg, rgba(255, 0, 60, 0.16) 0%, rgba(26, 7, 18, 0.65) 45%, rgba(12, 3, 9, 0.8) 100%) !important;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.7), 0 0 35px rgba(255, 0, 60, 0.6), inset 0 0 18px rgba(255, 0, 60, 0.22) !important;
+  transform: translateY(-4px) !important;
 }
 
-/* 2. Crystal-Clear Font Visibility & Contrast Enhancement */
-.stat-big-num {
+/* 5. Mecha Action Buttons (Chamfered Cut Corners & Crimson Radiant Glow) */
+.pill-cta-btn,
+.hero-primary-btn,
+.hero-gaming-btn,
+.grand-btn,
+.banner-btn,
+.modal-submit-btn,
+.btn-primary,
+.nav-center-register-btn {
+  background: linear-gradient(135deg, #ff003c 0%, #b7092b 100%) !important;
+  border: 1.5px solid #ff4d6d !important;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px) !important;
+  border-radius: 0 !important;
+  box-shadow: 0 0 25px rgba(255, 0, 60, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  color: #ffffff !important;
+  font-family: var(--font-display, sans-serif) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.pill-cta-btn:hover,
+.hero-primary-btn:hover,
+.hero-gaming-btn:hover,
+.grand-btn:hover,
+.banner-btn:hover,
+.modal-submit-btn:hover,
+.btn-primary:hover,
+.nav-center-register-btn:hover {
+  background: linear-gradient(135deg, #ff1744 0%, #e60039 100%) !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 40px rgba(255, 0, 60, 0.95), inset 0 0 15px rgba(255, 255, 255, 0.5) !important;
+  transform: translateY(-2px) scale(1.03) !important;
+  filter: brightness(1.15) !important;
+}
+
+.ghost-cta-btn {
+  background: rgba(255, 0, 60, 0.12) !important;
+  border: 1.5px solid rgba(255, 0, 60, 0.45) !important;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px) !important;
+  border-radius: 0 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 15px rgba(255, 0, 60, 0.25) !important;
+}
+
+.ghost-cta-btn:hover {
+  background: rgba(255, 0, 60, 0.25) !important;
+  border-color: #ff003c !important;
+  box-shadow: 0 0 25px rgba(255, 0, 60, 0.6) !important;
+  color: #ffffff !important;
+}
+
+/* 6. Site Header Crimson Neon Line */
+.site-header {
+  background: rgba(12, 4, 10, 0.48) !important;
+  backdrop-filter: blur(20px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+  border-bottom: 1.5px solid rgba(255, 0, 60, 0.5) !important;
+  box-shadow: 0 4px 30px rgba(255, 0, 60, 0.25) !important;
+}
+
+.brand-cube {
+  background: #ff003c !important;
+  border: 1.5px solid #ff4d6d !important;
+  box-shadow: 0 0 14px #ff003c !important;
+}
+
+.brand-year {
+  color: #ff4d6d !important;
+  text-shadow: 0 0 10px rgba(255, 0, 60, 0.6) !important;
+}
+
+.brand-tag {
+  background: #ff003c !important;
+  color: #ffffff !important;
+  clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%) !important;
+  box-shadow: 0 0 12px rgba(255, 0, 60, 0.6) !important;
+}
+
+/* 7. FAQ Accordion (Prominent, High-Contrast, Cyber-Mecha HUD Style) */
+.faq-section {
+  position: relative !important;
+  padding: 90px 0 !important;
+}
+
+.faq-item {
+  margin-bottom: 14px !important;
+  border: 1.5px solid rgba(255, 0, 60, 0.45) !important;
+}
+
+.faq-item[open] {
+  border-color: #ff003c !important;
+  background: linear-gradient(135deg, rgba(255, 0, 60, 0.16) 0%, rgba(24, 6, 16, 0.68) 45%, rgba(12, 3, 9, 0.82) 100%) !important;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7), 0 0 35px rgba(255, 0, 60, 0.55), inset 0 0 16px rgba(255, 0, 60, 0.2) !important;
+}
+
+.faq-question {
+  padding: 22px 26px !important;
   color: #ffffff !important;
   font-weight: 800 !important;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 0 2px #000000 !important;
+  font-size: 1.05rem !important;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95) !important;
+}
+
+.mc-npc-prefix {
+  color: #ff4d6d !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  text-shadow: 0 0 10px rgba(255, 77, 109, 0.7) !important;
+}
+
+.faq-answer {
+  padding: 0 26px 24px 26px !important;
+}
+
+.faq-answer p {
+  color: #f1f5f9 !important;
+  font-size: 0.94rem !important;
+  font-weight: 400 !important;
+  line-height: 1.7 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+}
+
+.faq-icon-arrow {
+  border-color: #ff4d6d !important;
+  box-shadow: 0 0 8px rgba(255, 0, 60, 0.5) !important;
+}
+
+/* 8. Text Legibility & Contrast Guarantee */
+.stat-big-num {
+  color: #ffffff !important;
+  font-weight: 900 !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.95), 0 0 15px rgba(255, 0, 60, 0.45) !important;
   letter-spacing: -0.02em !important;
 }
 
 .stat-caption {
   color: #f1f5f9 !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
   line-height: 1.45 !important;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
 }
 
 .stat-biome {
-  color: #f8fafc !important;
-  font-weight: 700 !important;
+  color: #ff4d6d !important;
+  font-weight: 800 !important;
   letter-spacing: 0.14em !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95) !important;
+  text-shadow: 0 0 10px rgba(255, 0, 60, 0.6) !important;
 }
 
-.stat-glyph {
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.85)) !important;
-}
-
-/* Institutional Credibility Strip Font Visibility */
-.dbu-institutional-card .dbu-info h4,
-.dbu-seal-box .seal-info strong {
+.track-name,
+.node-title,
+.org-name,
+.highlight-item strong,
+.criteria-card h4 {
   color: #ffffff !important;
   font-weight: 800 !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
-  font-size: 0.98rem !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95) !important;
 }
 
-.dbu-institutional-card .dbu-info p,
-.dbu-seal-box .seal-info span {
-  color: #cbd5e1 !important;
-  font-weight: 500 !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85) !important;
-}
-
-/* Track Cards Font Visibility */
-.track-name {
-  color: #ffffff !important;
-  font-weight: 800 !important;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
-}
-
-.track-desc {
+.track-desc,
+.node-desc,
+.highlight-item span,
+.criteria-card p {
   color: #e2e8f0 !important;
-  font-weight: 400 !important;
-  line-height: 1.55 !important;
+  line-height: 1.6 !important;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85) !important;
-}
-
-/* Prize & Bounty Cards Font Visibility */
-.loot-card .loot-tier {
-  color: #ffffff !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
 }
 
 .loot-card .loot-bounty {
   color: #fbbf24 !important;
   font-weight: 800 !important;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 0 15px rgba(245, 158, 11, 0.5) !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 0 20px rgba(245, 158, 11, 0.6) !important;
 }
 
-.loot-card .loot-desc {
-  color: #e2e8f0 !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85) !important;
-}
-
-/* FAQ Item Font Visibility */
-.faq-item summary {
+.text-glow-red {
   color: #ffffff !important;
-  font-weight: 700 !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+  text-shadow: 0 0 25px rgba(255, 0, 60, 0.85), 0 0 50px rgba(255, 0, 60, 0.5) !important;
 }
 
-.faq-item p {
-  color: #e2e8f0 !important;
-  line-height: 1.6 !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85) !important;
-}
-
-/* Timeline & Highlight Item Font Visibility */
-.node-title,
-.highlight-item strong {
-  color: #ffffff !important;
-  font-weight: 700 !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
-}
-
-.node-desc,
-.highlight-item span {
-  color: #e2e8f0 !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85) !important;
-}
