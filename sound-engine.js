@@ -3,7 +3,7 @@
  * Synthesizes ultra-pleasing, tactile, mobile-optimized UI audio feedback
  * using the Web Audio API with zero external file dependencies.
  *
- * Guaranteed 100% audio compatibility on iOS Safari, Android Chrome,
+ * 100% audio compatibility on iOS Safari, Android Chrome, Samsung Internet,
  * Windows, macOS, and Linux touch & desktop devices.
  */
 
@@ -12,12 +12,17 @@
 
   let audioCtx = null;
   let masterGain = null;
-  let compressor = null;
-  const isMuted = false; // Always ON by default for everyone! Sound cut option removed.
+  let dynamicsLimiter = null;
   let isUnlocked = false;
   let lastSoundTime = 0;
+  let lastInteractiveEl = null;
 
-  // Clear any old mute preference so sound ALWAYS plays by default
+  // Track touch position to distinguish taps from scrolling on mobile
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let isTouchScroll = false;
+
+  // Clear any legacy mute preferences so sound ALWAYS plays loud and clear
   try {
     localStorage.removeItem('craftcon_sound_muted');
   } catch (e) {}
@@ -27,8 +32,8 @@
    */
   function initAudioContext() {
     if (audioCtx) {
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
+      if (audioCtx.state === 'suspended' || audioCtx.state === 'interrupted') {
+        audioCtx.resume().catch(() => {});
       }
       return audioCtx;
     }
@@ -39,20 +44,20 @@
     try {
       audioCtx = new AudioContextClass();
 
-      // Punchy compressor calibrated for phone speakers & desktop headphones
-      compressor = audioCtx.createDynamicsCompressor();
-      compressor.threshold.setValueAtTime(-8, audioCtx.currentTime);
-      compressor.knee.setValueAtTime(6, audioCtx.currentTime);
-      compressor.ratio.setValueAtTime(2.2, audioCtx.currentTime);
-      compressor.attack.setValueAtTime(0.001, audioCtx.currentTime);
-      compressor.release.setValueAtTime(0.08, audioCtx.currentTime);
-
+      // Master output gain calibrated for punchy volume on phone speakers and headphones
       masterGain = audioCtx.createGain();
-      // High-clarity volume calibrated for phone speakers & desktop headphones
-      masterGain.gain.setValueAtTime(0.96, audioCtx.currentTime);
+      masterGain.gain.setValueAtTime(0.94, audioCtx.currentTime);
 
-      masterGain.connect(compressor);
-      compressor.connect(audioCtx.destination);
+      // Dynamics limiter with fast release for clean punch without clipping
+      dynamicsLimiter = audioCtx.createDynamicsCompressor();
+      dynamicsLimiter.threshold.setValueAtTime(-5, audioCtx.currentTime);
+      dynamicsLimiter.knee.setValueAtTime(6, audioCtx.currentTime);
+      dynamicsLimiter.ratio.setValueAtTime(2.0, audioCtx.currentTime);
+      dynamicsLimiter.attack.setValueAtTime(0.002, audioCtx.currentTime);
+      dynamicsLimiter.release.setValueAtTime(0.12, audioCtx.currentTime);
+
+      masterGain.connect(dynamicsLimiter);
+      dynamicsLimiter.connect(audioCtx.destination);
     } catch (err) {
       console.warn('Web Audio initialization error:', err);
     }
@@ -61,19 +66,20 @@
   }
 
   /**
-   * Permanent iOS / Android mobile gesture unlocker
+   * Universal audio unlocker for iOS Safari, Android Chrome, and Desktop
+   * Must execute synchronously inside user interaction
    */
   function unlockAudioEngine() {
     const ctx = initAudioContext();
     if (!ctx) return;
 
-    if (ctx.state === 'suspended') {
+    if (ctx.state === 'suspended' || ctx.state === 'interrupted') {
       ctx.resume().catch(() => {});
     }
 
     if (!isUnlocked) {
       try {
-        // Play 1-sample silent buffer to satisfy iOS WebKit policy
+        // Play 1-sample silent buffer directly to destination to satisfy iOS WebKit policy
         const buffer = ctx.createBuffer(1, 1, 22050);
         const source = ctx.createBufferSource();
         source.buffer = buffer;
@@ -84,8 +90,8 @@
     }
   }
 
-  // Pre-unlock on any initial user touch or keypress
-  ['touchstart', 'touchend', 'pointerdown', 'mousedown', 'keydown'].forEach(evt => {
+  // Pre-unlock on any initial user touch, click, or keypress
+  ['pointerdown', 'touchstart', 'touchend', 'mousedown', 'keydown'].forEach(evt => {
     window.addEventListener(evt, unlockAudioEngine, { capture: true, passive: true });
   });
 
@@ -101,75 +107,90 @@
   }
 
   /**
-   * High-End Procedural Sound Generators
-   * Hand-crafted frequencies & envelopes for maximum satisfaction
+   * High-End Procedural Sound Synthesizers
+   * Specially calibrated frequencies & envelopes for maximum acoustic clarity on phone speakers & desktop
    */
   const SoundSynthesizers = {
-    // 1. Crisp, tactile, ASMR mechanical micro-click (buttons, links, pills)
+    // 1. Crisp, tactile mechanical microswitch click (buttons, links, pills, standard actions)
     tactileClick(ctx, now) {
-      // Layer A: Transient high snap (audible on tiny mobile speakers)
+      // Layer A: Crisp high-frequency snap (audible on small phone speakers)
       const osc1 = ctx.createOscillator();
       const gain1 = ctx.createGain();
       osc1.type = 'triangle';
-      osc1.frequency.setValueAtTime(1450, now);
-      osc1.frequency.exponentialRampToValueAtTime(420, now + 0.024);
+      osc1.frequency.setValueAtTime(1900, now);
+      osc1.frequency.exponentialRampToValueAtTime(650, now + 0.045);
 
-      gain1.gain.setValueAtTime(0.68, now);
-      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.024);
+      gain1.gain.setValueAtTime(0.85, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
 
       osc1.connect(gain1);
       gain1.connect(masterGain);
       osc1.start(now);
-      osc1.stop(now + 0.026);
+      osc1.stop(now + 0.07);
 
-      // Layer B: Resonant punch
+      // Layer B: Resonant punch body
       const osc2 = ctx.createOscillator();
       const gain2 = ctx.createGain();
-      osc2.type = 'square';
-      osc2.frequency.setValueAtTime(540, now);
-      osc2.frequency.exponentialRampToValueAtTime(220, now + 0.038);
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(480, now);
+      osc2.frequency.exponentialRampToValueAtTime(190, now + 0.06);
 
-      gain2.gain.setValueAtTime(0.38, now);
-      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.038);
+      gain2.gain.setValueAtTime(0.55, now);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.075);
 
       osc2.connect(gain2);
       gain2.connect(masterGain);
       osc2.start(now);
-      osc2.stop(now + 0.04);
+      osc2.stop(now + 0.08);
     },
 
     // 2. Juicy Minecraft hotbar / inventory item bubble pop (cards, tiles, slots, badges)
     bubblePop(ctx, now) {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
       const filter = ctx.createBiquadFilter();
 
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(480, now);
-      osc.frequency.exponentialRampToValueAtTime(1080, now + 0.055);
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(460, now);
+      osc1.frequency.exponentialRampToValueAtTime(1420, now + 0.07);
 
       filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(2400, now);
+      filter.frequency.setValueAtTime(3200, now);
 
-      gain.gain.setValueAtTime(0.62, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
+      gain1.gain.setValueAtTime(0.85, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
 
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(masterGain);
+      osc1.connect(filter);
+      filter.connect(gain1);
+      gain1.connect(masterGain);
 
-      osc.start(now);
-      osc.stop(now + 0.06);
+      osc1.start(now);
+      osc1.stop(now + 0.085);
+
+      // Subtle bright overtone pip for sparkling clarity
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(920, now);
+      osc2.frequency.exponentialRampToValueAtTime(2600, now + 0.06);
+
+      gain2.gain.setValueAtTime(0.40, now);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
+
+      osc2.connect(gain2);
+      gain2.connect(masterGain);
+      osc2.start(now);
+      osc2.stop(now + 0.07);
     },
 
-    // 3. Shimmering Cyber Chime for Primary CTAs ("REGISTER NOW", "SUBMIT", "CONFIRM")
+    // 3. Shimmering Cyber Chime for Primary CTAs ("REGISTER NOW", "SUBMIT", "CONFIRM", "PAY")
     cyberChime(ctx, now) {
       const chord = [
-        { f: 587.33, t: 'triangle', g: 0.35, d: 0.00 }, // D5
-        { f: 739.99, t: 'sine',     g: 0.38, d: 0.03 }, // F#5
-        { f: 880.00, t: 'sine',     g: 0.42, d: 0.06 }, // A5
-        { f: 1174.66, t: 'triangle', g: 0.45, d: 0.09 }, // D6
-        { f: 1479.98, t: 'sine',     g: 0.30, d: 0.12 }  // F#6
+        { f: 587.33, t: 'triangle', g: 0.50, d: 0.00 }, // D5
+        { f: 783.99, t: 'sine',     g: 0.52, d: 0.03 }, // G5
+        { f: 987.77, t: 'triangle', g: 0.55, d: 0.06 }, // B5
+        { f: 1174.66, t: 'sine',    g: 0.58, d: 0.09 }, // D6
+        { f: 1567.98, t: 'triangle', g: 0.50, d: 0.12 }  // G6
       ];
 
       chord.forEach(note => {
@@ -181,13 +202,13 @@
         osc.frequency.setValueAtTime(note.f, start);
 
         gain.gain.setValueAtTime(note.g, start);
-        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.22);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.26);
 
         osc.connect(gain);
         gain.connect(masterGain);
 
         osc.start(start);
-        osc.stop(start + 0.24);
+        osc.stop(start + 0.28);
       });
     },
 
@@ -196,32 +217,32 @@
       // First click: push stroke
       const osc1 = ctx.createOscillator();
       const gain1 = ctx.createGain();
-      osc1.type = 'square';
-      osc1.frequency.setValueAtTime(820, now);
-      osc1.frequency.exponentialRampToValueAtTime(360, now + 0.02);
+      osc1.type = 'triangle';
+      osc1.frequency.setValueAtTime(960, now);
+      osc1.frequency.exponentialRampToValueAtTime(420, now + 0.028);
 
-      gain1.gain.setValueAtTime(0.28, now);
-      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+      gain1.gain.setValueAtTime(0.55, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.028);
 
       osc1.connect(gain1);
       gain1.connect(masterGain);
       osc1.start(now);
-      osc1.stop(now + 0.022);
+      osc1.stop(now + 0.03);
 
-      // Second click: latch engagement
+      // Second click: latch engagement snap
       const osc2 = ctx.createOscillator();
       const gain2 = ctx.createGain();
-      osc2.type = 'triangle';
-      osc2.frequency.setValueAtTime(460, now + 0.024);
-      osc2.frequency.exponentialRampToValueAtTime(240, now + 0.048);
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(560, now + 0.025);
+      osc2.frequency.exponentialRampToValueAtTime(260, now + 0.065);
 
-      gain2.gain.setValueAtTime(0.38, now + 0.024);
-      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.048);
+      gain2.gain.setValueAtTime(0.65, now + 0.025);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
 
       osc2.connect(gain2);
       gain2.connect(masterGain);
-      osc2.start(now + 0.024);
-      osc2.stop(now + 0.052);
+      osc2.start(now + 0.025);
+      osc2.stop(now + 0.07);
     },
 
     // 5. Soft ambient page tap (clicking anywhere on the screen / canvas / background)
@@ -229,21 +250,21 @@
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'triangle';
-      osc.frequency.setValueAtTime(880, now);
-      osc.frequency.exponentialRampToValueAtTime(360, now + 0.024);
+      osc.frequency.setValueAtTime(820, now);
+      osc.frequency.exponentialRampToValueAtTime(320, now + 0.035);
 
       gain.gain.setValueAtTime(0.48, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.024);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
 
       osc.connect(gain);
       gain.connect(masterGain);
       osc.start(now);
-      osc.stop(now + 0.026);
+      osc.stop(now + 0.045);
     },
 
     // 6. Smooth air whoosh (drawers, modal open/close, accordion toggles)
     whoosh(ctx, now) {
-      const bufferSize = Math.floor(ctx.sampleRate * 0.14);
+      const bufferSize = Math.floor(ctx.sampleRate * 0.16);
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const output = buffer.getChannelData(0);
       for (let i = 0; i < bufferSize; i++) {
@@ -255,21 +276,21 @@
 
       const filter = ctx.createBiquadFilter();
       filter.type = 'bandpass';
-      filter.frequency.setValueAtTime(350, now);
-      filter.frequency.exponentialRampToValueAtTime(1600, now + 0.07);
-      filter.frequency.exponentialRampToValueAtTime(280, now + 0.14);
-      filter.Q.setValueAtTime(3.2, now);
+      filter.frequency.setValueAtTime(380, now);
+      filter.frequency.exponentialRampToValueAtTime(1900, now + 0.08);
+      filter.frequency.exponentialRampToValueAtTime(320, now + 0.16);
+      filter.Q.setValueAtTime(3.0, now);
 
       const gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.38, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+      gain.gain.setValueAtTime(0.55, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
 
       noise.connect(filter);
       filter.connect(gain);
       gain.connect(masterGain);
 
       noise.start(now);
-      noise.stop(now + 0.14);
+      noise.stop(now + 0.16);
     },
 
     // 7. Iconic Minecraft XP Level Up Arpeggio (success modal, payment confirmed, ticket print)
@@ -279,18 +300,18 @@
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = idx === notes.length - 1 ? 'triangle' : 'sine';
-        const start = now + idx * 0.055;
+        const start = now + idx * 0.06;
 
         osc.frequency.setValueAtTime(freq, start);
 
-        gain.gain.setValueAtTime(0.42, start);
-        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.18);
+        gain.gain.setValueAtTime(0.58, start);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.22);
 
         osc.connect(gain);
         gain.connect(masterGain);
 
         osc.start(start);
-        osc.stop(start + 0.2);
+        osc.stop(start + 0.24);
       });
     },
 
@@ -304,20 +325,20 @@
       osc1.type = 'triangle';
       osc2.type = 'sawtooth';
 
-      osc1.frequency.setValueAtTime(230, now);
-      osc1.frequency.exponentialRampToValueAtTime(160, now + 0.11);
-      osc1.frequency.exponentialRampToValueAtTime(180, now + 0.21);
+      osc1.frequency.setValueAtTime(240, now);
+      osc1.frequency.exponentialRampToValueAtTime(165, now + 0.12);
+      osc1.frequency.exponentialRampToValueAtTime(185, now + 0.22);
 
-      osc2.frequency.setValueAtTime(235, now);
-      osc2.frequency.exponentialRampToValueAtTime(164, now + 0.11);
-      osc2.frequency.exponentialRampToValueAtTime(184, now + 0.21);
+      osc2.frequency.setValueAtTime(246, now);
+      osc2.frequency.exponentialRampToValueAtTime(170, now + 0.12);
+      osc2.frequency.exponentialRampToValueAtTime(190, now + 0.22);
 
       filter.type = 'bandpass';
-      filter.frequency.setValueAtTime(820, now);
-      filter.Q.setValueAtTime(4.0, now);
+      filter.frequency.setValueAtTime(840, now);
+      filter.Q.setValueAtTime(4.2, now);
 
-      gain.gain.setValueAtTime(0.38, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+      gain.gain.setValueAtTime(0.55, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
 
       osc1.connect(filter);
       osc2.connect(filter);
@@ -326,100 +347,114 @@
 
       osc1.start(now);
       osc2.start(now);
-      osc1.stop(now + 0.22);
-      osc2.stop(now + 0.22);
+      osc1.stop(now + 0.24);
+      osc2.stop(now + 0.24);
     }
   };
+
+  let lastPlayedSoundType = '';
+  let lastPlayedSoundTime = 0;
 
   /**
    * Sound Engine Public API
    */
   const SoundEngine = {
     play(soundType = 'tactileClick') {
-      if (isMuted) return;
+      const nowMs = Date.now();
+      if (soundType === lastPlayedSoundType && nowMs - lastPlayedSoundTime < 60) {
+        return;
+      }
+      lastPlayedSoundType = soundType;
+      lastPlayedSoundTime = nowMs;
 
       const ctx = initAudioContext();
       if (!ctx) return;
 
-      const renderSound = () => {
+      const trigger = () => {
         const now = ctx.currentTime;
         switch (soundType) {
           case 'chime':
           case 'cyberChime':
           case 'primary':
             SoundSynthesizers.cyberChime(ctx, now);
-            hapticFeedback(24);
+            hapticFeedback(25);
             break;
           case 'pop':
           case 'bubblePop':
           case 'item':
             SoundSynthesizers.bubblePop(ctx, now);
-            hapticFeedback(14);
+            hapticFeedback(16);
             break;
           case 'switch':
           case 'toggle':
           case 'tab':
             SoundSynthesizers.mechanicalSwitch(ctx, now);
-            hapticFeedback(16);
+            hapticFeedback(18);
             break;
           case 'whoosh':
           case 'drawer':
           case 'modal':
             SoundSynthesizers.whoosh(ctx, now);
-            hapticFeedback(18);
+            hapticFeedback(20);
             break;
           case 'level_up':
           case 'levelUp':
           case 'success':
             SoundSynthesizers.levelUp(ctx, now);
-            hapticFeedback([25, 45, 30]);
+            hapticFeedback([30, 50, 35]);
             break;
           case 'villager':
           case 'faq':
             SoundSynthesizers.villager(ctx, now);
-            hapticFeedback(16);
+            hapticFeedback(18);
             break;
           case 'tick':
           case 'softTick':
             SoundSynthesizers.softTick(ctx, now);
-            hapticFeedback(8);
+            hapticFeedback(10);
             break;
           case 'click':
           case 'tactileClick':
           default:
             SoundSynthesizers.tactileClick(ctx, now);
-            hapticFeedback(14);
+            hapticFeedback(15);
             break;
         }
       };
 
-      if (ctx.state === 'suspended') {
+      if (ctx.state === 'suspended' || ctx.state === 'interrupted') {
         ctx.resume().then(() => {
-          renderSound();
+          trigger();
         }).catch(() => {
-          renderSound();
+          trigger();
         });
       } else {
-        renderSound();
+        trigger();
       }
     },
 
     isMuted() {
-      return false; // Sound is permanently active by default
+      return false; // Sound is always enabled by default
+    },
+
+    status() {
+      return {
+        hasContext: !!audioCtx,
+        state: audioCtx ? audioCtx.state : 'uninitialized',
+        isUnlocked: isUnlocked
+      };
     }
   };
 
   /**
    * Universal Instant Audio Interaction Delegator
-   * Triggers with 0ms latency on pointerdown, touchstart, or click
+   * Supports Desktop Click, Mouse Down, Touch, and Mobile Gestures
    */
   function handleInteraction(e) {
-    // Debounce rapid double-events (e.g. pointerdown followed by click)
-    const nowMs = Date.now();
-    if (nowMs - lastSoundTime < 40) return;
-    lastSoundTime = nowMs;
-
-    unlockAudioEngine();
+    // If it's a touch gesture that was actually scrolling, don't trigger clicks
+    if (e.type === 'touchend' && isTouchScroll) {
+      return;
+    }
 
     const target = e.target;
     if (!target) return;
@@ -431,8 +466,25 @@
       '.voxel-stat-card, .dbu-institutional-card, .track-card, .loot-card, ' +
       '.mc-slot, .mc-hotbar-slot, .faq-item, .faq-question, .tab, .tag, ' +
       '.brand-wordmark, .hamburger-btn, .mobile-menu-btn, .chip, .pill, ' +
-      '.ticket-actions button, .wizard-footer button, .filter-chip, .filter-btn'
+      '.ticket-actions button, .wizard-footer button, .filter-chip, .filter-btn, ' +
+      '.clickable, [onclick], [data-action], .print-pass-btn, .ghost-cta-btn'
     );
+
+    const nowMs = Date.now();
+
+    // Prevent double-triggering when pointerdown is followed immediately by click on the same element
+    if (interactiveEl && lastInteractiveEl === interactiveEl && nowMs - lastSoundTime < 180) {
+      return;
+    }
+    // Prevent rapid repeated sounds within 40ms
+    if (nowMs - lastSoundTime < 40) {
+      return;
+    }
+
+    lastSoundTime = nowMs;
+    lastInteractiveEl = interactiveEl;
+
+    unlockAudioEngine();
 
     if (interactiveEl) {
       // 1. Primary CTA / Action buttons -> Shimmering Cyber Chime
@@ -440,7 +492,7 @@
         interactiveEl.matches(
           '.pill-cta-btn, .hero-primary-btn, .btn-gaming-primary, .btn-primary, .btn-success, ' +
           '.nav-center-register-btn, #download-pass-btn, .open-gaming-reg-btn, .open-modal-btn, ' +
-          '[type="submit"], #btn-wizard-next, .primary-cta'
+          '[type="submit"], #btn-wizard-next, .primary-cta, .btn-submit'
         )
       ) {
         SoundEngine.play('cyberChime');
@@ -451,7 +503,7 @@
       if (
         interactiveEl.matches(
           'input[type="checkbox"], input[type="radio"], .day-tab-btn, .codex-tab, ' +
-          '.rules-tab, .filter-chip, .tab-btn, .filter-btn'
+          '.rules-tab, .filter-chip, .tab-btn, .filter-btn, .tab'
         )
       ) {
         SoundEngine.play('mechanicalSwitch');
@@ -462,7 +514,7 @@
       if (
         interactiveEl.matches(
           '#hamburger-btn, #mobile-menu-btn, .modal-close-btn, .gep-close-btn, ' +
-          '#modal-done-btn, .drawer-close'
+          '#modal-done-btn, .drawer-close, .close-btn, #close-details-modal-btn'
         )
       ) {
         SoundEngine.play('whoosh');
@@ -479,24 +531,61 @@
       if (
         interactiveEl.matches(
           '.event-card, .game-card, .game-option-tile, .mc-hotbar-slot, .mc-slot, ' +
-          '.track-card, .prize-card, .sponsor-card, .voxel-stat-card, .battle-plan-card'
+          '.track-card, .prize-card, .sponsor-card, .voxel-stat-card, .battle-plan-card, ' +
+          '.btn-card-details, .btn-quick-reg'
         )
       ) {
         SoundEngine.play('bubblePop');
         return;
       }
 
-      // 6. Generic interactive element -> Tactile Click
+      // 6. Generic interactive element -> Crisp Tactile Click
       SoundEngine.play('tactileClick');
     } else {
-      // User tapped regular page body, canvas, or text -> gentle subtle micro-tick
+      // User tapped regular page body, canvas, or background -> gentle subtle micro-tick
       SoundEngine.play('softTick');
     }
   }
 
-  // Bind instant 0ms touch & click listeners
-  window.addEventListener('touchstart', handleInteraction, { capture: true, passive: true });
-  window.addEventListener('pointerdown', handleInteraction, { capture: true, passive: true });
+  // Mobile scroll detection so scrolling down doesn't falsely trigger click sounds
+  window.addEventListener('touchstart', (e) => {
+    if (e.touches && e.touches[0]) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      isTouchScroll = false;
+    }
+    unlockAudioEngine();
+  }, { capture: true, passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    if (e.touches && e.touches[0]) {
+      const dx = Math.abs(e.touches[0].clientX - touchStartX);
+      const dy = Math.abs(e.touches[0].clientY - touchStartY);
+      if (dx > 10 || dy > 10) {
+        isTouchScroll = true;
+      }
+    }
+  }, { capture: true, passive: true });
+
+  // On Desktop: pointerdown for mouse clicks gives 0ms instant click response
+  if (window.PointerEvent) {
+    window.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' || e.pointerType === 'pen') {
+        handleInteraction(e);
+      }
+    }, { capture: true, passive: true });
+  } else {
+    window.addEventListener('mousedown', handleInteraction, { capture: true, passive: true });
+  }
+
+  // On Mobile: touchend triggers sound when tapped without scrolling
+  window.addEventListener('touchend', (e) => {
+    if (!isTouchScroll) {
+      handleInteraction(e);
+    }
+  }, { capture: true, passive: true });
+
+  // Standard click fallback for keyboard navigation (Enter / Space) or programmatic clicks
   window.addEventListener('click', handleInteraction, { capture: true, passive: true });
 
   // Expose global SoundEngine and backward-compatible playMinecraftSound

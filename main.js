@@ -116,54 +116,54 @@ function playMinecraftSound(type) {
   const now = ctx.currentTime;
 
   if (type === 'click') {
-    // Crisp 8-bit mechanical click (Redstone Repeater)
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(320, now);
-    osc.frequency.exponentialRampToValueAtTime(80, now + 0.05);
-
-    gain.gain.setValueAtTime(0.08, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start(now);
-    osc.stop(now + 0.05);
-  } else if (type === 'pop') {
-    // Quick bubbly item select blip (Hotbar / Inventory slot)
+    // Crisp mechanical click
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = 'triangle';
-    osc.frequency.setValueAtTime(440, now);
-    osc.frequency.exponentialRampToValueAtTime(880, now + 0.07);
+    osc.frequency.setValueAtTime(1800, now);
+    osc.frequency.exponentialRampToValueAtTime(450, now + 0.05);
 
-    gain.gain.setValueAtTime(0.06, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+    gain.gain.setValueAtTime(0.85, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
     osc.start(now);
     osc.stop(now + 0.07);
+  } else if (type === 'pop') {
+    // Bubbly item select blip
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(480, now);
+    osc.frequency.exponentialRampToValueAtTime(1400, now + 0.07);
+
+    gain.gain.setValueAtTime(0.80, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.075);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.08);
   } else if (type === 'level_up') {
     // Minecraft XP Level Up Chime arpeggio
-    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+    const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C5, E5, G5, C6, E6
     notes.forEach((freq, idx) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.06);
 
-      gain.gain.setValueAtTime(0.04, now + idx * 0.07);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.12);
+      gain.gain.setValueAtTime(0.65, now + idx * 0.06);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.20);
 
       osc.connect(gain);
       gain.connect(ctx.destination);
-      osc.start(now + idx * 0.07);
-      osc.stop(now + idx * 0.07 + 0.13);
+      osc.start(now + idx * 0.06);
+      osc.stop(now + idx * 0.06 + 0.22);
     });
   } else if (type === 'villager') {
-    // Playful synthesized Villager "Hmm!" / "Huh!" nasal sound
+    // Playful synthesized Villager "Hmm!" nasal sound
     const osc1 = ctx.createOscillator();
     const osc2 = ctx.createOscillator();
     const gain = ctx.createGain();
@@ -172,21 +172,20 @@ function playMinecraftSound(type) {
     osc1.type = 'triangle';
     osc2.type = 'sawtooth';
 
-    // Pitch bends down then slightly up
-    osc1.frequency.setValueAtTime(220, now);
-    osc1.frequency.exponentialRampToValueAtTime(160, now + 0.14);
-    osc1.frequency.exponentialRampToValueAtTime(180, now + 0.24);
+    osc1.frequency.setValueAtTime(240, now);
+    osc1.frequency.exponentialRampToValueAtTime(165, now + 0.12);
+    osc1.frequency.exponentialRampToValueAtTime(185, now + 0.22);
 
-    osc2.frequency.setValueAtTime(224, now);
-    osc2.frequency.exponentialRampToValueAtTime(164, now + 0.14);
-    osc2.frequency.exponentialRampToValueAtTime(184, now + 0.24);
+    osc2.frequency.setValueAtTime(246, now);
+    osc2.frequency.exponentialRampToValueAtTime(170, now + 0.12);
+    osc2.frequency.exponentialRampToValueAtTime(190, now + 0.22);
 
     filter.type = 'bandpass';
-    filter.frequency.setValueAtTime(800, now);
-    filter.Q.setValueAtTime(4, now);
+    filter.frequency.setValueAtTime(840, now);
+    filter.Q.setValueAtTime(4.2, now);
 
-    gain.gain.setValueAtTime(0.07, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
+    gain.gain.setValueAtTime(0.65, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
 
     osc1.connect(filter);
     osc2.connect(filter);
@@ -195,8 +194,8 @@ function playMinecraftSound(type) {
 
     osc1.start(now);
     osc2.start(now);
-    osc1.stop(now + 0.26);
-    osc2.stop(now + 0.26);
+    osc1.stop(now + 0.24);
+    osc2.stop(now + 0.24);
   }
 }
 
