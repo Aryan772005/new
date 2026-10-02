@@ -61,12 +61,10 @@
             /* Force GPU-composited transforms only */
       * { -webkit-tap-highlight-color: transparent; }
 
-      /* EXTREME GPU SAVINGS: Kill all blurs and heavy shadows on mobile */
+      /* EXTREME GPU SAVINGS: Kill all blurs on mobile */
       * {
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
-        box-shadow: none !important;
-        text-shadow: none !important;
       }
       
       /* Promote all major sections to their own hardware layer */
@@ -1005,7 +1003,8 @@
             </div>
 
             <!-- 3D MODEL — poster shows instantly, GLB loads async -->
-            <model-viewer
+            <img src="assets/images/robot_poster.jpg" alt="Combat Robot" class="robot-static-fallback" style="width: 100%; height: auto; object-fit: contain; max-height: 80vh;">
+            <model-viewer class="robot-3d-model"
               id="combat-robot-viewer"
               src="assets/images/biped_robot.glb"
               poster="assets/images/robot_poster.jpg"
@@ -2799,10 +2798,8 @@
   ================================================================ -->
   <script>
     (function () {
-      var isMobile = ('ontouchstart' in window)
-        || (navigator.maxTouchPoints > 0)
-        || window.matchMedia('(pointer: coarse)').matches
-        || /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      /* Only disable heavy scripts on actual mobile phones (width <= 768) */
+      var isMobile = window.innerWidth <= 768;
 
       /* Bulk-lazy all images that don't already have a loading attribute */
       document.querySelectorAll('img:not([loading])').forEach(function(img){
@@ -2812,7 +2809,7 @@
 
       /* model-viewer: inject JS only when robot section is near viewport */
       var mvSection = document.getElementById('robot-showcase');
-      if (mvSection && 'IntersectionObserver' in window) {
+      if (!isMobile && mvSection && 'IntersectionObserver' in window) {
         new IntersectionObserver(function(entries, obs){
           if (entries[0].isIntersecting) {
             if (!document.querySelector('script[src*="model-viewer"]')) {
@@ -2824,7 +2821,7 @@
             obs.disconnect();
           }
         }, { rootMargin: '200px' }).observe(mvSection);
-      } else if (mvSection) {
+      } else if (!isMobile && mvSection) {
         var s = document.createElement('script');
         s.type = 'module';
         s.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';

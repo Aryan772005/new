@@ -1,0 +1,1 @@
+const fs = require('fs'); let html = fs.readFileSync('index.html', 'utf8'); html = html.replace('<model-viewer', '<img src=\"assets/images/robot_poster.jpg\" alt=\"Combat Robot\" class=\"robot-static-fallback\" style=\"width: 100%; height: auto; object-fit: contain; max-height: 80vh;\">\n            <model-viewer class=\"robot-3d-model\"'); fs.writeFileSync('index.html', html);

@@ -1,0 +1,22 @@
+177: <main id="main-content">
+179: <section id="hero-pinned-wrapper" class="hero-pinned-wrapper 3d-scroll-target">
+539: </section>
+542: <section id="robot-showcase" aria-label="CRAFTCON 3D Combat Robot Showcase">
+1046: </section>
+1050: <section id="about" class="about-section section-padding reveal-3d-section has-section-backdrop">
+1259: </section>
+1262: <section id="tracks" class="tracks-section section-padding reveal-3d-section has-section-backdrop">
+1615: </section>
+1618: <section id="timeline" class="timeline-section section-padding reveal-3d-section has-section-backdrop">
+1846: </section>
+1849: <section id="rules" class="rules-section section-padding reveal-3d-section has-section-backdrop">
+2022: </section>
+2025: <section id="sponsors" class="sponsors-section section-padding reveal-3d-section has-section-backdrop">
+2135: </section>
+2138: <section id="organizers" class="organizers-section section-padding reveal-3d-section">
+2311: </section>
+2314: <section id="faq" class="faq-section section-padding reveal-3d-section has-section-backdrop">
+2461: </section>
+2464: <section class="final-cta-section reveal-3d-section">
+2487: </section>
+2488: </main>

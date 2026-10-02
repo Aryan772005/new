@@ -1,0 +1,1 @@
+const fs = require('fs'); let html = fs.readFileSync('index.html', 'utf8'); html = html.replace('if (mvSection && \'IntersectionObserver\' in window)', 'if (!isMobile && mvSection && \'IntersectionObserver\' in window)').replace('} else if (mvSection) {', '} else if (!isMobile && mvSection) {'); fs.writeFileSync('index.html', html);

@@ -1,0 +1,1 @@
+const fs = require('fs'); const css = '\n\n/* ROBOT FALLBACK MOBILE */\n.robot-static-fallback { display: none; }\n@media (max-width: 768px) {\n  .robot-3d-model { display: none !important; }\n  .robot-static-fallback { display: block !important; }\n  .mv-loader-overlay, .mv-interact-hint { display: none !important; }\n}\n'; fs.appendFileSync('style.css', css);
