@@ -21,24 +21,53 @@
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%2312121a'/><rect x='4' y='4' width='24' height='24' fill='%233f8f2f'/><rect x='8' y='8' width='16' height='16' fill='%238b2fd1'/><rect x='12' y='12' width='8' height='8' fill='%23f5a623'/></svg>">
 
-  <!-- Google Fonts: Space Grotesk, Inter, Silkscreen (Pixel Accent) -->
+  <!-- Preconnect to CDNs used by this page (speeds up DNS + TLS) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+
+  <!-- Google Fonts: Inter + Space Grotesk only. Silkscreen loaded async below. -->
+  <!-- display=swap prevents font-blocking render -->
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;600;700;800&display=swap"
     rel="stylesheet">
 
-  <!-- External 3D & Animation Libraries for Reel-Style Modern Experience (Deferred for instant mobile paint) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-  <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js" defer></script>
-  <script src="sound-engine.js?v=2026.4" defer></script>
+  <!-- Silkscreen (pixel accent font) — non-critical, loaded after paint -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"
+    rel="stylesheet" media="print" onload="this.media='all'">
 
-  <!-- Google Model Viewer — Official Web Component for glTF / GLB 3D models -->
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+  <!--
+    Heavy animation libs (Three.js, GSAP, Lenis) are injected ONLY for desktop
+    via JavaScript below the fold — mobile never downloads them at all.
+    model-viewer is deferred to bottom of <body>.
+  -->
 
   <link rel="stylesheet" href="style.css">
+
+  <!-- Critical mobile perf: disable heavy CSS animations on small screens -->
+  <style>
+    /* Stop all non-essential keyframe animations on mobile/low-end devices.
+       Individual sections can re-enable specific ones as needed. */
+    @media (max-width: 768px) {
+      .hero-portal-vortex-fx,
+      .hero-portal-glow-layer,
+      .hero-clouds-container,
+      .tf-hero-card,
+      .hero-backdrop::before,
+      .hero-backdrop::after { animation: none !important; }
+
+      /* Force GPU-composited transforms only */
+      * { -webkit-tap-highlight-color: transparent; }
+
+      /* Contain layout of offscreen sections — massive paint savings */
+      #about, #tracks, #timeline, #prizes, #rules, #sponsors, #faq {
+        content-visibility: auto;
+        contain-intrinsic-size: auto 600px;
+      }
+    }
+  </style>
 </head>
 
 <body class="smooth-scroll-body">
@@ -2747,8 +2776,86 @@
       </div>
     </div>
   </div>
+  <!-- ================================================================
+    PERFORMANCE LOADER
+    - Mobile: only main.js + sound-engine (no Three.js/GSAP/Lenis)
+    - Desktop: load heavy libs after first interaction or 2.5s
+    - model-viewer: injected via IntersectionObserver when section visible
+    - All below-fold images: lazy + async decoded automatically
+  ================================================================ -->
+  <script>
+    (function () {
+      var isMobile = ('ontouchstart' in window)
+        || (navigator.maxTouchPoints > 0)
+        || window.matchMedia('(pointer: coarse)').matches
+        || /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-  <script src="main.js" defer></script>
+      /* Bulk-lazy all images that don't already have a loading attribute */
+      document.querySelectorAll('img:not([loading])').forEach(function(img){
+        img.setAttribute('loading','lazy');
+        img.setAttribute('decoding','async');
+      });
+
+      /* model-viewer: inject JS only when robot section is near viewport */
+      var mvSection = document.getElementById('robot-showcase');
+      if (mvSection && 'IntersectionObserver' in window) {
+        new IntersectionObserver(function(entries, obs){
+          if (entries[0].isIntersecting) {
+            if (!document.querySelector('script[src*="model-viewer"]')) {
+              var s = document.createElement('script');
+              s.type = 'module';
+              s.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
+              document.head.appendChild(s);
+            }
+            obs.disconnect();
+          }
+        }, { rootMargin: '200px' }).observe(mvSection);
+      } else if (mvSection) {
+        var s = document.createElement('script');
+        s.type = 'module';
+        s.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
+        document.head.appendChild(s);
+      }
+
+      if (isMobile) {
+        /* Mobile fast path: no Three.js / GSAP / Lenis ever downloaded */
+        var srcs = ['sound-engine.js?v=2026.4', 'main.js'];
+        srcs.forEach(function(src){
+          var sc = document.createElement('script');
+          sc.src = src;
+          document.body.appendChild(sc);
+        });
+        return;
+      }
+
+      /* Desktop: load heavy libs after first scroll/click or 2.5s */
+      var loaded = false;
+      function loadAll() {
+        if (loaded) return;
+        loaded = true;
+        var CDN = 'https://cdnjs.cloudflare.com/ajax/libs/';
+        var libs = [
+          CDN + 'three.js/r128/three.min.js',
+          CDN + 'gsap/3.12.5/gsap.min.js',
+          CDN + 'gsap/3.12.5/ScrollTrigger.min.js',
+          'https://cdn.jsdelivr.net/npm/lenis@1.1.9/dist/lenis.min.js',
+          'sound-engine.js?v=2026.4',
+          'main.js'
+        ];
+        (function next(i){
+          if (i >= libs.length) return;
+          var sc = document.createElement('script');
+          sc.src = libs[i];
+          sc.onload = sc.onerror = function(){ next(i + 1); };
+          document.body.appendChild(sc);
+        })(0);
+      }
+      window.addEventListener('scroll', loadAll, { once: true, passive: true });
+      window.addEventListener('pointerdown', loadAll, { once: true });
+      setTimeout(loadAll, 2500);
+    })();
+  </script>
+
 </body>
 
 </html>
