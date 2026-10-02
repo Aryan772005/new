@@ -74,6 +74,13 @@ function initMainApp() {
   initRegistrationModal();
   initAudioAmbiance();
   initBrochureAction();
+
+  // Refresh ScrollTrigger after everything is laid out (CSS sticky needs settled layout)
+  window.addEventListener('load', () => {
+    if (typeof ScrollTrigger !== 'undefined') {
+      setTimeout(() => ScrollTrigger.refresh(), 200);
+    }
+  }, { once: true });
 }
 
 if (document.readyState === 'loading') {
