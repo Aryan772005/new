@@ -5955,3 +5955,18 @@ body, input, select, textarea, button {
   text-shadow: 0 0 25px rgba(255, 0, 60, 0.85), 0 0 50px rgba(255, 0, 60, 0.5) !important;
 }
 
+
+
+/* EXTREME MOBILE GPU SAVINGS */
+@media (max-width: 768px) {
+  * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  section {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+}

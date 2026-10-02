@@ -58,8 +58,22 @@
       .hero-backdrop::before,
       .hero-backdrop::after { animation: none !important; }
 
-      /* Force GPU-composited transforms only */
+            /* Force GPU-composited transforms only */
       * { -webkit-tap-highlight-color: transparent; }
+
+      /* EXTREME GPU SAVINGS: Kill all blurs and heavy shadows on mobile */
+      * {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+      }
+      
+      /* Promote all major sections to their own hardware layer */
+      section {
+        transform: translateZ(0);
+        will-change: transform;
+      }
 
       /* Contain layout of offscreen sections — massive paint savings */
       #about, #tracks, #timeline, #prizes, #rules, #sponsors, #faq {
