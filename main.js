@@ -23,10 +23,7 @@ function initMainApp() {
   // On any touch device (phone / tablet), skip ALL heavy 3D, WebGL, GSAP,
   // and audio initialisation. Only run the bare essentials so low-RAM users
   // get an instant, smooth registration experience.
-  const _isMobileTouch = ('ontouchstart' in window)
-    || (navigator.maxTouchPoints > 0)
-    || window.matchMedia('(pointer: coarse)').matches
-    || /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const _isMobileTouch = window.innerWidth <= 768;
 
   if (_isMobileTouch) {
     // Hide WebGL canvases immediately so they don't reserve GPU memory
@@ -614,10 +611,7 @@ function initHero3DCameraDive() {
 
   if (!heroWrapper || !heroBgLayer) return;
 
-  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.matchMedia('(pointer: coarse)').matches;
-  const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  const isMobileScreen = window.innerWidth <= 768;
-  const isTouchOrMobile = isMobileScreen || isTouch || isMobileUA;
+  const isTouchOrMobile = window.innerWidth <= 768;
 
   // PINNED MULTI-STAGE CAMERA & CLOUD FLY-THROUGH (DESKTOP PINNED, MOBILE LIGHTWEIGHT NATURAL SCROLL)
   const pinTimeline = gsap.timeline({
@@ -1072,9 +1066,7 @@ function initTracks3DAnimation() {
     });
   }
 
-  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.matchMedia('(pointer: coarse)').matches;
-  const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  const isTouchOrMobile = window.innerWidth <= 1024 || isTouch || isMobileUA;
+  const isTouchOrMobile = window.innerWidth <= 1024;
 
   // 3D Card Deal & Fan-Out:
   // On desktop mouse: 3D perspective fan. On touch/mobile: silky clean 2D glide
