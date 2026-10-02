@@ -310,276 +310,6 @@
             </div>
           </div>
 
-          <!-- ===== 3D COMBAT ROBOT SHOWCASE STRIP ===== -->
-          <div class="hero-3d-robot-strip" id="hero-3d-strip">
-            <!-- Left: copy / label column -->
-            <div class="hero-3d-copy">
-              <div class="robot-eyebrow-badge">
-                <span class="robot-badge-dot"></span>
-                CRAFTCON '26 MASCOT
-              </div>
-              <h2 class="robot-strip-title">MEET THE<br><span class="robot-name-highlight">COMBAT UNIT</span></h2>
-              <p class="robot-strip-desc">Drag to rotate &middot; Pinch to zoom. Built from the same relentless spirit every
-                CRAFTCON builder brings to the arena. Are you ready to compete?</p>
-              <div class="robot-stat-row">
-                <div class="robot-stat-item">
-                  <span class="rsi-val">500+</span>
-                  <span class="rsi-label">Builders</span>
-                </div>
-                <div class="robot-stat-divider"></div>
-                <div class="robot-stat-item">
-                  <span class="rsi-val">24h</span>
-                  <span class="rsi-label">Hack Sprint</span>
-                </div>
-                <div class="robot-stat-divider"></div>
-                <div class="robot-stat-item">
-                  <span class="rsi-val">₹2L</span>
-                  <span class="rsi-label">Prize Pool</span>
-                </div>
-              </div>
-              <!-- RGB Glow CTA Button -->
-              <a href="/register" class="rgb-glow-cta" id="rgb-glow-register-btn" aria-label="Register for CRAFTCON 2026">
-                <span class="rgb-glow-inner">REGISTER FOR CRAFTCON '26</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-            </div>
-
-            <!-- Right: model-viewer column -->
-            <div class="hero-3d-viewer-wrap">
-              <div class="model-viewer-frame">
-                <div class="mv-corner mv-tl"></div>
-                <div class="mv-corner mv-tr"></div>
-                <div class="mv-corner mv-bl"></div>
-                <div class="mv-corner mv-br"></div>
-                <model-viewer
-                  id="combat-robot-viewer"
-                  src="assets/images/combat_robot.glb"
-                  alt="CRAFTCON 2026 Combat Robot 3D Mascot"
-                  auto-rotate
-                  camera-controls
-                  shadow-intensity="1.4"
-                  exposure="0.85"
-                  environment-image="neutral"
-                  rotation-per-second="30deg"
-                  min-camera-orbit="auto auto 5%"
-                  max-camera-orbit="auto auto 100%"
-                  style="width:100%; height:100%; --progress-bar-color: #9d4edd; --progress-mask: transparent;"
-                  loading="eager"
-                  reveal="auto">
-                  <div slot="progress-bar" class="mv-progress">
-                    <div class="mv-progress-inner" id="mv-progress-fill"></div>
-                  </div>
-                </model-viewer>
-                <!-- Ambient glow halo behind model -->
-                <div class="mv-glow-halo" aria-hidden="true"></div>
-              </div>
-              <p class="mv-interact-hint">Drag &middot; Rotate &middot; Zoom</p>
-            </div>
-          </div>
-          <!-- ===== END 3D COMBAT ROBOT STRIP ===== -->
-
-          <style>
-            /* ====== RGB GLOW CTA BUTTON ====== */
-            @keyframes rgbBorderCycle {
-              0%   { border-color: #ff0080; box-shadow: 0 0 18px 4px rgba(255,0,128,0.55), 0 0 40px 8px rgba(255,0,128,0.2); }
-              14%  { border-color: #ff4000; box-shadow: 0 0 18px 4px rgba(255,64,0,0.55),   0 0 40px 8px rgba(255,64,0,0.2); }
-              28%  { border-color: #ffd700; box-shadow: 0 0 18px 4px rgba(255,215,0,0.55),  0 0 40px 8px rgba(255,215,0,0.2); }
-              42%  { border-color: #00ff80; box-shadow: 0 0 18px 4px rgba(0,255,128,0.55),  0 0 40px 8px rgba(0,255,128,0.2); }
-              57%  { border-color: #00cfff; box-shadow: 0 0 18px 4px rgba(0,207,255,0.55),  0 0 40px 8px rgba(0,207,255,0.2); }
-              71%  { border-color: #7b2fff; box-shadow: 0 0 18px 4px rgba(123,47,255,0.55), 0 0 40px 8px rgba(123,47,255,0.2); }
-              85%  { border-color: #ff00cc; box-shadow: 0 0 18px 4px rgba(255,0,204,0.55), 0 0 40px 8px rgba(255,0,204,0.2); }
-              100% { border-color: #ff0080; box-shadow: 0 0 18px 4px rgba(255,0,128,0.55), 0 0 40px 8px rgba(255,0,128,0.2); }
-            }
-            @keyframes rgbBgShift {
-              0%   { background-position: 0% 50%; }
-              50%  { background-position: 100% 50%; }
-              100% { background-position: 0% 50%; }
-            }
-            @keyframes mvPulseHalo {
-              0%, 100% { opacity: 0.35; transform: scale(1); }
-              50% { opacity: 0.65; transform: scale(1.06); }
-            }
-            @keyframes robotBadgePulse {
-              0%, 100% { box-shadow: 0 0 0 0 rgba(157,78,221,0.4); }
-              50% { box-shadow: 0 0 0 6px rgba(157,78,221,0); }
-            }
-            @keyframes stripFadeIn {
-              from { opacity: 0; transform: translateY(32px); }
-              to { opacity: 1; transform: translateY(0); }
-            }
-
-            /* ====== STRIP LAYOUT ====== */
-            .hero-3d-robot-strip {
-              position: relative;
-              z-index: 10;
-              display: grid;
-              grid-template-columns: 1fr 1fr;
-              gap: 40px;
-              align-items: center;
-              padding: 56px 48px 56px;
-              margin: 32px 0 0;
-              background: linear-gradient(135deg, #05050a 0%, #0c0c18 55%, #0a0514 100%);
-              border-top: 1px solid rgba(157,78,221,0.18);
-              border-bottom: 1px solid rgba(157,78,221,0.12);
-              overflow: hidden;
-              animation: stripFadeIn 0.9s ease both;
-            }
-            .hero-3d-robot-strip::before {
-              content: '';
-              position: absolute;
-              inset: 0;
-              background: radial-gradient(ellipse 60% 70% at 65% 50%, rgba(157,78,221,0.07) 0%, transparent 70%);
-              pointer-events: none;
-            }
-
-            /* copy column */
-            .hero-3d-copy { display: flex; flex-direction: column; gap: 18px; }
-            .robot-eyebrow-badge {
-              display: inline-flex; align-items: center; gap: 8px;
-              padding: 5px 14px; border-radius: 3px;
-              border: 1px solid rgba(157,78,221,0.4);
-              background: rgba(157,78,221,0.08);
-              font-family: 'Space Grotesk', sans-serif;
-              font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em;
-              color: #c084fc; text-transform: uppercase;
-              width: fit-content;
-            }
-            .robot-badge-dot {
-              display: inline-block; width: 6px; height: 6px; border-radius: 50%;
-              background: #c084fc;
-              animation: robotBadgePulse 2s ease-in-out infinite;
-            }
-            .robot-strip-title {
-              font-family: 'Space Grotesk', sans-serif;
-              font-size: clamp(2rem, 3.5vw, 3.2rem);
-              font-weight: 800; line-height: 1.05;
-              color: #f8fafc; margin: 0;
-              letter-spacing: -0.02em;
-            }
-            .robot-name-highlight {
-              background: linear-gradient(90deg, #9d4edd, #c084fc, #7b2fff);
-              -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-              background-clip: text;
-            }
-            .robot-strip-desc {
-              font-family: 'Inter', sans-serif;
-              font-size: 0.93rem; color: #94a3b8; line-height: 1.65;
-              margin: 0; max-width: 380px;
-            }
-
-            /* stat row */
-            .robot-stat-row {
-              display: flex; align-items: center; gap: 0; flex-wrap: wrap;
-            }
-            .robot-stat-item {
-              display: flex; flex-direction: column; align-items: center;
-              padding: 10px 24px;
-            }
-            .robot-stat-item:first-child { padding-left: 0; }
-            .rsi-val {
-              font-family: 'Space Grotesk', sans-serif;
-              font-size: 1.6rem; font-weight: 800; color: #e2e8f0;
-            }
-            .rsi-label {
-              font-family: 'Inter', sans-serif;
-              font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
-              color: #64748b; margin-top: 2px;
-            }
-            .robot-stat-divider {
-              width: 1px; height: 36px; background: rgba(148,163,184,0.15);
-            }
-
-            /* RGB glow CTA */
-            .rgb-glow-cta {
-              display: inline-flex; align-items: center; gap: 10px;
-              padding: 14px 30px;
-              border: 2px solid #ff0080;
-              border-radius: 6px;
-              background: linear-gradient(270deg, #1a0038, #0d001a, #001428, #001a00);
-              background-size: 400% 400%;
-              color: #fff;
-              font-family: 'Space Grotesk', sans-serif;
-              font-size: 0.9rem; font-weight: 700; letter-spacing: 0.1em;
-              text-transform: uppercase; text-decoration: none;
-              cursor: pointer; width: fit-content;
-              animation: rgbBorderCycle 4s linear infinite, rgbBgShift 6s ease infinite;
-              transition: transform 0.2s ease, filter 0.2s ease;
-              position: relative; overflow: hidden;
-            }
-            .rgb-glow-cta::after {
-              content: '';
-              position: absolute; inset: 0;
-              background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%);
-              pointer-events: none;
-            }
-            .rgb-glow-cta:hover {
-              transform: translateY(-2px) scale(1.025);
-              filter: brightness(1.15);
-            }
-            .rgb-glow-inner { position: relative; z-index: 1; }
-
-            /* viewer wrapper */
-            .hero-3d-viewer-wrap {
-              display: flex; flex-direction: column;
-              align-items: center; gap: 12px;
-            }
-            .model-viewer-frame {
-              position: relative;
-              width: 100%; max-width: 500px;
-              aspect-ratio: 1 / 1;
-              border-radius: 12px;
-              background: radial-gradient(ellipse at 50% 40%, #12062b 0%, #070711 70%);
-              border: 1px solid rgba(157,78,221,0.25);
-              overflow: hidden;
-            }
-            /* HUD corner brackets on model viewer */
-            .mv-corner {
-              position: absolute; width: 18px; height: 18px;
-              border-color: rgba(157,78,221,0.6); border-style: solid;
-              z-index: 20; pointer-events: none;
-            }
-            .mv-tl { top: 10px; left: 10px; border-width: 2px 0 0 2px; border-radius: 2px 0 0 0; }
-            .mv-tr { top: 10px; right: 10px; border-width: 2px 2px 0 0; border-radius: 0 2px 0 0; }
-            .mv-bl { bottom: 10px; left: 10px; border-width: 0 0 2px 2px; border-radius: 0 0 0 2px; }
-            .mv-br { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; border-radius: 0 0 2px 0; }
-            .mv-glow-halo {
-              position: absolute; inset: -20%; border-radius: 50%;
-              background: radial-gradient(circle, rgba(157,78,221,0.18) 0%, transparent 65%);
-              animation: mvPulseHalo 3.2s ease-in-out infinite;
-              pointer-events: none; z-index: 0;
-            }
-            /* model-viewer progress bar slot */
-            .mv-progress {
-              position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
-              background: rgba(157,78,221,0.2);
-            }
-            .mv-progress-inner {
-              height: 100%; width: 0; background: #9d4edd;
-              transition: width 0.3s ease;
-            }
-            .mv-interact-hint {
-              font-family: 'Space Grotesk', sans-serif;
-              font-size: 0.72rem; letter-spacing: 0.12em;
-              text-transform: uppercase; color: #475569; margin: 0;
-            }
-
-            /* responsive */
-            @media (max-width: 900px) {
-              .hero-3d-robot-strip {
-                grid-template-columns: 1fr;
-                padding: 40px 24px;
-                gap: 32px;
-              }
-              .hero-3d-copy { align-items: center; text-align: center; }
-              .robot-strip-desc { max-width: none; text-align: center; }
-              .robot-stat-row { justify-content: center; }
-              .robot-eyebrow-badge { align-self: center; }
-              .rgb-glow-cta { align-self: center; }
-              .hero-3d-viewer-wrap { width: 100%; }
-              .model-viewer-frame { max-width: 340px; }
-            }
-          </style>
-
           <!-- Corner Anchor Badges -->
           <div class="hero-footer-bar">
             <div class="hero-crest">
@@ -764,6 +494,341 @@
         </div>
       </div>
     </section>
+
+    <!-- ================= 3D COMBAT ROBOT SHOWCASE SECTION ================= -->
+    <section id="robot-showcase" aria-label="CRAFTCON 3D Combat Robot Showcase">
+      <style>
+        /* ============================================================
+           ROBOT SHOWCASE SECTION — Standalone full-width layout
+           Works on mobile (320px) · tablet (768px) · desktop (1440px)
+        ============================================================ */
+        #robot-showcase {
+          position: relative;
+          z-index: 5;
+          background: #05050d;
+          overflow: hidden;
+        }
+        #robot-showcase::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background:
+            radial-gradient(ellipse 80% 60% at 70% 50%, rgba(157,78,221,0.09) 0%, transparent 65%),
+            radial-gradient(ellipse 50% 80% at 20% 80%, rgba(0,207,255,0.04) 0%, transparent 60%);
+          pointer-events: none;
+        }
+
+        .robot-section-inner {
+          max-width: 1280px;
+          margin: 0 auto;
+          padding: 80px 48px;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 60px;
+          align-items: center;
+        }
+
+        /* ---- LEFT: copy ---- */
+        .robot-copy-col {
+          display: flex;
+          flex-direction: column;
+          gap: 22px;
+        }
+        .robot-eyebrow-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 5px 14px;
+          border-radius: 4px;
+          border: 1px solid rgba(157,78,221,0.45);
+          background: rgba(157,78,221,0.09);
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: 0.15em;
+          color: #c084fc;
+          text-transform: uppercase;
+          width: fit-content;
+        }
+        .robot-badge-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #c084fc;
+          animation: robotPingDot 2s ease-in-out infinite;
+        }
+        @keyframes robotPingDot {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(192,132,252,0.5); }
+          50%       { box-shadow: 0 0 0 7px rgba(192,132,252,0); }
+        }
+        .robot-strip-title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(2.2rem, 4vw, 3.6rem);
+          font-weight: 800;
+          line-height: 1.05;
+          letter-spacing: -0.025em;
+          color: #f8fafc;
+          margin: 0;
+        }
+        .robot-name-highlight {
+          background: linear-gradient(100deg, #9d4edd 0%, #c084fc 50%, #38bdf8 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        .robot-strip-desc {
+          font-family: 'Inter', sans-serif;
+          font-size: 1rem;
+          color: #94a3b8;
+          line-height: 1.7;
+          margin: 0;
+          max-width: 420px;
+        }
+
+        /* ---- stat pills ---- */
+        .robot-stat-row {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          border: 1px solid rgba(148,163,184,0.1);
+          border-radius: 8px;
+          overflow: hidden;
+          width: fit-content;
+        }
+        .robot-stat-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 14px 28px;
+          border-right: 1px solid rgba(148,163,184,0.1);
+        }
+        .robot-stat-item:last-child { border-right: none; }
+        .rsi-val {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 1.65rem;
+          font-weight: 800;
+          color: #e2e8f0;
+          line-height: 1;
+        }
+        .rsi-label {
+          font-family: 'Inter', sans-serif;
+          font-size: 0.68rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #64748b;
+          margin-top: 4px;
+        }
+
+        /* ---- RGB glow CTA button ---- */
+        @keyframes rgbBorderCycle {
+          0%   { border-color: #ff0080; box-shadow: 0 0 20px 5px rgba(255,0,128,0.5), 0 0 50px 10px rgba(255,0,128,0.15); }
+          14%  { border-color: #ff4500; box-shadow: 0 0 20px 5px rgba(255,69,0,0.5),   0 0 50px 10px rgba(255,69,0,0.15); }
+          28%  { border-color: #ffd700; box-shadow: 0 0 20px 5px rgba(255,215,0,0.5),  0 0 50px 10px rgba(255,215,0,0.15); }
+          42%  { border-color: #00ff80; box-shadow: 0 0 20px 5px rgba(0,255,128,0.5),  0 0 50px 10px rgba(0,255,128,0.15); }
+          57%  { border-color: #00cfff; box-shadow: 0 0 20px 5px rgba(0,207,255,0.5),  0 0 50px 10px rgba(0,207,255,0.15); }
+          71%  { border-color: #8b5cf6; box-shadow: 0 0 20px 5px rgba(139,92,246,0.5), 0 0 50px 10px rgba(139,92,246,0.15); }
+          85%  { border-color: #ff00cc; box-shadow: 0 0 20px 5px rgba(255,0,204,0.5),  0 0 50px 10px rgba(255,0,204,0.15); }
+          100% { border-color: #ff0080; box-shadow: 0 0 20px 5px rgba(255,0,128,0.5),  0 0 50px 10px rgba(255,0,128,0.15); }
+        }
+        @keyframes rgbTextPulse {
+          0%, 100% { letter-spacing: 0.1em; }
+          50%       { letter-spacing: 0.12em; }
+        }
+        .rgb-glow-cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 12px;
+          padding: 16px 34px;
+          border: 2.5px solid #ff0080;
+          border-radius: 6px;
+          background: linear-gradient(135deg, #0d001a, #001220, #001a00, #0d001a);
+          background-size: 400% 400%;
+          color: #fff;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.95rem;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          text-decoration: none;
+          width: fit-content;
+          animation: rgbBorderCycle 4s linear infinite;
+          transition: transform 0.2s ease, filter 0.25s ease;
+          position: relative;
+          overflow: hidden;
+        }
+        .rgb-glow-cta:hover {
+          transform: translateY(-3px) scale(1.03);
+          filter: brightness(1.2);
+        }
+        .rgb-glow-cta svg { flex-shrink: 0; }
+
+        /* ---- RIGHT: viewer ---- */
+        .robot-viewer-col {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 14px;
+        }
+        .model-viewer-frame {
+          position: relative;
+          width: 100%;
+          max-width: 520px;
+          aspect-ratio: 1 / 1;
+          border-radius: 16px;
+          background: radial-gradient(ellipse at 50% 38%, #1a0540 0%, #060612 68%);
+          border: 1.5px solid rgba(157,78,221,0.3);
+          overflow: hidden;
+          box-shadow: 0 0 60px 10px rgba(157,78,221,0.08), inset 0 0 60px rgba(0,0,0,0.4);
+        }
+        model-viewer {
+          width: 100%;
+          height: 100%;
+          --progress-bar-color: #9d4edd;
+          --progress-mask: transparent;
+        }
+        /* HUD corner brackets */
+        .mv-corner {
+          position: absolute;
+          width: 22px;
+          height: 22px;
+          border-color: rgba(157,78,221,0.7);
+          border-style: solid;
+          z-index: 20;
+          pointer-events: none;
+        }
+        .mv-tl { top: 12px; left: 12px;   border-width: 2px 0 0 2px; border-radius: 3px 0 0 0; }
+        .mv-tr { top: 12px; right: 12px;  border-width: 2px 2px 0 0; border-radius: 0 3px 0 0; }
+        .mv-bl { bottom: 12px; left: 12px;  border-width: 0 0 2px 2px; border-radius: 0 0 0 3px; }
+        .mv-br { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; border-radius: 0 0 3px 0; }
+        @keyframes mvHaloPulse {
+          0%, 100% { opacity: 0.3; transform: scale(1); }
+          50%       { opacity: 0.6; transform: scale(1.05); }
+        }
+        .mv-glow-halo {
+          position: absolute;
+          inset: -25%;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(157,78,221,0.2) 0%, transparent 60%);
+          animation: mvHaloPulse 3s ease-in-out infinite;
+          pointer-events: none;
+          z-index: 0;
+        }
+        .mv-interact-hint {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.72rem;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: #334155;
+          margin: 0;
+          user-select: none;
+        }
+
+        /* ============================================================
+           RESPONSIVE BREAKPOINTS
+        ============================================================ */
+        /* Tablet: ≤1024px — tighter padding, slightly smaller model */
+        @media (max-width: 1024px) {
+          .robot-section-inner {
+            gap: 40px;
+            padding: 64px 32px;
+          }
+          .model-viewer-frame { max-width: 420px; }
+        }
+        /* Mobile + phablet: ≤768px — single column, model first */
+        @media (max-width: 768px) {
+          .robot-section-inner {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto;
+            padding: 52px 20px 60px;
+            gap: 36px;
+          }
+          /* Show model viewer ABOVE the copy on mobile */
+          .robot-viewer-col  { order: -1; }
+          .robot-copy-col    { align-items: center; text-align: center; }
+          .robot-strip-desc  { max-width: none; }
+          .robot-stat-row    { width: 100%; justify-content: center; }
+          .robot-eyebrow-badge { align-self: center; }
+          .rgb-glow-cta      { align-self: center; width: 100%; justify-content: center; }
+          .model-viewer-frame { max-width: 100%; aspect-ratio: 1 / 1; }
+        }
+        /* Small phones: ≤400px */
+        @media (max-width: 400px) {
+          .robot-section-inner { padding: 40px 16px 48px; }
+          .robot-strip-title   { font-size: 2rem; }
+          .rgb-glow-cta        { padding: 14px 20px; font-size: 0.82rem; }
+        }
+      </style>
+
+      <div class="robot-section-inner">
+        <!-- LEFT: copy -->
+        <div class="robot-copy-col">
+          <div class="robot-eyebrow-badge">
+            <span class="robot-badge-dot"></span>
+            CRAFTCON '26 — OFFICIAL MASCOT
+          </div>
+          <h2 class="robot-strip-title">MEET THE<br><span class="robot-name-highlight">COMBAT UNIT</span></h2>
+          <p class="robot-strip-desc">
+            Drag to rotate &middot; Pinch to zoom. Forged from the same relentless spirit every CRAFTCON
+            builder brings to the arena. This is what 24 hours of innovation looks like.
+          </p>
+
+          <div class="robot-stat-row">
+            <div class="robot-stat-item">
+              <span class="rsi-val">500+</span>
+              <span class="rsi-label">Builders</span>
+            </div>
+            <div class="robot-stat-item">
+              <span class="rsi-val">24h</span>
+              <span class="rsi-label">Sprint</span>
+            </div>
+            <div class="robot-stat-item">
+              <span class="rsi-val">₹2L</span>
+              <span class="rsi-label">Prizes</span>
+            </div>
+            <div class="robot-stat-item">
+              <span class="rsi-val">7+</span>
+              <span class="rsi-label">Tracks</span>
+            </div>
+          </div>
+
+          <!-- RGB LED glow CTA -->
+          <a href="/register" class="rgb-glow-cta" id="rgb-glow-register-btn" aria-label="Register for CRAFTCON 2026">
+            <span>REGISTER FOR CRAFTCON '26</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <!-- RIGHT: interactive 3D model -->
+        <div class="robot-viewer-col">
+          <div class="model-viewer-frame">
+            <div class="mv-corner mv-tl"></div>
+            <div class="mv-corner mv-tr"></div>
+            <div class="mv-corner mv-bl"></div>
+            <div class="mv-corner mv-br"></div>
+            <div class="mv-glow-halo" aria-hidden="true"></div>
+            <model-viewer
+              id="combat-robot-viewer"
+              src="assets/images/combat_robot.glb"
+              alt="CRAFTCON 2026 Combat Robot Mascot — drag to rotate"
+              auto-rotate
+              camera-controls
+              touch-action="pan-y"
+              shadow-intensity="1.2"
+              exposure="0.9"
+              environment-image="neutral"
+              rotation-per-second="28deg"
+              min-camera-orbit="auto auto 5%"
+              max-camera-orbit="auto auto 105%"
+              loading="eager"
+              reveal="auto"
+              style="width:100%; height:100%;">
+            </model-viewer>
+          </div>
+          <p class="mv-interact-hint">Drag &middot; Rotate &middot; Zoom</p>
+        </div>
+      </div>
+    </section>
+    <!-- ================= END 3D COMBAT ROBOT SHOWCASE ================= -->
 
     <!-- ================= 2. ABOUT SECTION (CRAFTING TABLE 3x3 UI & VOXEL STATS) ================= -->
     <section id="about" class="about-section section-padding reveal-3d-section has-section-backdrop">
