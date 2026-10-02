@@ -234,7 +234,7 @@ function renderPaymentStep() {
   if (fee > 0) {
     paymentActionArea.innerHTML = `
       <div style="margin: 20px auto; max-width: 320px; padding: 18px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; text-align: center;">
-        <div style="font-size:2rem; margin-bottom:8px;">💳</div>
+        <div style="display:flex; justify-content:center; margin-bottom:8px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#f59e0b;"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg></div>
         <h4 style="margin-bottom:6px; font-size:1.05rem;">Online Payment via Razorpay</h4>
         <p style="font-size:0.85rem; color:#a1a1aa; margin-bottom:12px;">Instant confirmation with UPI (GPay, PhonePe, Paytm), Cards, or NetBanking.</p>
         <div style="font-size:0.85rem; color:#f59e0b; font-weight:700;">Payable: ₹${fee}</div>

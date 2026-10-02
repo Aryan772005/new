@@ -449,7 +449,7 @@ function populateStep2GameGrid() {
       const tile = document.createElement('div');
       tile.className = `game-option-tile ${wizardState.gameId === config.id ? 'selected' : ''}`;
       tile.innerHTML = `
-        <div class="tile-icon-wrap">🎮</div>
+        <div class="tile-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="3"></rect><path d="M6 12h4m-2-2v4m8-2h.01m3 0h.01"></path></svg></div>
         <div>
           <div class="tile-title">${config.name}</div>
           <div class="tile-sub">${config.type.toUpperCase()} • ${config.minPlayers} Player(s) • ₹${config.minPlayers * 50} Total</div>
@@ -628,7 +628,7 @@ function populateStep5Review() {
   if (collegeEl) collegeEl.textContent = wizardState.college;
   if (countEl) countEl.textContent = wizardState.playerCount;
   if (totalEl) totalEl.textContent = `₹${wizardState.totalAmount}`;
-  if (whatsappEl) whatsappEl.textContent = wizardState.whatsappJoined ? '✓ Joined / Confirmed' : 'Not Joined';
+  if (whatsappEl) whatsappEl.textContent = wizardState.whatsappJoined ? 'Joined / Confirmed' : 'Not Joined';
 
   if (listEl) {
     listEl.innerHTML = '';

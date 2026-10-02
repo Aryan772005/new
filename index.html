@@ -35,6 +35,9 @@
   <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js" defer></script>
   <script src="sound-engine.js?v=2026.4" defer></script>
 
+  <!-- Google Model Viewer — Official Web Component for glTF / GLB 3D models -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -184,7 +187,14 @@
 
             <!-- Prominent Prizes Highlight Badge in Front -->
             <div class="hero-prize-pill elem-3d-float" style="display:inline-flex; align-items:center; gap:8px; background:linear-gradient(90deg, rgba(255,0,60,0.25), rgba(234,179,8,0.15)); border:1.5px solid #ff4d6d; padding:8px 18px; border-radius:4px; clip-path:polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%); margin-bottom:14px; box-shadow:0 0 20px rgba(255,0,60,0.45);">
-              <span style="font-size:1.2rem;">🏆</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(251,191,36,0.6));">
+                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+                <path d="M4 22h16"/>
+                <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+                <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+                <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+              </svg>
               <span style="font-size:0.95rem; font-weight:800; letter-spacing:0.08em; color:#ffffff; text-transform:uppercase; text-shadow:0 0 10px rgba(255,77,109,0.8);">PRIZES UP TO ₹2 LAKHS</span>
             </div>
 
@@ -249,7 +259,13 @@
                 </svg>
               </a>
               <a href="/gaming.html" id="hero-gaming-btn" class="pill-cta-btn hero-gaming-btn" title="Enter CRAFTCON '26 Gaming Arena Registration">
-                <span class="gaming-gamepad-icon">🎮</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="gaming-gamepad-icon">
+                  <rect x="2" y="6" width="20" height="12" rx="4"></rect>
+                  <line x1="6" y1="12" x2="10" y2="12"></line>
+                  <line x1="8" y1="10" x2="8" y2="14"></line>
+                  <line x1="15" y1="13" x2="15.01" y2="13"></line>
+                  <line x1="18" y1="11" x2="18.01" y2="11"></line>
+                </svg>
                 <span>ENTER GAMING ARENA</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <path d="M5 12h14M12 5l7 7-7 7" />
@@ -293,6 +309,276 @@
               <div class="mecha-wing right"><span>PRIZES UP TO ₹2 LAKHS</span></div>
             </div>
           </div>
+
+          <!-- ===== 3D COMBAT ROBOT SHOWCASE STRIP ===== -->
+          <div class="hero-3d-robot-strip" id="hero-3d-strip">
+            <!-- Left: copy / label column -->
+            <div class="hero-3d-copy">
+              <div class="robot-eyebrow-badge">
+                <span class="robot-badge-dot"></span>
+                CRAFTCON '26 MASCOT
+              </div>
+              <h2 class="robot-strip-title">MEET THE<br><span class="robot-name-highlight">COMBAT UNIT</span></h2>
+              <p class="robot-strip-desc">Drag to rotate &middot; Pinch to zoom. Built from the same relentless spirit every
+                CRAFTCON builder brings to the arena. Are you ready to compete?</p>
+              <div class="robot-stat-row">
+                <div class="robot-stat-item">
+                  <span class="rsi-val">500+</span>
+                  <span class="rsi-label">Builders</span>
+                </div>
+                <div class="robot-stat-divider"></div>
+                <div class="robot-stat-item">
+                  <span class="rsi-val">24h</span>
+                  <span class="rsi-label">Hack Sprint</span>
+                </div>
+                <div class="robot-stat-divider"></div>
+                <div class="robot-stat-item">
+                  <span class="rsi-val">₹2L</span>
+                  <span class="rsi-label">Prize Pool</span>
+                </div>
+              </div>
+              <!-- RGB Glow CTA Button -->
+              <a href="/register" class="rgb-glow-cta" id="rgb-glow-register-btn" aria-label="Register for CRAFTCON 2026">
+                <span class="rgb-glow-inner">REGISTER FOR CRAFTCON '26</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+
+            <!-- Right: model-viewer column -->
+            <div class="hero-3d-viewer-wrap">
+              <div class="model-viewer-frame">
+                <div class="mv-corner mv-tl"></div>
+                <div class="mv-corner mv-tr"></div>
+                <div class="mv-corner mv-bl"></div>
+                <div class="mv-corner mv-br"></div>
+                <model-viewer
+                  id="combat-robot-viewer"
+                  src="assets/images/combat_robot.glb"
+                  alt="CRAFTCON 2026 Combat Robot 3D Mascot"
+                  auto-rotate
+                  camera-controls
+                  shadow-intensity="1.4"
+                  exposure="0.85"
+                  environment-image="neutral"
+                  rotation-per-second="30deg"
+                  min-camera-orbit="auto auto 5%"
+                  max-camera-orbit="auto auto 100%"
+                  style="width:100%; height:100%; --progress-bar-color: #9d4edd; --progress-mask: transparent;"
+                  loading="eager"
+                  reveal="auto">
+                  <div slot="progress-bar" class="mv-progress">
+                    <div class="mv-progress-inner" id="mv-progress-fill"></div>
+                  </div>
+                </model-viewer>
+                <!-- Ambient glow halo behind model -->
+                <div class="mv-glow-halo" aria-hidden="true"></div>
+              </div>
+              <p class="mv-interact-hint">Drag &middot; Rotate &middot; Zoom</p>
+            </div>
+          </div>
+          <!-- ===== END 3D COMBAT ROBOT STRIP ===== -->
+
+          <style>
+            /* ====== RGB GLOW CTA BUTTON ====== */
+            @keyframes rgbBorderCycle {
+              0%   { border-color: #ff0080; box-shadow: 0 0 18px 4px rgba(255,0,128,0.55), 0 0 40px 8px rgba(255,0,128,0.2); }
+              14%  { border-color: #ff4000; box-shadow: 0 0 18px 4px rgba(255,64,0,0.55),   0 0 40px 8px rgba(255,64,0,0.2); }
+              28%  { border-color: #ffd700; box-shadow: 0 0 18px 4px rgba(255,215,0,0.55),  0 0 40px 8px rgba(255,215,0,0.2); }
+              42%  { border-color: #00ff80; box-shadow: 0 0 18px 4px rgba(0,255,128,0.55),  0 0 40px 8px rgba(0,255,128,0.2); }
+              57%  { border-color: #00cfff; box-shadow: 0 0 18px 4px rgba(0,207,255,0.55),  0 0 40px 8px rgba(0,207,255,0.2); }
+              71%  { border-color: #7b2fff; box-shadow: 0 0 18px 4px rgba(123,47,255,0.55), 0 0 40px 8px rgba(123,47,255,0.2); }
+              85%  { border-color: #ff00cc; box-shadow: 0 0 18px 4px rgba(255,0,204,0.55), 0 0 40px 8px rgba(255,0,204,0.2); }
+              100% { border-color: #ff0080; box-shadow: 0 0 18px 4px rgba(255,0,128,0.55), 0 0 40px 8px rgba(255,0,128,0.2); }
+            }
+            @keyframes rgbBgShift {
+              0%   { background-position: 0% 50%; }
+              50%  { background-position: 100% 50%; }
+              100% { background-position: 0% 50%; }
+            }
+            @keyframes mvPulseHalo {
+              0%, 100% { opacity: 0.35; transform: scale(1); }
+              50% { opacity: 0.65; transform: scale(1.06); }
+            }
+            @keyframes robotBadgePulse {
+              0%, 100% { box-shadow: 0 0 0 0 rgba(157,78,221,0.4); }
+              50% { box-shadow: 0 0 0 6px rgba(157,78,221,0); }
+            }
+            @keyframes stripFadeIn {
+              from { opacity: 0; transform: translateY(32px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+
+            /* ====== STRIP LAYOUT ====== */
+            .hero-3d-robot-strip {
+              position: relative;
+              z-index: 10;
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 40px;
+              align-items: center;
+              padding: 56px 48px 56px;
+              margin: 32px 0 0;
+              background: linear-gradient(135deg, #05050a 0%, #0c0c18 55%, #0a0514 100%);
+              border-top: 1px solid rgba(157,78,221,0.18);
+              border-bottom: 1px solid rgba(157,78,221,0.12);
+              overflow: hidden;
+              animation: stripFadeIn 0.9s ease both;
+            }
+            .hero-3d-robot-strip::before {
+              content: '';
+              position: absolute;
+              inset: 0;
+              background: radial-gradient(ellipse 60% 70% at 65% 50%, rgba(157,78,221,0.07) 0%, transparent 70%);
+              pointer-events: none;
+            }
+
+            /* copy column */
+            .hero-3d-copy { display: flex; flex-direction: column; gap: 18px; }
+            .robot-eyebrow-badge {
+              display: inline-flex; align-items: center; gap: 8px;
+              padding: 5px 14px; border-radius: 3px;
+              border: 1px solid rgba(157,78,221,0.4);
+              background: rgba(157,78,221,0.08);
+              font-family: 'Space Grotesk', sans-serif;
+              font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em;
+              color: #c084fc; text-transform: uppercase;
+              width: fit-content;
+            }
+            .robot-badge-dot {
+              display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+              background: #c084fc;
+              animation: robotBadgePulse 2s ease-in-out infinite;
+            }
+            .robot-strip-title {
+              font-family: 'Space Grotesk', sans-serif;
+              font-size: clamp(2rem, 3.5vw, 3.2rem);
+              font-weight: 800; line-height: 1.05;
+              color: #f8fafc; margin: 0;
+              letter-spacing: -0.02em;
+            }
+            .robot-name-highlight {
+              background: linear-gradient(90deg, #9d4edd, #c084fc, #7b2fff);
+              -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+              background-clip: text;
+            }
+            .robot-strip-desc {
+              font-family: 'Inter', sans-serif;
+              font-size: 0.93rem; color: #94a3b8; line-height: 1.65;
+              margin: 0; max-width: 380px;
+            }
+
+            /* stat row */
+            .robot-stat-row {
+              display: flex; align-items: center; gap: 0; flex-wrap: wrap;
+            }
+            .robot-stat-item {
+              display: flex; flex-direction: column; align-items: center;
+              padding: 10px 24px;
+            }
+            .robot-stat-item:first-child { padding-left: 0; }
+            .rsi-val {
+              font-family: 'Space Grotesk', sans-serif;
+              font-size: 1.6rem; font-weight: 800; color: #e2e8f0;
+            }
+            .rsi-label {
+              font-family: 'Inter', sans-serif;
+              font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
+              color: #64748b; margin-top: 2px;
+            }
+            .robot-stat-divider {
+              width: 1px; height: 36px; background: rgba(148,163,184,0.15);
+            }
+
+            /* RGB glow CTA */
+            .rgb-glow-cta {
+              display: inline-flex; align-items: center; gap: 10px;
+              padding: 14px 30px;
+              border: 2px solid #ff0080;
+              border-radius: 6px;
+              background: linear-gradient(270deg, #1a0038, #0d001a, #001428, #001a00);
+              background-size: 400% 400%;
+              color: #fff;
+              font-family: 'Space Grotesk', sans-serif;
+              font-size: 0.9rem; font-weight: 700; letter-spacing: 0.1em;
+              text-transform: uppercase; text-decoration: none;
+              cursor: pointer; width: fit-content;
+              animation: rgbBorderCycle 4s linear infinite, rgbBgShift 6s ease infinite;
+              transition: transform 0.2s ease, filter 0.2s ease;
+              position: relative; overflow: hidden;
+            }
+            .rgb-glow-cta::after {
+              content: '';
+              position: absolute; inset: 0;
+              background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%);
+              pointer-events: none;
+            }
+            .rgb-glow-cta:hover {
+              transform: translateY(-2px) scale(1.025);
+              filter: brightness(1.15);
+            }
+            .rgb-glow-inner { position: relative; z-index: 1; }
+
+            /* viewer wrapper */
+            .hero-3d-viewer-wrap {
+              display: flex; flex-direction: column;
+              align-items: center; gap: 12px;
+            }
+            .model-viewer-frame {
+              position: relative;
+              width: 100%; max-width: 500px;
+              aspect-ratio: 1 / 1;
+              border-radius: 12px;
+              background: radial-gradient(ellipse at 50% 40%, #12062b 0%, #070711 70%);
+              border: 1px solid rgba(157,78,221,0.25);
+              overflow: hidden;
+            }
+            /* HUD corner brackets on model viewer */
+            .mv-corner {
+              position: absolute; width: 18px; height: 18px;
+              border-color: rgba(157,78,221,0.6); border-style: solid;
+              z-index: 20; pointer-events: none;
+            }
+            .mv-tl { top: 10px; left: 10px; border-width: 2px 0 0 2px; border-radius: 2px 0 0 0; }
+            .mv-tr { top: 10px; right: 10px; border-width: 2px 2px 0 0; border-radius: 0 2px 0 0; }
+            .mv-bl { bottom: 10px; left: 10px; border-width: 0 0 2px 2px; border-radius: 0 0 0 2px; }
+            .mv-br { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; border-radius: 0 0 2px 0; }
+            .mv-glow-halo {
+              position: absolute; inset: -20%; border-radius: 50%;
+              background: radial-gradient(circle, rgba(157,78,221,0.18) 0%, transparent 65%);
+              animation: mvPulseHalo 3.2s ease-in-out infinite;
+              pointer-events: none; z-index: 0;
+            }
+            /* model-viewer progress bar slot */
+            .mv-progress {
+              position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
+              background: rgba(157,78,221,0.2);
+            }
+            .mv-progress-inner {
+              height: 100%; width: 0; background: #9d4edd;
+              transition: width 0.3s ease;
+            }
+            .mv-interact-hint {
+              font-family: 'Space Grotesk', sans-serif;
+              font-size: 0.72rem; letter-spacing: 0.12em;
+              text-transform: uppercase; color: #475569; margin: 0;
+            }
+
+            /* responsive */
+            @media (max-width: 900px) {
+              .hero-3d-robot-strip {
+                grid-template-columns: 1fr;
+                padding: 40px 24px;
+                gap: 32px;
+              }
+              .hero-3d-copy { align-items: center; text-align: center; }
+              .robot-strip-desc { max-width: none; text-align: center; }
+              .robot-stat-row { justify-content: center; }
+              .robot-eyebrow-badge { align-self: center; }
+              .rgb-glow-cta { align-self: center; }
+              .hero-3d-viewer-wrap { width: 100%; }
+              .model-viewer-frame { max-width: 340px; }
+            }
+          </style>
 
           <!-- Corner Anchor Badges -->
           <div class="hero-footer-bar">
@@ -344,9 +630,34 @@
               <p class="tf-card-desc">A 24-hour non-stop collegiate build expedition inside Desh Bhagat University's
                 grand auditorium. Assemble your party and build without limits.</p>
               <div class="tf-card-perks">
-                <div class="tf-perk"><span class="tf-perk-ico">🏰</span> Free Campus Stay & 10/10 Meals</div>
-                <div class="tf-perk"><span class="tf-perk-ico">⚡</span> 1Gbps High-Speed WiFi & Power</div>
-                <div class="tf-perk"><span class="tf-perk-ico">⚔️</span> 1 to 4 Crafters / Party</div>
+                <div class="tf-perk">
+                  <span class="tf-perk-ico" style="display:inline-flex; align-items:center;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                      <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                  </span>
+                  Free Campus Stay & 10/10 Meals
+                </div>
+                <div class="tf-perk">
+                  <span class="tf-perk-ico" style="display:inline-flex; align-items:center;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                  </span>
+                  1Gbps High-Speed WiFi & Power
+                </div>
+                <div class="tf-perk">
+                  <span class="tf-perk-ico" style="display:inline-flex; align-items:center;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                  </span>
+                  1 to 4 Crafters / Party
+                </div>
               </div>
               <div class="tf-card-btn-wrap">
                 <a href="#about" class="tf-card-link-btn">
@@ -401,9 +712,36 @@
               <h3 class="tf-card-title">PRIZES UP TO ₹2L</h3>
               <p class="tf-card-desc">Over ₹2 Lakhs in total prize pools across hackathon tracks and gaming arena tournaments. Custom hoodies, trophies & grants.</p>
               <div class="tf-card-perks">
-                <div class="tf-perk"><span class="tf-perk-ico">🏆</span> ₹2,00,000 Total Prize Pool</div>
-                <div class="tf-perk"><span class="tf-perk-ico">💎</span> Custom Ender Hoodies & Swag</div>
-                <div class="tf-perk"><span class="tf-perk-ico">🚀</span> DBU Pre-Seed Incubation Support</div>
+                <div class="tf-perk">
+                  <span class="tf-perk-ico" style="display:inline-flex; align-items:center;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="8" r="7"></circle>
+                      <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                    </svg>
+                  </span>
+                  ₹2,00,000 Total Prize Pool
+                </div>
+                <div class="tf-perk">
+                  <span class="tf-perk-ico" style="display:inline-flex; align-items:center;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                      <rect x="2" y="7" width="20" height="5"></rect>
+                      <line x1="12" y1="22" x2="12" y2="7"></line>
+                      <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                      <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+                    </svg>
+                  </span>
+                  Custom Ender Hoodies & Swag
+                </div>
+                <div class="tf-perk">
+                  <span class="tf-perk-ico" style="display:inline-flex; align-items:center;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                    </svg>
+                  </span>
+                  DBU Pre-Seed Incubation Support
+                </div>
               </div>
               <div class="tf-card-btn-wrap">
                 <a href="/register" class="tf-card-link-btn">
@@ -454,29 +792,29 @@
           <div class="mc-crafting-body">
             <!-- 3x3 Grid -->
             <div class="mc-grid-3x3" id="crafting-grid">
-              <div class="mc-slot" data-slot="1"><span class="mc-item item-chip">💻</span><span
+              <div class="mc-slot" data-slot="1"><span class="mc-item item-chip"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="15" x2="23" y2="15"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="15" x2="4" y2="15"></line></svg></span><span
                   class="mc-item-qty">64</span></div>
-              <div class="mc-slot" data-slot="2"><span class="mc-item item-redstone">🔴</span><span
+              <div class="mc-slot" data-slot="2"><span class="mc-item item-redstone"><svg width="22" height="22" viewBox="0 0 24 24" fill="#ef4444" stroke="#b91c1c" stroke-width="1.5"><polygon points="12 2 20 8 16 22 8 22 4 8"></polygon></svg></span><span
                   class="mc-item-qty">32</span></div>
-              <div class="mc-slot" data-slot="3"><span class="mc-item item-emerald">🟢</span><span
+              <div class="mc-slot" data-slot="3"><span class="mc-item item-emerald"><svg width="22" height="22" viewBox="0 0 24 24" fill="#22c55e" stroke="#15803d" stroke-width="1.5"><polygon points="6 3 18 3 22 9 12 22 2 9"></polygon></svg></span><span
                   class="mc-item-qty">16</span></div>
-              <div class="mc-slot" data-slot="4"><span class="mc-item item-obsidian">⬛</span><span
+              <div class="mc-slot" data-slot="4"><span class="mc-item item-obsidian"><svg width="22" height="22" viewBox="0 0 24 24" fill="#312e81" stroke="#6366f1" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"></rect></svg></span><span
                   class="mc-item-qty">4</span></div>
-              <div class="mc-slot" data-slot="5"><span class="mc-item item-diamond">💠</span><span
+              <div class="mc-slot" data-slot="5"><span class="mc-item item-diamond"><svg width="22" height="22" viewBox="0 0 24 24" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5"><polygon points="12 2 22 8.5 12 22 2 8.5"></polygon></svg></span><span
                   class="mc-item-qty">8</span></div>
-              <div class="mc-slot" data-slot="6"><span class="mc-item item-obsidian">⬛</span><span
+              <div class="mc-slot" data-slot="6"><span class="mc-item item-obsidian"><svg width="22" height="22" viewBox="0 0 24 24" fill="#312e81" stroke="#6366f1" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"></rect></svg></span><span
                   class="mc-item-qty">4</span></div>
-              <div class="mc-slot" data-slot="7"><span class="mc-item item-glowstone">🟡</span><span
+              <div class="mc-slot" data-slot="7"><span class="mc-item item-glowstone"><svg width="22" height="22" viewBox="0 0 24 24" fill="#eab308" stroke="#ca8a04" stroke-width="1.5"><polygon points="12 2 15 9 22 12 15 15 12 22 9 15 2 12 9 9"></polygon></svg></span><span
                   class="mc-item-qty">64</span></div>
-              <div class="mc-slot" data-slot="8"><span class="mc-item item-ingot">🪙</span><span
+              <div class="mc-slot" data-slot="8"><span class="mc-item item-ingot"><svg width="22" height="22" viewBox="0 0 24 24" fill="#f59e0b" stroke="#d97706" stroke-width="1.5"><polygon points="4 15 8 8 20 8 16 15"></polygon><polygon points="4 15 16 15 14 18 2 18"></polygon></svg></span><span
                   class="mc-item-qty">12</span></div>
-              <div class="mc-slot" data-slot="9"><span class="mc-item item-chip">⚡</span><span
+              <div class="mc-slot" data-slot="9"><span class="mc-item item-chip"><svg width="22" height="22" viewBox="0 0 24 24" fill="#a855f7" stroke="#9333ea" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span><span
                   class="mc-item-qty">24</span></div>
             </div>
 
             <!-- Crafting Arrow with Animated Energy Stream -->
             <div class="mc-crafting-arrow-wrap">
-              <div class="mc-arrow-icon" id="mc-crafting-arrow">➔</div>
+              <div class="mc-arrow-icon" id="mc-crafting-arrow">&rarr;</div>
               <span class="mc-arrow-label">FORGING...</span>
             </div>
 
@@ -516,21 +854,37 @@
 
             <div class="about-highlights">
               <div class="highlight-item tilt-3d-card flame-orange">
-                <span class="highlight-icon">⚡</span>
+                <span class="highlight-icon" style="display:inline-flex; align-items:center;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                  </svg>
+                </span>
                 <div>
                   <strong>High-Octane Mentorship</strong>
                   <span>Round-the-clock guidance from seasoned engineers & startup founders.</span>
                 </div>
               </div>
               <div class="highlight-item tilt-3d-card flame-green">
-                <span class="highlight-icon">🛖</span>
+                <span class="highlight-icon" style="display:inline-flex; align-items:center;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                    <line x1="6" y1="1" x2="6" y2="4"></line>
+                    <line x1="10" y1="1" x2="10" y2="4"></line>
+                    <line x1="14" y1="1" x2="14" y2="4"></line>
+                  </svg>
+                </span>
                 <div>
                   <strong>All-Inclusive Hospitality</strong>
                   <span>Free food, midnight fuel bars, energy stations & dedicated rest zones.</span>
                 </div>
               </div>
               <div class="highlight-item tilt-3d-card flame-purple">
-                <span class="highlight-icon">💎</span>
+                <span class="highlight-icon" style="display:inline-flex; align-items:center;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                  </svg>
+                </span>
                 <div>
                   <strong>Real Institutional Backing</strong>
                   <span>Direct incubation opportunities with DBU Centre for Innovation & Research.</span>
@@ -545,7 +899,14 @@
               <!-- Stat Card 1 -->
               <div class="voxel-stat-card card-purple tilt-3d-card flame-purple">
                 <div class="voxel-stat-header">
-                  <span class="stat-glyph">👥</span>
+                  <span class="stat-glyph" style="display:inline-flex; align-items:center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                  </span>
                   <span class="stat-biome">BUILDERS</span>
                 </div>
                 <div class="stat-big-num">500+</div>
@@ -555,7 +916,12 @@
               <!-- Stat Card 2 -->
               <div class="voxel-stat-card card-amber tilt-3d-card flame-orange">
                 <div class="voxel-stat-header">
-                  <span class="stat-glyph">⏳</span>
+                  <span class="stat-glyph" style="display:inline-flex; align-items:center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                  </span>
                   <span class="stat-biome">DURATION</span>
                 </div>
                 <div class="stat-big-num">24</div>
@@ -565,7 +931,16 @@
               <!-- Stat Card 3 -->
               <div class="voxel-stat-card card-green tilt-3d-card flame-green">
                 <div class="voxel-stat-header">
-                  <span class="stat-glyph">🏆</span>
+                  <span class="stat-glyph" style="display:inline-flex; align-items:center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                      <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                      <path d="M4 22h16"></path>
+                      <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                      <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                      <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                    </svg>
+                  </span>
                   <span class="stat-biome">LOOT VAULT</span>
                 </div>
                 <div class="stat-big-num">₹65K+</div>
@@ -575,7 +950,13 @@
               <!-- Stat Card 4 -->
               <div class="voxel-stat-card card-cyan tilt-3d-card flame-blue">
                 <div class="voxel-stat-header">
-                  <span class="stat-glyph">🏛️</span>
+                  <span class="stat-glyph" style="display:inline-flex; align-items:center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 21h18"></path>
+                      <path d="M5 21V7l8-4 8 4v14"></path>
+                      <path d="M9 18v-3a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v3"></path>
+                    </svg>
+                  </span>
                   <span class="stat-biome">OUTREACH</span>
                 </div>
                 <div class="stat-big-num">60+</div>
@@ -658,7 +1039,7 @@
               </div>
               <div class="track-bounty-badge">
                 <span>Primary Biome Track</span>
-                <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
+                <span class="mc-enchant-req">LVL 30 REQUIREMENT</span>
               </div>
             </div>
           </div>
@@ -687,7 +1068,7 @@
               </div>
               <div class="track-bounty-badge">
                 <span>Primary Biome Track</span>
-                <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
+                <span class="mc-enchant-req">LVL 30 REQUIREMENT</span>
               </div>
             </div>
           </div>
@@ -716,7 +1097,7 @@
               </div>
               <div class="track-bounty-badge">
                 <span>Primary Biome Track</span>
-                <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
+                <span class="mc-enchant-req">LVL 30 REQUIREMENT</span>
               </div>
             </div>
           </div>
@@ -745,7 +1126,7 @@
               </div>
               <div class="track-bounty-badge">
                 <span>Primary Biome Track</span>
-                <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
+                <span class="mc-enchant-req">LVL 30 REQUIREMENT</span>
               </div>
             </div>
           </div>
@@ -774,7 +1155,7 @@
               </div>
               <div class="track-bounty-badge">
                 <span>Primary Biome Track</span>
-                <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
+                <span class="mc-enchant-req">LVL 30 REQUIREMENT</span>
               </div>
             </div>
           </div>
@@ -803,7 +1184,7 @@
               </div>
               <div class="track-bounty-badge">
                 <span>Primary Biome Track</span>
-                <span class="mc-enchant-req">⭐ LVL 30 REQUIREMENT</span>
+                <span class="mc-enchant-req">LVL 30 REQUIREMENT</span>
               </div>
             </div>
           </div>
@@ -813,9 +1194,9 @@
         <div class="gaming-arena-showcase-module tilt-3d-card" id="gaming-arena-details">
           <div class="ga-header">
             <div class="ga-badge-row">
-              <span class="ga-badge-fire">🔥 ESPORTS TOURNAMENT ARENA</span>
+              <span class="ga-badge-fire">ESPORTS TOURNAMENT ARENA</span>
               <span class="ga-badge-fee">₹50 / PLAYER ENTRY FEE</span>
-              <span class="ga-badge-fire">⚡ INSTANT RAZORPAY CHECKOUT</span>
+              <span class="ga-badge-fire">INSTANT RAZORPAY CHECKOUT</span>
             </div>
             <h3 class="ga-title">ENTER THE GAMING ARENA</h3>
             <p class="ga-subtitle">
@@ -926,7 +1307,12 @@
           <!-- Bottom Action Bar with Official Razorpay Payment Integration -->
           <div class="ga-action-bar">
             <div class="ga-upi-preview ga-razorpay-preview">
-              <div class="ga-razorpay-icon-box">💳</div>
+              <div class="ga-razorpay-icon-box" style="display:inline-flex; align-items:center; justify-content:center;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                  <line x1="1" y1="10" x2="23" y2="10"></line>
+                </svg>
+              </div>
               <div class="ga-upi-info">
                 <span class="ga-upi-label" style="color:var(--color-green-bright);">OFFICIAL PAYMENT GATEWAY (RAZORPAY)</span>
                 <span class="ga-upi-payee">Instant Confirmation • ₹50/Player</span>
@@ -935,7 +1321,7 @@
             </div>
             <div class="ga-cta-buttons">
               <a href="/gaming" class="pill-cta-btn hero-gaming-btn">
-                <span>OPEN FULL GAMING ARENA 🎮</span>
+                <span>OPEN FULL GAMING ARENA</span>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
               </a>
               <a href="/register" class="ghost-cta-btn">
@@ -962,7 +1348,11 @@
         <!-- Smelting Furnace Interactive Countdown Gauge -->
         <div class="mc-furnace-banner tilt-3d-card flame-orange">
           <div class="furnace-flame-wrap">
-            <span class="furnace-flame-icon">🔥</span>
+            <span class="furnace-flame-icon" style="display:inline-flex; align-items:center;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="#ff7700" stroke="#ff3300" stroke-width="1.5">
+                <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"></path>
+              </svg>
+            </span>
             <div class="furnace-fuel-gauge">
               <div class="fuel-level-fill"></div>
             </div>
@@ -1297,7 +1687,7 @@
             <div class="codex-pane" id="pane-submission">
               <ul class="codex-list">
                 <li>
-                  <div class="codex-bullet">📦</div>
+                  <div class="codex-bullet">01</div>
                   <div class="codex-text">
                     <strong>Original Codebase Requirement</strong>
                     <p>All core development must be written during the official 24-hour duration. Utilizing open-source
@@ -1306,7 +1696,7 @@
                   </div>
                 </li>
                 <li>
-                  <div class="codex-bullet">🔗</div>
+                  <div class="codex-bullet">02</div>
                   <div class="codex-text">
                     <strong>Public Git Repository & Deployment</strong>
                     <p>Teams must provide a public GitHub/GitLab repository with a descriptive README, setup
@@ -1314,7 +1704,7 @@
                   </div>
                 </li>
                 <li>
-                  <div class="codex-bullet">🎥</div>
+                  <div class="codex-bullet">03</div>
                   <div class="codex-text">
                     <strong>2-Minute Video Walkthrough</strong>
                     <p>A concise screen recording demonstrating the core problem statement, architecture diagram, and
@@ -1328,7 +1718,7 @@
             <div class="codex-pane" id="pane-conduct">
               <ul class="codex-list">
                 <li>
-                  <div class="codex-bullet">🤝</div>
+                  <div class="codex-bullet">01</div>
                   <div class="codex-text">
                     <strong>Inclusive & Respectful Culture</strong>
                     <p>CRAFTCON '26 is dedicated to providing a harassment-free experience for everyone, regardless of
@@ -1336,7 +1726,7 @@
                   </div>
                 </li>
                 <li>
-                  <div class="codex-bullet">🛡️</div>
+                  <div class="codex-bullet">02</div>
                   <div class="codex-text">
                     <strong>Academic Integrity & Zero Tolerance</strong>
                     <p>Plagiarism, credential spoofing, unauthorized access to network infrastructure, or sabotage of
@@ -1481,7 +1871,7 @@
           <!-- Member 1 -->
           <div class="organizer-card tilt-3d-card mc-sponsor-bevel flame-purple">
             <div class="org-avatar-wrap">
-              <div class="org-avatar-cube avatar-prof">👩‍🏫</div>
+              <div class="org-avatar-cube avatar-prof"><span style="font-family:'Space Grotesk',sans-serif; font-weight:800; font-size:1.5rem; color:#c084fc;">NK</span></div>
               <span class="org-role-badge">FACULTY CONVENER</span>
             </div>
             <h4 class="org-name">Dr. Navneet Kaur Sandhu</h4>
@@ -1504,7 +1894,7 @@
           <!-- Member 2 -->
           <div class="organizer-card tilt-3d-card mc-sponsor-bevel flame-green">
             <div class="org-avatar-wrap">
-              <div class="org-avatar-cube avatar-lead">🧑‍💻</div>
+              <div class="org-avatar-cube avatar-lead"><span style="font-family:'Space Grotesk',sans-serif; font-weight:800; font-size:1.5rem; color:#4ade80;">RK</span></div>
               <span class="org-role-badge">STUDENT LEAD HEAD</span>
             </div>
             <h4 class="org-name">Rounak Kumar</h4>
@@ -1560,7 +1950,7 @@
           <!-- Member 3 -->
           <div class="organizer-card tilt-3d-card mc-sponsor-bevel flame-blue">
             <div class="org-avatar-wrap">
-              <div class="org-avatar-cube avatar-tech">👨‍💻</div>
+              <div class="org-avatar-cube avatar-tech"><span style="font-family:'Space Grotesk',sans-serif; font-weight:800; font-size:1.5rem; color:#38bdf8;">AT</span></div>
               <span class="org-role-badge">TECH LEAD</span>
             </div>
             <h4 class="org-name">Aryan Singh Tariani</h4>
@@ -1618,7 +2008,7 @@
           <!-- Member 4 -->
           <div class="organizer-card tilt-3d-card mc-sponsor-bevel flame-orange">
             <div class="org-avatar-wrap">
-              <div class="org-avatar-cube avatar-ops">⚡</div>
+              <div class="org-avatar-cube avatar-ops"><span style="font-family:'Space Grotesk',sans-serif; font-weight:800; font-size:1.5rem; color:#fbbf24;">MK</span></div>
               <span class="org-role-badge">COMMUNITY LEADER</span>
             </div>
             <h4 class="org-name">Manohar Kumar</h4>
@@ -1666,7 +2056,7 @@
           <!-- Item 1 -->
           <details class="faq-item tilt-3d-card mc-dialogue-card flame-purple" open>
             <summary class="faq-question">
-              <span class="mc-npc-prefix">💬 [LIBRARIAN VILLAGER]</span>
+              <span class="mc-npc-prefix">[LIBRARIAN ARCHIVES]</span>
               <span class="faq-q-text">Who is eligible to participate in CRAFTCON '26?</span>
               <span class="faq-icon-arrow"></span>
             </summary>
@@ -1682,7 +2072,7 @@
           <!-- Item 2 -->
           <details class="faq-item tilt-3d-card mc-dialogue-card flame-orange">
             <summary class="faq-question">
-              <span class="mc-npc-prefix">🪙 [TRADE MASTER]</span>
+              <span class="mc-npc-prefix">[TRADE &amp; AMENITIES]</span>
               <span class="faq-q-text">What is the registration fee? Are meals and lodging included?</span>
               <span class="faq-icon-arrow"></span>
             </summary>
@@ -1698,7 +2088,7 @@
           <!-- Item 3 -->
           <details class="faq-item tilt-3d-card mc-dialogue-card flame-blue">
             <summary class="faq-question">
-              <span class="mc-npc-prefix">🛡️ [GUILD CAPTAIN]</span>
+              <span class="mc-npc-prefix">[GUILD &amp; SQUADS]</span>
               <span class="faq-q-text">What is the allowed team size? Can I apply alone?</span>
               <span class="faq-icon-arrow"></span>
             </summary>
@@ -1713,7 +2103,7 @@
           <!-- Item 4 -->
           <details class="faq-item tilt-3d-card mc-dialogue-card flame-red">
             <summary class="faq-question">
-              <span class="mc-npc-prefix">⚙️ [REDSTONE GOLEM]</span>
+              <span class="mc-npc-prefix">[REDSTONE RULES]</span>
               <span class="faq-q-text">Can we work on an existing project before the hackathon?</span>
               <span class="faq-icon-arrow"></span>
             </summary>
@@ -1729,7 +2119,7 @@
           <!-- Item 5 -->
           <details class="faq-item tilt-3d-card mc-dialogue-card flame-green">
             <summary class="faq-question">
-              <span class="mc-npc-prefix">🗺️ [CARTOGRAPHER]</span>
+              <span class="mc-npc-prefix">[CARTOGRAPHY &amp; TRANSIT]</span>
               <span class="faq-q-text">How do we reach Desh Bhagat University?</span>
               <span class="faq-icon-arrow"></span>
             </summary>
@@ -1745,7 +2135,7 @@
           <!-- Item 6 -->
           <details class="faq-item tilt-3d-card mc-dialogue-card flame-white">
             <summary class="faq-question">
-              <span class="mc-npc-prefix">🔬 [ALCHEMIST]</span>
+              <span class="mc-npc-prefix">[LABS &amp; HARDWARE]</span>
               <span class="faq-q-text">Will hardware components or microcontrollers be provided?</span>
               <span class="faq-icon-arrow"></span>
             </summary>
@@ -1761,7 +2151,7 @@
           <!-- Item 7 -->
           <details class="faq-item tilt-3d-card mc-dialogue-card flame-gold">
             <summary class="faq-question">
-              <span class="mc-npc-prefix">🎮 [ARENA MASTER]</span>
+              <span class="mc-npc-prefix">[ARENA ESPORTS]</span>
               <span class="faq-q-text">Can we participate in both the Hackathon and Gaming Arena tournaments?</span>
               <span class="faq-icon-arrow"></span>
             </summary>
@@ -1775,7 +2165,7 @@
           <!-- Item 8 -->
           <details class="faq-item tilt-3d-card mc-dialogue-card flame-purple">
             <summary class="faq-question">
-              <span class="mc-npc-prefix">📜 [HACKATHON CONVENER]</span>
+              <span class="mc-npc-prefix">[CONVENER DOSSIER]</span>
               <span class="faq-q-text">How will projects and gaming tournament winners be judged?</span>
               <span class="faq-icon-arrow"></span>
             </summary>
@@ -1831,7 +2221,7 @@
             collaboration, and student startup incubation.
           </p>
           <div class="dbu-seal-box flame-orange">
-            <div class="seal-icon">🏛️</div>
+            <div class="seal-icon" style="display:flex; align-items:center; justify-content:center;"><img src="assets/images/dbu_logo_cropped.png" alt="Desh Bhagat University Logo" style="width:32px; height:32px; object-fit:contain;"></div>
             <div class="seal-info">
               <strong>DESH BHAGAT UNIVERSITY</strong>
               <span>State Private University · Approved by UGC & AICTE · Punjab</span>
@@ -2041,7 +2431,7 @@
           <div style="text-align: center; margin-top: 14px; font-size: 0.82rem; color: #a5a5c2;">
             Prefer the 4-step wizard with multiple event passes?<br>
             <a href="/register" style="color: #70e000; font-weight: 700; text-decoration: underline; display: inline-block; margin-top: 4px;">
-              Open Full Registration Portal ➔
+              Open Full Registration Portal &rarr;
             </a>
           </div>
         </form>
@@ -2050,7 +2440,7 @@
       <!-- Step 2: Digital Hacker Pass Generated Result -->
       <div id="modal-step-ticket" class="modal-view">
         <div class="ticket-celebration">
-          <span class="celebration-badge">🎉 INVENTORY PASS ISSUED</span>
+          <span class="celebration-badge">INVENTORY PASS ISSUED</span>
           <h3>Squad Successfully Registered!</h3>
           <p>Your team is registered for CRAFTCON '26. A confirmation receipt has been generated.</p>
         </div>

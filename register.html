@@ -150,7 +150,7 @@
     <nav class="header-nav">
       <a href="/">Home</a>
       <a href="/#tracks">Tracks</a>
-      <a href="/gaming.html" class="gaming-link">&#127918; Gaming Arena</a>
+      <a href="/gaming.html" class="gaming-link">Gaming Arena</a>
     </nav>
   </header>
 
@@ -173,7 +173,7 @@
 
       <!-- STEP 1 -->
       <div id="step-1" class="wizard-step active">
-        <div class="step-heading">&#127919; Choose Your Event</div>
+        <div class="step-heading">Choose Your Event</div>
         <div class="step-sub">Click an event card to select it. Prize pool and fees are shown on each card.</div>
         <div id="events-grid" class="events-grid">
           <div class="event-card" style="height:220px"><div class="skel" style="height:100%;border-radius:10px"></div></div>
@@ -187,11 +187,11 @@
 
       <!-- STEP 2 -->
       <div id="step-2" class="wizard-step">
-        <div class="step-heading">&#128100; Registration Details</div>
+        <div class="step-heading">Registration Details</div>
         <div class="step-sub">Fill in your team info and captain contact. A confirmation email will be sent here.</div>
         <div id="error-box-2" class="error-box hidden"><span>&#9888;</span><span id="error-msg-2"></span></div>
         <div class="form-card">
-          <h3><span>&#127942;</span> Team Information</h3>
+          <h3>Team Information</h3>
           <div class="form-grid">
             <div class="form-group" id="team-name-group">
               <label for="reg-team-name">Team / Squad Name <span class="req">*</span></label>
@@ -204,7 +204,7 @@
           </div>
         </div>
         <div class="form-card">
-          <h3><span>&#128100;</span> Captain / Leader Contact</h3>
+          <h3>Captain / Leader Contact</h3>
           <div class="form-grid">
             <div class="form-group">
               <label for="reg-captain-name">Full Name <span class="req">*</span></label>
@@ -213,12 +213,12 @@
             <div class="form-group">
               <label for="reg-captain-email">Email Address <span class="req">*</span></label>
               <input type="email" id="reg-captain-email" placeholder="name@college.edu">
-              <span class="input-hint">&#128231; Confirmation will be sent here</span>
+              <span class="input-hint">Confirmation will be sent here</span>
             </div>
             <div class="form-group">
               <label for="reg-captain-phone">WhatsApp Number <span class="req">*</span></label>
               <input type="tel" id="reg-captain-phone" placeholder="+91 9876543210" maxlength="15">
-              <span class="input-hint">&#128241; For event updates &amp; reminders</span>
+              <span class="input-hint">For event updates &amp; reminders</span>
             </div>
           </div>
         </div>
@@ -230,7 +230,7 @@
 
       <!-- STEP 3 -->
       <div id="step-3" class="wizard-step">
-        <div class="step-heading">&#128101; Participant Roster</div>
+        <div class="step-heading">Participant Roster</div>
         <div id="step-3-sub" class="step-sub">Add all team members. Player 1 is auto-filled from captain details.</div>
         <div id="error-box-3" class="error-box hidden"><span>&#9888;</span><span id="error-msg-3"></span></div>
         <div id="participants-container"></div>
@@ -242,7 +242,7 @@
 
       <!-- STEP 4 -->
       <div id="step-4" class="wizard-step">
-        <div class="step-heading">&#128179; Payment &amp; Confirmation</div>
+        <div class="step-heading">Payment &amp; Confirmation</div>
         <div class="step-sub">Review your summary and complete payment if required.</div>
         <div id="error-box-4" class="error-box hidden"><span>&#9888;</span><span id="error-msg-4"></span></div>
         <div id="payment-summary-area"></div>
@@ -251,7 +251,7 @@
           <button class="btn btn-ghost" onclick="goToStep(3)">&#8592; Back</button>
           <button id="btn-submit" class="btn btn-success">
             <div class="spinner" id="submit-spinner"></div>
-            <span id="submit-label">&#9989; Confirm Registration</span>
+            <span id="submit-label">Confirm Registration</span>
           </button>
         </div>
         <div style="text-align:center;margin-top:12px;">
@@ -265,12 +265,12 @@
           <div class="success-ring">&#10003;</div>
           <h2>You are Registered!</h2>
           <p>Your registration is confirmed. Check your email for your confirmation ticket.</p>
-          <div class="reg-id-box">&#127903; <span id="success-reg-id">CRAFT26-XXXX</span></div>
+          <div class="reg-id-box"><span id="success-reg-id">CRAFT26-XXXX</span></div>
           <div class="success-details" id="success-details"></div>
-          <div class="email-notice">&#128236; Confirmation sent to <strong id="success-email">your email</strong>.</div>
+          <div class="email-notice">Confirmation sent to <strong id="success-email">your email</strong>.</div>
           <div class="success-actions">
-            <a href="/" class="btn btn-ghost">&#127968; Back to Home</a>
-            <a href="/register" class="btn btn-primary" onclick="location.reload();return false;">&#10133; Register Another</a>
+            <a href="/" class="btn btn-ghost">Back to Home</a>
+            <a href="/register" class="btn btn-primary" onclick="location.reload();return false;">Register Another</a>
           </div>
         </div>
       </div>
@@ -435,7 +435,7 @@
       var order=['HACKATHON','BGMI','FREE_FIRE','MOBILE_LEGENDS','LUDO','CHESS','CARROM'];
       var sorted=order.filter(function(id){return CATALOGUE[id]&&CATALOGUE[id].active;});
       sorted.forEach(function(eid){
-        var ev=CATALOGUE[eid],meta=EMETA[eid]||{icon:'&#127918;',color:'#8b5cf6',bg:'rgba(139,92,246,.12)',prize:'TBA'};
+        var ev=CATALOGUE[eid],meta=EMETA[eid]||{icon:'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="3"/><path d="M6 12h4m-2-2v4m8-2h.01m3 0h.01"/></svg>',color:'#8b5cf6',bg:'rgba(139,92,246,.12)',prize:'TBA'};
         var fee=!ev.paymentRequired?'FREE':('&#8377;'+(ev.fixedFee>0?ev.fixedFee:ev.feePerParticipant*(ev.minParticipants||1)));
         var team=ev.minParticipants===ev.maxParticipants?(ev.minParticipants+' Player'+(ev.minParticipants>1?'s':'')):(ev.minParticipants+'-'+ev.maxParticipants+' Players');
         var desc=ev.description?ev.description.substring(0,80)+'...':'';
@@ -448,7 +448,7 @@
           +'<div><div class="prize-label">Prize Pool</div><div class="prize-amount'+(ev.paymentRequired?'':' free')+'">'+meta.prize+'</div></div>'
           +'<div style="text-align:right"><div class="prize-label">Entry Fee</div><div class="prize-amount" style="font-size:1rem;color:'+(!ev.paymentRequired?'var(--green)':'var(--gold)')+'">'+fee+'</div></div></div>'
           +'<div class="card-meta"><span class="badge '+(ev.paymentRequired?'badge-paid':'badge-free')+'">'+(!ev.paymentRequired?'&#10003; FREE':fee+' Entry')+'</span>'
-          +'<span class="badge '+(ev.registrationType==='SOLO'?'badge-solo':'badge-team')+'">&#128101; '+team+'</span></div>';
+          +'<span class="badge '+(ev.registrationType==='SOLO'?'badge-solo':'badge-team')+'">'+team+'</span></div>';
         card.addEventListener('click',function(){
           document.querySelectorAll('.event-card').forEach(function(c){c.classList.remove('selected');});
           card.classList.add('selected'); STATE.selectedEventId=eid;
@@ -500,7 +500,7 @@
       var ev=CATALOGUE[STATE.selectedEventId],ig=ev.category==='GAMING';
       if(ev.maxParticipants<=1||ev.registrationType==='SOLO'){
         document.getElementById('step-3-sub').textContent='Solo event - your captain details will be used as participant.';
-        c.innerHTML='<div class="free-entry-badge" style="flex-direction:row;justify-content:flex-start;gap:16px;padding:20px"><span style="font-size:2rem">&#128100;</span><div><h3 style="font-size:1rem;color:var(--cyan)">Solo Registration</h3><p style="font-size:.85rem;color:var(--text-muted)">Competing as '+STATE.captain.name+'</p></div></div>';
+        c.innerHTML='<div class="free-entry-badge" style="flex-direction:row;justify-content:flex-start;gap:16px;padding:20px"><div style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:8px;background:rgba(6,182,212,0.15);color:var(--cyan);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div><h3 style="font-size:1rem;color:var(--cyan)">Solo Registration</h3><p style="font-size:.85rem;color:var(--text-muted)">Competing as '+STATE.captain.name+'</p></div></div>';
         STATE.participants=[{full_name:STATE.captain.name,role:'SOLO'}]; return;
       }
       document.getElementById('step-3-sub').textContent='Add '+ev.minParticipants+'-'+ev.maxParticipants+' members. Fields marked * are required.';
@@ -533,7 +533,7 @@
     function renderPaymentStep(){
       var ev=CATALOGUE[STATE.selectedEventId];
       var fee=ev.paymentRequired?(ev.fixedFee>0?ev.fixedFee:ev.feePerParticipant*STATE.participants.length):0;
-      document.getElementById('payment-summary-area').innerHTML='<div class="payment-summary-card"><div class="psh"><h3>&#128203; Registration Summary</h3></div>'
+      document.getElementById('payment-summary-area').innerHTML='<div class="payment-summary-card"><div class="psh"><h3>Registration Summary</h3></div>'
         +'<div class="summary-row"><span class="summary-key">Event</span><span class="summary-val">'+ev.name+'</span></div>'
         +'<div class="summary-row"><span class="summary-key">Team / Name</span><span class="summary-val">'+STATE.teamName+'</span></div>'
         +'<div class="summary-row"><span class="summary-key">Captain</span><span class="summary-val">'+STATE.captain.name+'</span></div>'
@@ -541,11 +541,11 @@
         +'<div class="summary-row"><span class="summary-key">Players</span><span class="summary-val">'+STATE.participants.length+'</span></div>'
         +'<div class="summary-row"><span class="summary-key">Total Fee</span><span class="summary-val '+(fee===0?'free-tag':'amount')+'">'+(fee===0?'&#10003; FREE ENTRY':'&#8377;'+fee)+'</span></div></div>';
       if(fee===0){
-        document.getElementById('payment-action-area').innerHTML='<div class="free-entry-badge"><div class="bigcheck">&#x1F193;</div><h3>Free Entry - No Payment Required!</h3><p>Click Confirm Registration below. A confirmation email will be sent to '+STATE.captain.email+'.</p></div>';
-        document.getElementById('submit-label').innerHTML='&#9989; Confirm Registration';
+        document.getElementById('payment-action-area').innerHTML='<div class="free-entry-badge"><div class="bigcheck">&#10003;</div><h3>Free Entry - No Payment Required!</h3><p>Click Confirm Registration below. A confirmation email will be sent to '+STATE.captain.email+'.</p></div>';
+        document.getElementById('submit-label').innerHTML='Confirm Registration';
       } else {
-        document.getElementById('payment-action-area').innerHTML='<div class="rzp-box"><div style="font-size:2.2rem;margin-bottom:8px">&#128179;</div><h3>Secure Online Payment via Razorpay</h3><p>Instant digital confirmation with zero delay. All payment options supported:</p><div class="rzp-pills"><span class="rzp-pill">&#9889; UPI (GPay, PhonePe, Paytm)</span><span class="rzp-pill">&#128179; Debit / Credit Cards</span><span class="rzp-pill">&#127963; NetBanking</span><span class="rzp-pill">&#128274; 256-Bit SSL Encrypted</span></div><div style="font-size:0.85rem;color:var(--gold);font-weight:700">Amount Payable: &#8377;'+fee+'</div></div>';
-        document.getElementById('submit-label').innerHTML='&#128179; Pay &#8377;'+fee+' via Razorpay';
+        document.getElementById('payment-action-area').innerHTML='<div class="rzp-box"><div style="display:flex;justify-content:center;margin-bottom:10px;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--gold);"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><h3>Secure Online Payment via Razorpay</h3><p>Instant digital confirmation with zero delay. All payment options supported:</p><div class="rzp-pills"><span class="rzp-pill">UPI (GPay, PhonePe, Paytm)</span><span class="rzp-pill">Debit / Credit Cards</span><span class="rzp-pill">NetBanking</span><span class="rzp-pill">256-Bit SSL Encrypted</span></div><div style="font-size:0.85rem;color:var(--gold);font-weight:700">Amount Payable: &#8377;'+fee+'</div></div>';
+        document.getElementById('submit-label').innerHTML='Pay &#8377;'+fee+' via Razorpay';
       }
     }
 
@@ -579,11 +579,11 @@
             goToStep('success');
           } else {
             showError(4,data.error||'Registration failed. Please try again.');
-            btn.disabled=false;sp.style.display='none';lb.innerHTML='&#9989; Confirm Registration';
+            btn.disabled=false;sp.style.display='none';lb.innerHTML='Confirm Registration';
           }
         }catch(err){
           showError(4,'Network error: '+err.message);
-          btn.disabled=false;sp.style.display='none';lb.innerHTML='&#9989; Confirm Registration';
+          btn.disabled=false;sp.style.display='none';lb.innerHTML='Confirm Registration';
         }
       } else {
         // Razorpay payment flow
@@ -599,7 +599,7 @@
               document.head.appendChild(s);
             });
           } catch(e) {
-            btn.disabled=false;sp.style.display='none';lb.innerHTML='&#128179; Pay &#8377;'+fee+' via Razorpay';
+            btn.disabled=false;sp.style.display='none';lb.innerHTML='Pay &#8377;'+fee+' via Razorpay';
             return showError(4, 'Failed to load Razorpay checkout SDK. Please check your internet connection.');
           }
         }
@@ -618,7 +618,7 @@
           });
           var orderData = await orderRes.json();
           if(!orderData.success){
-            btn.disabled=false;sp.style.display='none';lb.innerHTML='&#128179; Pay &#8377;'+fee+' via Razorpay';
+            btn.disabled=false;sp.style.display='none';lb.innerHTML='Pay &#8377;'+fee+' via Razorpay';
             return showError(4, orderData.error || 'Failed to create payment order.');
           }
 
@@ -637,7 +637,7 @@
             theme: { color: "#8b5cf6" },
             modal: {
               ondismiss: function(){
-                btn.disabled=false;sp.style.display='none';lb.innerHTML='&#128179; Pay &#8377;'+fee+' via Razorpay';
+                btn.disabled=false;sp.style.display='none';lb.innerHTML='Pay &#8377;'+fee+' via Razorpay';
               }
             },
             handler: async function(resp){
@@ -668,18 +668,18 @@
                   document.getElementById('success-details').innerHTML='<div class="sdi"><div class="lbl">Event</div><div class="val">'+ev.name+'</div></div><div class="sdi"><div class="lbl">Team</div><div class="val">'+STATE.teamName+'</div></div><div class="sdi"><div class="lbl">Captain</div><div class="val">'+STATE.captain.name+'</div></div><div class="sdi"><div class="lbl">Paid</div><div class="val" style="color:var(--green)">&#8377;'+fee+' (VERIFIED)</div></div>';
                   goToStep('success');
                 } else {
-                  btn.disabled=false;sp.style.display='none';lb.innerHTML='&#128179; Pay &#8377;'+fee+' via Razorpay';
-                  showError(4, (vData.error || 'Payment verification failed.') + (resp.razorpay_payment_id ? '<br><button type="button" class="btn btn-sm btn-primary" style="margin-top:10px;padding:6px 14px;background:#8b5cf6;color:#fff;border-radius:6px;cursor:pointer;" onclick="retryPaymentVerification()">⚡ Retry Verification with Payment ID (' + resp.razorpay_payment_id + ')</button>' : ''));
+                  btn.disabled=false;sp.style.display='none';lb.innerHTML='Pay &#8377;'+fee+' via Razorpay';
+                  showError(4, (vData.error || 'Payment verification failed.') + (resp.razorpay_payment_id ? '<br><button type="button" class="btn btn-sm btn-primary" style="margin-top:10px;padding:6px 14px;background:#8b5cf6;color:#fff;border-radius:6px;cursor:pointer;" onclick="retryPaymentVerification()">Retry Verification with Payment ID (' + resp.razorpay_payment_id + ')</button>' : ''));
                 }
               } catch(vErr) {
-                btn.disabled=false;sp.style.display='none';lb.innerHTML='&#128179; Pay &#8377;'+fee+' via Razorpay';
-                showError(4, 'Network error during verification: ' + vErr.message + (resp.razorpay_payment_id ? '<br><button type="button" class="btn btn-sm btn-primary" style="margin-top:10px;padding:6px 14px;background:#8b5cf6;color:#fff;border-radius:6px;cursor:pointer;" onclick="retryPaymentVerification()">⚡ Retry Verification with Payment ID (' + resp.razorpay_payment_id + ')</button>' : ''));
+                btn.disabled=false;sp.style.display='none';lb.innerHTML='Pay &#8377;'+fee+' via Razorpay';
+                showError(4, 'Network error during verification: ' + vErr.message + (resp.razorpay_payment_id ? '<br><button type="button" class="btn btn-sm btn-primary" style="margin-top:10px;padding:6px 14px;background:#8b5cf6;color:#fff;border-radius:6px;cursor:pointer;" onclick="retryPaymentVerification()">Retry Verification with Payment ID (' + resp.razorpay_payment_id + ')</button>' : ''));
               }
             }
           });
           rzp.open();
         } catch(err) {
-          btn.disabled=false;sp.style.display='none';lb.innerHTML='&#128179; Pay &#8377;'+fee+' via Razorpay';
+          btn.disabled=false;sp.style.display='none';lb.innerHTML='Pay &#8377;'+fee+' via Razorpay';
           showError(4, 'Order creation error: ' + err.message);
         }
       }

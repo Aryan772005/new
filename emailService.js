@@ -65,10 +65,10 @@ function buildHtmlEmail(reg, players) {
       <!-- Header Banner -->
       <div style="background:linear-gradient(135deg, #1e0936 0%, #3c096c 100%); padding:30px 20px; text-align:center; border-bottom:3px solid #ffb703;">
         <h1 style="margin:0; color:#ffb703; font-size:26px; text-transform:uppercase; letter-spacing:2px; text-shadow:0 0 10px rgba(255,183,3,0.5);">
-          🎮 CRAFTCON 2K26 GAMING ARENA
+          CRAFTCON 2K26 GAMING ARENA
         </h1>
         <p style="margin:8px 0 0; color:#70e000; font-size:16px; font-weight:bold;">
-          REGISTRATION CONFIRMED ✓
+          REGISTRATION CONFIRMED
         </p>
       </div>
 
@@ -149,7 +149,7 @@ function buildHtmlEmail(reg, players) {
 
         <!-- Event Information -->
         <div style="background-color:#181826; border-left:4px solid #00f2fe; padding:15px; border-radius:4px; margin-top:25px;">
-          <h4 style="margin:0 0 10px; color:#00f2fe;">📍 TOURNAMENT EVENT DETAILS</h4>
+          <h4 style="margin:0 0 10px; color:#00f2fe;">TOURNAMENT EVENT DETAILS</h4>
           <p style="margin:4px 0; font-size:13px; color:#cbd5e1;"><strong>Event:</strong> CRAFTCON 2K26 Gaming Arena</p>
           <p style="margin:4px 0; font-size:13px; color:#cbd5e1;"><strong>Date:</strong> 22–23 October 2026</p>
           <p style="margin:4px 0; font-size:13px; color:#cbd5e1;"><strong>Time:</strong> 10:00 AM Onwards</p>
@@ -262,11 +262,11 @@ async function sendRegistrationConfirmation(registrationId) {
         text: textContent
       });
 
-      console.log(`✉️ Email successfully sent to ${toAddress} for ${registrationId}`);
+      console.log(`[Email] Email successfully sent to ${toAddress} for ${registrationId}`);
     } else {
       // Mock / Console Fallback Mode
       console.log('\n============================================================');
-      console.log(`✉️ MOCK EMAIL SENT [${new Date().toISOString()}]`);
+      console.log(`[Email] MOCK EMAIL SENT [${new Date().toISOString()}]`);
       console.log(`To: ${toAddress}`);
       console.log(`Subject: CRAFTCON 2K26 Gaming Arena — Registration Confirmed (${reg.registration_id})`);
       console.log('------------------------------------------------------------');
@@ -299,7 +299,7 @@ async function sendRegistrationConfirmation(registrationId) {
     return { success: true };
 
   } catch (error) {
-    console.error(`❌ Failed to send confirmation email for ${registrationId}:`, error.message);
+    console.error(`[Email Error] Failed to send confirmation email for ${registrationId}:`, error.message);
 
     // Record email failure state in DB without throwing
     try {
@@ -338,7 +338,7 @@ async function sendPaymentProofSubmittedEmail(registrationId) {
 
     const htmlContent = `
       <div style="max-width:600px; margin:20px auto; background-color:#12121c; border:2px solid #f5a623; border-radius:12px; padding:25px; color:#ffffff; font-family:sans-serif;">
-        <h2 style="color:#f5a623; margin-top:0;">📋 PAYMENT PROOF RECEIVED</h2>
+        <h2 style="color:#f5a623; margin-top:0;">PAYMENT PROOF RECEIVED</h2>
         <p>Dear <strong>${reg.captain_name}</strong>,</p>
         <p>We have received your payment proof for <strong>${reg.game}</strong>.</p>
         <div style="background:rgba(245,166,35,0.1); border:1px dashed #f5a623; padding:15px; border-radius:8px; margin:15px 0;">
@@ -380,13 +380,13 @@ Our team is verifying your payment. Your official confirmed pass will be emailed
         html: htmlContent,
         text: textContent
       });
-      console.log(`✉️ Payment proof submission email sent to ${toAddress} for ${registrationId}`);
+      console.log(`[Email] Payment proof submission email sent to ${toAddress} for ${registrationId}`);
     } else {
-      console.log(`✉️ [MOCK EMAIL] Payment proof submission email sent to ${toAddress} for ${registrationId}`);
+      console.log(`[Email] Mock payment proof email sent to ${toAddress} for ${registrationId}`);
     }
     return { success: true };
   } catch (err) {
-    console.warn(`⚠️ Failed to send payment proof submitted email for ${registrationId}:`, err.message);
+    console.warn(`[Email Warning] Failed to send payment proof submitted email for ${registrationId}:`, err.message);
     return { success: false, error: err.message };
   }
 }

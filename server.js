@@ -1368,14 +1368,14 @@ if (require.main === module) {
     }
     console.log(`
     ============================================================
-    🎮 CRAFTCON 2K26 GAMING ARENA SERVER RUNNING
+    CRAFTCON 2K26 GAMING ARENA SERVER RUNNING
     ------------------------------------------------------------
-    🌐 Local URL:   http://localhost:${PORT}
-    🕹️ Gaming Arena: http://localhost:${PORT}/gaming.html
-    ⚔️ Hackathon:    https://tech-hack-three.vercel.app
-    📊 Admin Portal: http://localhost:${PORT}/admin.html
-    📊 Admin API:    http://localhost:${PORT}/api/admin/registrations
-    ❤️ Health API:   http://localhost:${PORT}/api/health
+    [Local URL]    http://localhost:${PORT}
+    [Gaming Arena] http://localhost:${PORT}/gaming.html
+    [Hackathon]    https://tech-hack-three.vercel.app
+    [Admin Portal] http://localhost:${PORT}/admin.html
+    [Admin API]    http://localhost:${PORT}/api/admin/registrations
+    [Health API]   http://localhost:${PORT}/api/health
     ============================================================
     `);
   });
