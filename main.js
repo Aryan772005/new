@@ -18,7 +18,7 @@
  * - Live Countdown, Audio Ambiance Synthesizer & Ticket Generator
  */
 
-document.addEventListener('DOMContentLoaded', () => {
+function initMainApp() {
   // ── MOBILE / LOW-RAM FAST PATH ──────────────────────────────────────────
   // On any touch device (phone / tablet), skip ALL heavy 3D, WebGL, GSAP,
   // and audio initialisation. Only run the bare essentials so low-RAM users
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Run ONLY what is needed for a working, navigable registration flow
     initCountdown();
-    initLenisSmoothScroll(); // already returns early on touch — just sets native scroll
+    if (typeof initLenisSmoothScroll === 'function') initLenisSmoothScroll(); 
     initNavScrollspy();
     initMobileDrawer();
     initTimelineFilter();
@@ -55,21 +55,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   // ── DESKTOP FULL EXPERIENCE ─────────────────────────────────────────────
   initCountdown();
-  initLenisSmoothScroll();
-  initThreeJSScene();
-  initHero3DCameraDive();
-  initSectionBackdropParallax();
-  init3DCardTiltPhysics();
-  initHUDScrollTracker();
-  initAboutCrafting3DScroll();
-  initTracks3DAnimation();
-  initTimelineRedstoneAnimation();
-  initPrizes3DAnimation();
-  initRulesCodexAnimation();
-  initSponsorsBeaconAnimation();
-  initOrganizersAnimation();
-  initVillagerFAQAnimation();
-  initFinalCTAAnimation();
+  if (typeof initLenisSmoothScroll === 'function') initLenisSmoothScroll();
+  if (typeof initThreeJSScene === 'function') initThreeJSScene();
+  if (typeof initHero3DCameraDive === 'function') initHero3DCameraDive();
+  if (typeof initSectionBackdropParallax === 'function') initSectionBackdropParallax();
+  if (typeof init3DCardTiltPhysics === 'function') init3DCardTiltPhysics();
+  if (typeof initHUDScrollTracker === 'function') initHUDScrollTracker();
+  if (typeof initAboutCrafting3DScroll === 'function') initAboutCrafting3DScroll();
+  if (typeof initTracks3DAnimation === 'function') initTracks3DAnimation();
+  if (typeof initTimelineRedstoneAnimation === 'function') initTimelineRedstoneAnimation();
+  if (typeof initPrizes3DAnimation === 'function') initPrizes3DAnimation();
+  if (typeof initRulesCodexAnimation === 'function') initRulesCodexAnimation();
+  if (typeof initSponsorsBeaconAnimation === 'function') initSponsorsBeaconAnimation();
+  if (typeof initOrganizersAnimation === 'function') initOrganizersAnimation();
+  if (typeof initVillagerFAQAnimation === 'function') initVillagerFAQAnimation();
+  if (typeof initFinalCTAAnimation === 'function') initFinalCTAAnimation();
   initNavScrollspy();
   initMobileDrawer();
   initTimelineFilter();
@@ -77,7 +77,13 @@ document.addEventListener('DOMContentLoaded', () => {
   initRegistrationModal();
   initAudioAmbiance();
   initBrochureAction();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMainApp);
+} else {
+  initMainApp();
+}
 
 /* ==========================================================================
    GLOBAL WEB AUDIO SYNTHESIZER (NO EXTERNAL AUDIO FILES NEEDED)
