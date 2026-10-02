@@ -305,12 +305,8 @@ function initLenisSmoothScroll() {
 
   const progressBar = document.getElementById('scroll-progress-bar');
 
+  // Progress bar update (ScrollTrigger sync handled via scrollerProxy below)
   lenis.on('scroll', (e) => {
-    if (typeof ScrollTrigger !== 'undefined') {
-      ScrollTrigger.update();
-    }
-
-    // Update 3D scroll progress line
     if (progressBar) {
       const scrollProgress = e.progress * 100;
       progressBar.style.width = `${scrollProgress}%`;
@@ -321,6 +317,23 @@ function initLenisSmoothScroll() {
     ScrollTrigger.config({
       autoRefreshEvents: "visibilitychange,DOMContentLoaded,load,resize"
     });
+
+    // CRITICAL: Tell ScrollTrigger to use Lenis scroll position instead of window.scrollY.
+    // Without this, pinned sections create a blank dead zone and scroll gets stuck at top.
+    ScrollTrigger.scrollerProxy(document.documentElement, {
+      scrollTop(value) {
+        if (arguments.length) {
+          lenis.scrollTo(value, { immediate: true });
+        }
+        return lenis.scroll;
+      },
+      getBoundingClientRect() {
+        return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
+      },
+      pinType: document.documentElement.style.transform ? 'transform' : 'fixed'
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
 
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
@@ -611,7 +624,9 @@ function initHero3DCameraDive() {
 
   if (!heroWrapper || !heroBgLayer) return;
 
-  const isTouchOrMobile = window.innerWidth <= 768;
+  // Use UA-based detection: only treat actual phones/tablets as mobile
+  const _mobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isTouchOrMobile = _mobileUA && window.innerWidth <= 900;
 
   // PINNED MULTI-STAGE CAMERA & CLOUD FLY-THROUGH (DESKTOP PINNED, MOBILE LIGHTWEIGHT NATURAL SCROLL)
   const pinTimeline = gsap.timeline({
@@ -621,6 +636,7 @@ function initHero3DCameraDive() {
       end: isTouchOrMobile ? 'bottom top' : 'bottom bottom',
       scrub: isTouchOrMobile ? 0.3 : 0.8,
       pin: isTouchOrMobile ? false : heroStage,
+      pinSpacing: false,  // CRITICAL: prevents 280vh blank dead zone at page top
       anticipatePin: 0,
       fastScrollEnd: true,
       invalidateOnRefresh: true
@@ -1582,11 +1598,13 @@ function initMobileDrawer() {
       drawer.setAttribute('aria-hidden', 'true');
       hamburger.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
+      if (typeof lenis !== 'undefined' && lenis) lenis.start();
     } else {
       drawer.classList.add('open');
       drawer.setAttribute('aria-hidden', 'false');
       hamburger.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden';
+      if (typeof lenis !== 'undefined' && lenis) lenis.stop();
     }
   }
 
@@ -1680,6 +1698,7 @@ function initRegistrationModal() {
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    if (typeof lenis !== 'undefined' && lenis) lenis.stop();
     playMinecraftSound('pop');
   }
 
@@ -1687,6 +1706,7 @@ function initRegistrationModal() {
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    if (typeof lenis !== 'undefined' && lenis) lenis.start();
   }
 
   openBtns.forEach((btn) => btn.addEventListener('click', openModal));
