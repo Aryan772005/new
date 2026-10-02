@@ -305,8 +305,13 @@ function initLenisSmoothScroll() {
 
   const progressBar = document.getElementById('scroll-progress-bar');
 
-  // Progress bar update (ScrollTrigger sync handled via scrollerProxy below)
+  // Correct Lenis 1.x + GSAP ScrollTrigger integration (no scrollerProxy needed)
   lenis.on('scroll', (e) => {
+    // Keep ScrollTrigger in sync with Lenis scroll position
+    if (typeof ScrollTrigger !== 'undefined') {
+      ScrollTrigger.update();
+    }
+    // Update progress bar
     if (progressBar) {
       const scrollProgress = e.progress * 100;
       progressBar.style.width = `${scrollProgress}%`;
@@ -318,23 +323,7 @@ function initLenisSmoothScroll() {
       autoRefreshEvents: "visibilitychange,DOMContentLoaded,load,resize"
     });
 
-    // CRITICAL: Tell ScrollTrigger to use Lenis scroll position instead of window.scrollY.
-    // Without this, pinned sections create a blank dead zone and scroll gets stuck at top.
-    ScrollTrigger.scrollerProxy(document.documentElement, {
-      scrollTop(value) {
-        if (arguments.length) {
-          lenis.scrollTo(value, { immediate: true });
-        }
-        return lenis.scroll;
-      },
-      getBoundingClientRect() {
-        return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
-      },
-      pinType: document.documentElement.style.transform ? 'transform' : 'fixed'
-    });
-
-    lenis.on('scroll', ScrollTrigger.update);
-
+    // Drive Lenis from GSAP ticker for perfect frame sync
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
     });
@@ -628,16 +617,14 @@ function initHero3DCameraDive() {
   const _mobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   const isTouchOrMobile = _mobileUA && window.innerWidth <= 900;
 
-  // PINNED MULTI-STAGE CAMERA & CLOUD FLY-THROUGH (DESKTOP PINNED, MOBILE LIGHTWEIGHT NATURAL SCROLL)
+  // SCROLL-TRIGGERED MULTI-STAGE CAMERA & CLOUD FLY-THROUGH
+  // CSS position:sticky keeps hero on screen — no GSAP pin needed (avoids Lenis conflicts)
   const pinTimeline = gsap.timeline({
     scrollTrigger: {
       trigger: heroWrapper,
       start: 'top top',
-      end: isTouchOrMobile ? 'bottom top' : 'bottom bottom',
+      end: 'bottom bottom',
       scrub: isTouchOrMobile ? 0.3 : 0.8,
-      pin: isTouchOrMobile ? false : heroStage,
-      pinSpacing: false,  // CRITICAL: prevents 280vh blank dead zone at page top
-      anticipatePin: 0,
       fastScrollEnd: true,
       invalidateOnRefresh: true
     }

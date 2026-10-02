@@ -923,7 +923,8 @@ a {
 }
 
 .hero-sticky-stage {
-  position: relative;
+  position: sticky;
+  top: 0;
   width: 100%;
   height: 100vh;
   height: 100dvh;
@@ -1704,9 +1705,10 @@ a {
   }
   
   .hero-sticky-stage {
-    position: relative;
-    height: auto;
-    min-height: 100vh;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
   }
   
   .hero-portal-showcase {
