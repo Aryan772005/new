@@ -50,7 +50,7 @@
   <style>
     /* Stop all non-essential keyframe animations on mobile/low-end devices.
        Individual sections can re-enable specific ones as needed. */
-    @media (max-width: 768px) {
+    @media (max-width: 600px) {
       .hero-portal-vortex-fx,
       .hero-portal-glow-layer,
       .hero-clouds-container,
@@ -913,7 +913,7 @@
           .robot-section-inner { gap: 44px; padding: 64px 32px; }
           .model-viewer-frame  { max-width: 420px; }
         }
-        @media (max-width: 768px) {
+        @media (max-width: 600px) {
           .robot-section-inner {
             grid-template-columns: 1fr;
             padding: 48px 20px 56px;
@@ -2942,8 +2942,10 @@
   ================================================================ -->
   <script>
     (function () {
-      /* Only disable heavy scripts on actual mobile phones (width <= 768) */
-      var isMobile = window.innerWidth <= 768;
+      /* Only disable heavy scripts on actual phones/tablets (mobile UA + small screen).
+         Laptops — including touchscreen laptops — always load Three.js/GSAP/Lenis. */
+      var _mobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      var isMobile = _mobileUA && window.innerWidth <= 900;
 
       /* Bulk-lazy all images that don't already have a loading attribute */
       document.querySelectorAll('img:not([loading])').forEach(function(img){

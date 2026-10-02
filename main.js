@@ -20,10 +20,10 @@
 
 function initMainApp() {
   // ── MOBILE / LOW-RAM FAST PATH ──────────────────────────────────────────
-  // On any touch device (phone / tablet), skip ALL heavy 3D, WebGL, GSAP,
-  // and audio initialisation. Only run the bare essentials so low-RAM users
-  // get an instant, smooth registration experience.
-  const _isMobileTouch = window.innerWidth <= 768;
+  // Only skip heavy 3D on actual phones and tablets (small screen + mobile UA).
+  // Laptops — including touchscreen laptops — always get the full experience.
+  const _mobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const _isMobileTouch = _mobileUA && window.innerWidth <= 900;
 
   if (_isMobileTouch) {
     // Hide WebGL canvases immediately so they don't reserve GPU memory
@@ -39,7 +39,7 @@ function initMainApp() {
 
     // Run ONLY what is needed for a working, navigable registration flow
     initCountdown();
-    if (typeof initLenisSmoothScroll === 'function') initLenisSmoothScroll(); 
+    if (typeof initLenisSmoothScroll === 'function') initLenisSmoothScroll();
     initNavScrollspy();
     initMobileDrawer();
     initTimelineFilter();
@@ -250,11 +250,14 @@ let lenis = null;
 function initLenisSmoothScroll() {
   if (typeof Lenis === 'undefined') return;
 
-  // Detect ANY touch-capable device — width check alone misses landscape phones & desktop-mode
-  const isTouchMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.matchMedia('(pointer: coarse)').matches || /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  // Detect actual mobile phones/tablets by UA string — NOT by touch capability.
+  // Touchscreen laptops (Surface, etc.) must NOT be treated as mobile; they need
+  // Lenis smooth scroll and all GSAP animations.
+  const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isTouchMobile = isMobileUA && window.innerWidth <= 900;
 
   if (isTouchMobile) {
-    // On mobile devices, native touch momentum scrolling is hardware-accelerated 120Hz.
+    // On actual phones/tablets, native touch momentum scrolling is hardware-accelerated 120Hz.
     // Lenis touch simulation causes severe input lag and inertia battles on phones.
     // Update progress bar and ScrollTrigger on native window scroll instead!
     const progressBar = document.getElementById('scroll-progress-bar');
@@ -287,8 +290,7 @@ function initLenisSmoothScroll() {
   }
 
   const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.matchMedia('(pointer: coarse)').matches;
-  const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  const isTouchOrMobile = isTouch || isMobileUA || window.innerWidth <= 1024;
+  const isTouchOrMobile = isMobileUA || window.innerWidth <= 900;
 
   lenis = new Lenis({
     duration: isTouchOrMobile ? 0.8 : 1.2,
@@ -359,12 +361,10 @@ function initThreeJSScene() {
   const canvas = document.getElementById('webgl-canvas');
   if (!canvas) return;
 
-  // Mobile & low-spec optimization: Disable Three.js completely on mobile/touch screens
-  // This saves ~100MB of RAM and guarantees 60fps native hardware-accelerated scrolling on 1GB RAM phones
-  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || window.matchMedia('(pointer: coarse)').matches;
-  const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  const isMobileScreen = window.innerWidth <= 768;
-  if (isMobileScreen || isTouch || isMobileUA) {
+  // Mobile & low-spec optimization: Disable Three.js completely on actual phones/tablets.
+  // Touchscreen laptops keep the full 3D experience.
+  const isMobileUA3 = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  if (isMobileUA3 && window.innerWidth <= 900) {
     canvas.style.display = 'none';
     const ambientCanvas = document.getElementById('ambient-canvas');
     if (ambientCanvas) ambientCanvas.style.display = 'none';
